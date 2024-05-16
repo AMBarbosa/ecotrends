@@ -3,12 +3,12 @@ Title: Ecological niche model temporal trends
 Version: 0.0.0.9000
 Authors@R: 
   c(
-    person("A. Marcia", "Barbosa", , "ana.marcia.barbosa@gmail.com", role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0001-8972-7713")),
-    person("Neftali", "Sillero", role = "aut")
+    person(given = "A. Marcia", family = "Barbosa", 
+    email = "ana.marcia.barbosa@gmail.com", role = c("aut", "cre")),
+    person(given = "Neftali", family = "Sillero", role = "aut")
   )
 Description: Compute temporal ecological niche model trends.
-License: CC-BY-SA + file LICENSE
+License: file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
@@ -18,9 +18,9 @@ Depends:
     R (>= 2.10)
 LazyData: true
 Suggests: 
-    covr,
-    testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Imports: 
-    terra,
-    Kendall
+    terra (>= 1.4-19),
+    collinear,
+    maxnet,
+    spatialEco

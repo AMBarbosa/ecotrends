@@ -31,9 +31,30 @@ You can install the development version of `ecotrends` with:
 
 ## Example
 
-This is a basic example which shows you how to use this package:
+You will need some species presence coordinates. The code below downloads some example occurrence data from GBIF, and then performs **just a basic cleaning**:
 
 ```{r example}
-# library(ecotrends)
-## [UNDER CONSTRUCTION]
+library(geodata)
+library(fuzzySim)
+
+occ_raw <- geodata::sp_occurrence(genus = "Chioglossa", species = "lusitanica", fixnames = FALSE)
+
+occ <- fuzzySim::cleanCoords(occ_raw, coord.cols = c("decimalLongitude", "decimalLatitude"), uncert.col = "coordinateUncertaintyInMeters", uncert.limit = 10000, year.col = "year", year.min = 1970, abs.col = "occurrenceStatus", plot = TRUE)
 ```
+
+
+```{r regio}
+countries <- geodata::world(path = "../outputs")
+ctry <- subset(countries, countries$name == "Portugal")
+plot(ctry)
+```
+
+
+Now let's download some variables with which to build a yearly time series of ecological niche models for this species in this region:
+
+```{r download_vars}
+variables <- downloadVars(vars = c("aet", "pet"), years = 1979:1980, region = region)
+
+variables
+```
+
