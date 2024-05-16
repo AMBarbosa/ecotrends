@@ -2,14 +2,14 @@ citHeader("To cite templateRpackage in publications use:")
 
 citEntry(
   entry    = "Manual",
-  title    = "templateRpackage",
-  author   = "Francisco Rodriguez-Sanchez",
+  title    = "ecotrends",
+  author   = "A.M. Barbosa, N. Sillero",
   # journal  = ,
-  year     = "2023",
+  year     = "2024",
   # volume   = ,
   # number   = ,
   # pages    = ,
-  url      = "https://ecologyr.github.io/templateRpackage/",
-  textVersion = paste("Rodriguez-Sanchez F. 2023. templateRpackage.",
-                      "https://ecologyr.github.io/templateRpackage/")
+  url      = "https://github.com/AMBarbosa/ecotrends",
+  textVersion = paste("Barbosa A.M. et al. 2024. ecotrends.",
+                      "https://github.com/AMBarbosa/ecotrends")
 )
