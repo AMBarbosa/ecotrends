@@ -4,7 +4,7 @@
 #' @param rasts (multi-layer) SpatRaster with the variables to use in the models
 #' @param region optional SpatExtent or SpatVector polygon delimiting the region of 'rasts' within which to compute the models; see ?getRegion for suggestions
 #' @param nbg integer value indicating the maximum number of background pixels to use in the models. The default is 10,000, or the total number of pixels in the modelling region if that's less.
-#' @param nreps integer value indicating the number of replicates to compute for each model. The default is 1.
+#' @param nreps integer value indicating the number of replicates to compute for each model. One 1 is implemented currently.
 #' @param collin logical value indicating whether multicollinearity among the variables should be reduced prior to modelling. The default is TRUE, in which case the collinear::collinear function is used.
 #' @param file optional file name (including path, not including extension) if you want the output list of model objects to be saved on disk
 
@@ -14,6 +14,8 @@
 #' @examples
 
 getModels <- function(occs, rasts, region = NULL, nbg = 10000, nreps = 1, collin = TRUE, file = NULL) {
+
+  if (nreps != 1) warning("argument 'nreps' is not yet implemented, currently ignored")
 
   if (methods::is(region, "SpatVector") && terra::geomtype(region) == "polygons") {
     rasts <- terra::mask(rasts, region)

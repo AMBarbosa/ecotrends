@@ -13,6 +13,9 @@
 
 
 getEverything <- function(occs, vars = "all", years = 1979:2013, region = NULL, res = 5) {
+
+  stop("sorry, this function is still not implemented")
+
   message ("downloading variables...")
   if (res > 0.5) message ("aggregating variables to requested resolution...")
   message ("reducing collinearity...")

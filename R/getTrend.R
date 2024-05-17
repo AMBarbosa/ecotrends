@@ -10,5 +10,5 @@
 
 
 getTrend <- function(mods, rasts) {
-
+  stop("sorry, this function is still not implemented")
 }
