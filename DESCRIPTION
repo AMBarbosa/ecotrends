@@ -20,7 +20,8 @@ LazyData: true
 Suggests: 
 Config/testthat/edition: 3
 Imports: 
+    methods,
     terra (>= 1.4-19),
     collinear,
-    maxnet,
-    spatialEco
+    fuzzySim (>= 3.8),
+    maxnet

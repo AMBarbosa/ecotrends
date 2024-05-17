@@ -1,22 +1,24 @@
 #' varsAvailable
 #'
-#' @param source currently only "TerraClimate" is implemented
+#' @param source the source database where to check available variables. By default (i.e. if left NULL), all implemented sources are used. Currently "TerraClimate" is the only implemented source.
 #'
 #' @return character vector
 #' @export
 #'
 #' @examples
-#' varsAvailable("TerraClimate")
+#' varsAvailable()
 
-varsAvailable <- function(source = "TerraClimate") {
+varsAvailable <- function(source = NULL) {
 
-  stopifnot(source == "TerraClimate")  # while no more sources are implemented
+  if (is.null(source))  source <- c("TerraClimate")  # more to be added later
 
-  if (source == "TerraClimate") {
-    return(c("ws", "vpd", "vap", "tmin", "tmax", "swe", "srad", "soil", "g", "ppt", "pet", "def", "aet", "PDSI"))
+  out <- list(TerraClimate = vector("list", length = 2))
 
-  } else if (source == "CHELSA") {
-    stop("sorry, 'CHELSA' not yet implemented")
+  names(out$TerraClimate) <- c("vars", "years")
 
-  } else stop ("invalid 'source' argument")
+  out$TerraClimate$vars <- c("ws", "vpd", "vap", "tmin", "tmax", "swe", "srad", "soil", "g", "ppt", "pet", "def", "aet", "PDSI")
+
+  out$TerraClimate$years <- 1958:2020
+
+  return(out)
 }

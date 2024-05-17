@@ -19,7 +19,7 @@ pixelArea <- function(r, # SpatRaster
                       map = TRUE) {
 
   # by A. Marcia Barbosa (https://modtools.wordpress.com/)
-  # version 1.3 (16 May 2024)
+  # version 1.4 (17 May 2024)
 
   stopifnot(inherits(r, "SpatRaster"),
             type %in% c("mean", "centroid"))
@@ -29,8 +29,9 @@ pixelArea <- function(r, # SpatRaster
   areas <- terra::values(r_size, mat = FALSE, dataframe = FALSE, na.rm = FALSE)  # na.rm must be FALSE for areas[centr_pix] to be correct
 
   if (type == "mean") {
-    cat(paste0("Mean pixel area (", unit, "2):\n"))
-    return(mean(areas, na.rm = TRUE))
+    out <- mean(areas, na.rm = TRUE)
+    cat(paste0("Mean pixel area (", unit, "2):\n", out, "\n\n"))
+    return(out)
   }
 
   if (type == "centroid") {
@@ -44,7 +45,7 @@ pixelArea <- function(r, # SpatRaster
     centr_pix <- terra::cellFromXY(r, terra::crds(centr))
     out <- areas[centr_pix]
     if (!is.finite(out)) message("The centroid of your region may not have a pixel value; consider using mask=FALSE, or type = 'mean'.")
-    cat(paste0("Centroid pixel area (", unit, "2):\n"))
+    cat(paste0("Centroid pixel area (", unit, "2):\n", out, "\n\n"))
     return(out)
   }
 }

@@ -17,7 +17,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: A. Marcia Barbosa \email{ana.marcia.barbosa@gmail.com} (\href{https://orcid.org/0000-0001-8972-7713}{ORCID})
+\strong{Maintainer}: A. Marcia Barbosa \email{ana.marcia.barbosa@gmail.com}
 
 Authors:
 \itemize{
