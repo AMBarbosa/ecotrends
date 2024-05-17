@@ -17,10 +17,12 @@ knitr::opts_chunk$set(
 # ecotrends
 
 <!-- badges: start -->
+
 <!-- badges: end -->
 
 The goal of `ecotrends` is to compute a time series of ecological niche models, using species occurrence data and environmental variables, and then analyse the trends in environmental suitability over time.
 
+This package is part of the [MontObEO project](https://montobeo.wordpress.com/).
 
 ## Installation
 
@@ -57,7 +59,7 @@ plot(reg, col = "wheat")
 points(occ_coords)
 ```
 
-  Now let's download some variables with which to build a yearly time series of ecological niche models for this species in this region. You can first use the `varsAvailable` function to check which variables are available, and then the  `getVariables` function to download the ones you choose. Mind that the download may take a long time:
+Now let's download some variables with which to build a yearly time series of ecological niche models for this species in this region. You can first use the `varsAvailable` function to check which variables are available, and then the `getVariables` function to download the ones you choose. Mind that the download may take a long time:
 
 ```{r variables}
 ecotrends::varsAvailable()
@@ -68,7 +70,6 @@ names(vars)
 plot(vars[[1]])
 plot(vars[[length(vars)]])
 ```
-
 
 The variable raster layers have a nominal pixel size at the Equator, but actual pixel sizes vary widely across latitudes. So, let's check the average pixel size in our study region, and the spatial uncertainties of our occurrence coordinates:
 
@@ -105,4 +106,3 @@ From this, you can use the `getTrend` function to compute the trend:
 ```{r}
 # [UNDER CONSTRUCTION]
 ```
-

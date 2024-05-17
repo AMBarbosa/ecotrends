@@ -10,6 +10,9 @@ The goal of `ecotrends` is to compute a time series of ecological niche
 models, using species occurrence data and environmental variables, and
 then analyse the trends in environmental suitability over time.
 
+This package is part of the [MontObEO
+project](https://montobeo.wordpress.com/).
+
 ## Installation
 
 You can install `ecotrends` from GitHub with:
