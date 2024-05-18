@@ -12,6 +12,10 @@
 
 getPredictions <- function(rasts, mods, file = NULL) {
 
+  if (paste0(file, ".tif") %in% list.files(getwd())) {
+    stop ("'file' already exists in the current working directory; please delete it or choose a different file name.")
+  }
+
   n_mods <- length(mods)
   preds <- vector("list", n_mods)
   names(preds) <- names(mods)

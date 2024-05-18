@@ -15,6 +15,13 @@
 #' @examples
 
 getTrend <- function(rasts, alpha = 0.05) {
+
+  # mannKendEst <- function(x) cor.test(x, 1:length(x), method = "kendall")$estimate
+  # mannKendSig <- function(x) cor.test(x, 1:length(x), method = "kendall")$p.value
+  #
+  # tau <- terra::app(rasts, function(x) mannKendEst)
+  # p <- terra::app(rasts, function(x) mannKendSig)
+
   tau <- terra::app(rasts, function(x) Kendall::MannKendall(x)$tau)
   p <- terra::app(rasts, function(x) Kendall::MannKendall(x)$sl)
 

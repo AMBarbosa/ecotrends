@@ -19,6 +19,10 @@
 
 getModels <- function(occs, rasts, region = NULL, nbg = 10000, nreps = 1, collin = TRUE, file = NULL) {
 
+  if (paste0(file, ".rds") %in% list.files(getwd())) {
+    stop ("'file' already exists in the current working directory; please delete it or choose a different file name.")
+  }
+
   if (nreps != 1) warning("sorry, argument 'nreps' not yet implemented, currently ignored")
 
   if (methods::is(region, "SpatVector") && terra::geomtype(region) == "polygons") {
@@ -43,7 +47,7 @@ getModels <- function(occs, rasts, region = NULL, nbg = 10000, nreps = 1, collin
   for (y in years) {
 
     mod_count <- mod_count + 1
-    message("computing model ", mod_count, " of ", length(years), ": year ", y)
+    message("computing model ", mod_count, " of ", length(years), ": ", y)
 
     if (collin) {
       var_sel <- collinear::collinear(dat, response = "presence", predictors = var_cols[grep(y, var_cols)])

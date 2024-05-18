@@ -24,6 +24,10 @@ getVariables <- function(source = "TerraClimate", vars = varsAvailable(source)$v
 
   if (!is.null(file) && !exists(dirname(file))) {
     dir.create(dirname(file))
+  }  # # #
+
+  if (paste0(file, ".tif") %in% list.files(getwd())) {
+    stop ("'file' already exists in the current working directory; please delete it or choose a different file name.")
   }
 
   rast_n <- length(vars) * length(years)
