@@ -8,7 +8,9 @@
 
 The goal of `ecotrends` is to compute a time series of ecological niche
 models, using species occurrence data and environmental variables, and
-then analyse the trends in environmental suitability over time.
+then analyse the trend in environmental suitability over time, as in
+[Arenas-Castro & Sillero
+(2021)](https://doi.org/10.1016/j.scitotenv.2021.147172).
 
 This package is part of the [MontObEO
 project](https://montobeo.wordpress.com/).
@@ -25,10 +27,9 @@ devtools::install_github("AMBarbosa/ecotrends")
 
 You’ll need some species presence coordinates. The code below downloads
 some example occurrence data from GBIF, and then performs **just a basic
-cleaning**:
+automatic cleaning**:
 
 ``` r
-library(terra)
 library(geodata)
 library(fuzzySim)
 
@@ -41,9 +42,9 @@ occ_coords <- occ_clean[ , c("decimalLongitude", "decimalLatitude")]
 
 You should also delimit a region for modelling. You can provide your own
 spatial extent or polygon – e.g., a biogeographical region within which
-your species was more or less evenly surveyed. Another option is to use
-the `getRegion` function to compute a “reasonably sized” region around
-the existing occurrences:
+your species was more or less evenly surveyed. Alternatively or
+additionally, you can use the `getRegion` function to compute a
+“reasonably sized” area around your species occurrences:
 
 ``` r
 library(ecotrends)
@@ -51,14 +52,14 @@ library(ecotrends)
 reg <- ecotrends::getRegion(occs = occ_coords)
 
 plot(reg, col = "wheat")
-points(occ_coords)
+points(occ_coords, cex = 0.3)
 ```
 
 Now let’s download some variables with which to build a yearly time
 series of ecological niche models for this species in this region. You
-can first use the `varsAvailable` function to check which variables are
-available, and then the `getVariables` function to download the ones you
-choose. Mind that the download may take a long time:
+can first use the `varsAvailable` function to check which variables and
+years are available, and then the `getVariables` function to download
+the ones you choose. Mind that the download may take a long time:
 
 ``` r
 ecotrends::varsAvailable()
@@ -66,14 +67,13 @@ ecotrends::varsAvailable()
 vars <- ecotrends::getVariables(vars = c("tmin", "tmax", "ppt", "pet", "ws"), years = 1990:1981, region = reg, file = "variable_rasters")
 
 names(vars)
-plot(vars[[1]])
-plot(vars[[length(vars)]])
+plot(vars[[1:6]])
 ```
 
-The variable raster layers have a nominal pixel size at the Equator, but
-actual pixel sizes vary widely across latitudes. So, let’s check the
-average pixel size in our study region, and the spatial uncertainties of
-our occurrence coordinates:
+The variable raster layers have a given pixel size *at the Equator*, but
+actual pixel sizes can vary widely across latitudes. So, let’s check the
+average pixel size in our study region, as well as the spatial
+uncertainty values of our occurrence coordinates:
 
 ``` r
 sqrt(ecotrends::pixelArea(vars, unit = "m"))
@@ -82,8 +82,8 @@ summary(occ_clean$coordinateUncertaintyInMeters, na.rm = TRUE)
 ```
 
 You can see there are several occurrence points with spatial uncertainty
-larger than the pixel size, so it might be a good idea to aggregate the
-variable layers:
+larger than the pixel size, so it might be a good idea to coarsen the
+spatial resolution of the variable layers:
 
 ``` r
 vars_agg <- terra::aggregate(vars, fact = 2)
@@ -92,14 +92,14 @@ sqrt(ecotrends::pixelArea(vars, unit = "m"))
 ```
 
 This is much closer to the spatial resolution of many of the species
-occurrences. You can now compute models with these occurrences and
+occurrences. We can now compute yearly models with these occurrences and
 variables:
 
 ``` r
-mods <- ecotrends::getModels(occ_coords, vars_agg, region = reg, nbg = 10000, nreps = 1, collin = TRUE, file = "models")
+mods <- ecotrends::getModels(occ_coords, vars_agg, region = reg, collin = TRUE, file = "models")
 ```
 
-Let’s now get the model predictions for each of the provided years:
+Let’s now compute the model predictions for each year:
 
 ``` r
 preds <- ecotrends::getPredictions(vars_agg, mods, file = "predictions")
@@ -107,7 +107,8 @@ preds <- ecotrends::getPredictions(vars_agg, mods, file = "predictions")
 plot(preds)
 ```
 
-From this, you can use the `getTrend` function to compute the trend:
+From this, you can use the `getTrend` function to check for a monotonic
+temporal trend in suitability:
 
 ``` r
 # [UNDER CONSTRUCTION]
