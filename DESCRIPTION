@@ -24,4 +24,5 @@ Imports:
     terra (>= 1.4-19),
     collinear,
     fuzzySim (>= 3.8),
-    maxnet
+    maxnet,
+    Kendall

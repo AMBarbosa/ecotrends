@@ -51,5 +51,5 @@ getVariables <- function(source = "TerraClimate", vars = varsAvailable(source)$v
     terra::writeRaster(rasts, filename = paste0(file, ".tif"), gdal = c("COMPRESS=DEFLATE"))
   }
 
-  return(rasts)
+  return(rasts[[sort(names(rasts))]])
 }

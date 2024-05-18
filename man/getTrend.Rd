@@ -2,17 +2,23 @@
 % Please edit documentation in R/getTrend.R
 \name{getTrend}
 \alias{getTrend}
-\title{Get ecological trend}
+\title{Get trend}
 \usage{
-getTrend(mods, rasts)
+getTrend(rasts, alpha = 0.05)
 }
 \arguments{
-\item{mods}{model objects, output of getModels()}
+\item{rasts}{multi-layer SpatRaster with the output of getPredictions(), or another time series of values for which to detect a trend.}
 
-\item{rasts}{output of getVariables(), or another list of variable raster layers, with one multi-layer SpatRaster per year.}
+\item{alpha}{numeric value indicating the threshold significance level for Kendall's tau statistic. Default 0.05}
+}
+\value{
+SpatRaster layer where each pixel has Kendall's tau statistic (positive if increasing, negative if decreasing), or NA if the trend is non-significant (i.e., if the 2-sided p-value is larger than the specified 'alpha').
 }
 \description{
-Get ecological trend
+This function uses \code{\link[terra:app]{terra::app()}} to apply the \code{\link[Kendall:MannKendall]{Kendall::MannKendall()}} function to each pixel of a multi-layer time series SpatRaster, testing for a monotonic (either increasing or decreasing) trend in the raster values.
+}
+\seealso{
+\code{\link[Kendall:MannKendall]{Kendall::MannKendall()}}, \code{\link[spatialEco:raster.kendall]{spatialEco::raster.kendall()}}
 }
 \author{
 A. Marcia Barbosa

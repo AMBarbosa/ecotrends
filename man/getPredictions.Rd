@@ -14,7 +14,7 @@ getPredictions(rasts, mods, file = NULL)
 \item{file}{optional file name (including path, not including extension) if you want the output rasters to be saved on disk}
 }
 \value{
-multi-layer SpatRaster
+multi-layer SpatRaster with the predicted values from the variables for each year
 }
 \description{
 Get predictions

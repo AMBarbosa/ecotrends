@@ -35,7 +35,7 @@ library(fuzzySim)
 
 occ_raw <- geodata::sp_occurrence(genus = "Chioglossa", species = "lusitanica", fixnames = FALSE)
 
-occ_clean <- fuzzySim::cleanCoords(occ_raw, coord.cols = c("decimalLongitude", "decimalLatitude"), uncert.col = "coordinateUncertaintyInMeters", uncert.limit = 10000, year.col = "year", year.min = 1970, abs.col = "occurrenceStatus", plot = TRUE)
+occ_clean <- fuzzySim::cleanCoords(occ_raw, coord.cols = c("decimalLongitude", "decimalLatitude"), uncert.col = "coordinateUncertaintyInMeters", uncert.limit = 10000, year.col = "year", year.min = 1970, abs.col = "occurrenceStatus", plot = FALSE)
 
 occ_coords <- occ_clean[ , c("decimalLongitude", "decimalLatitude")]
 ```
@@ -66,6 +66,9 @@ ecotrends::varsAvailable()
 
 vars <- ecotrends::getVariables(vars = c("tmin", "tmax", "ppt", "pet", "ws"), years = 1990:1981, region = reg, file = "variable_rasters")
 
+# or, after you've downloaded the variables with the above 'file' argument:
+# vars <- terra::rast("variable_rasters.tif")
+
 names(vars)
 plot(vars[[1:6]])
 ```
@@ -88,7 +91,7 @@ spatial resolution of the variable layers:
 ``` r
 vars_agg <- terra::aggregate(vars, fact = 2)
 
-sqrt(ecotrends::pixelArea(vars, unit = "m"))
+sqrt(ecotrends::pixelArea(vars_agg, unit = "m"))
 ```
 
 This is much closer to the spatial resolution of many of the species
@@ -107,9 +110,15 @@ preds <- ecotrends::getPredictions(vars_agg, mods, file = "predictions")
 plot(preds)
 ```
 
-From this, you can use the `getTrend` function to check for a monotonic
-temporal trend in suitability:
+Finally, you can use the `getTrend` function to check for a monotonic
+temporal trend in suitability in each pixel:
 
 ``` r
-# [UNDER CONSTRUCTION]
+trend <- getTrend(preds, alpha = 0.05)
+
+plot(trend, col = hcl.colors(100, "spectral"), main = "Suitability trend")
 ```
+
+Positive values indicate increasing suitability, and negative values
+indicate decreasing suitability over time. Pixels with no value have no
+significant trend.

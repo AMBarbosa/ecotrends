@@ -4,7 +4,7 @@
 #' @param mods list of model objects produced with getModels()
 #' @param file optional file name (including path, not including extension) if you want the output rasters to be saved on disk
 #'
-#' @return multi-layer SpatRaster
+#' @return multi-layer SpatRaster with the predicted values from the variables for each year
 #' @author A. Marcia Barbosa
 #' @export
 #'
