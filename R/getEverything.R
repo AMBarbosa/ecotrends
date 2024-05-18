@@ -7,6 +7,7 @@
 #' @param res spatial resolution (pixel size), if larger than the original variable raster layers', in which case terra::aggregate() is used
 #'
 #' @return
+#' @author A. Marcia Barbosa
 #' @export
 #'
 #' @examples

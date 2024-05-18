@@ -13,6 +13,12 @@ getPredictions(rasts, mods, file = NULL)
 
 \item{file}{optional file name (including path, not including extension) if you want the output rasters to be saved on disk}
 }
+\value{
+multi-layer SpatRaster
+}
 \description{
 Get predictions
+}
+\author{
+A. Marcia Barbosa
 }

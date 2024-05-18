@@ -14,3 +14,6 @@ getTrend(mods, rasts)
 \description{
 Get ecological trend
 }
+\author{
+A. Marcia Barbosa
+}

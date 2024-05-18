@@ -5,6 +5,7 @@
 #' @param file optional file name (including path, not including extension) if you want the output rasters to be saved on disk
 #'
 #' @return multi-layer SpatRaster
+#' @author A. Marcia Barbosa
 #' @export
 #'
 #' @examples

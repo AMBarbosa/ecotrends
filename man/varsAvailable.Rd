@@ -2,19 +2,28 @@
 % Please edit documentation in R/varsAvailable.R
 \name{varsAvailable}
 \alias{varsAvailable}
-\title{varsAvailable}
+\title{Variables available}
 \usage{
 varsAvailable(source = NULL)
 }
 \arguments{
-\item{source}{the source database where to check available variables. By default (i.e. if left NULL), all implemented sources are used. Currently "TerraClimate" is the only implemented source.}
+\item{source}{the source database where to check available variables. By default (i.e. if left NULL), all implemented sources are used. Currently "TerraClimate" (https://www.climatologylab.org/terraclimate.html) is the only implemented source.}
 }
 \value{
-character vector
+a named nested list with one element per data source, each of which containing two elements: a character vector of the names of the variables available from that source, and an integer vector of the years for which those variables are available.
 }
 \description{
-varsAvailable
+Variables available
 }
 \examples{
 varsAvailable()
+}
+\references{
+Abatzoglou, J.T., S.Z. Dobrowski, S.A. Parks, K.C. Hegewisch (2018) Terraclimate, a high-resolution global dataset of monthly climate and climatic water balance from 1958-2015. Scientific Data, 5, Article number: 170191. doi: 10.1038/sdata.2017.191(2018). Database URL: https://www.climatologylab.org/terraclimate.html
+}
+\seealso{
+\code{\link[=getVariables]{getVariables()}}
+}
+\author{
+A. Marcia Barbosa
 }

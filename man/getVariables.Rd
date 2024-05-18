@@ -27,5 +27,14 @@ getVariables(
 multi-layer SpatRaster
 }
 \description{
-Get variables
+This function downloads a specified time series of variables from a specified environmental data source, optionally (to save download time) within a specified region. Currently "TerraClimate" (Abatzoglou et al., 2018) is the only implemented data source.
+}
+\references{
+Abatzoglou, J.T., S.Z. Dobrowski, S.A. Parks, K.C. Hegewisch (2018) Terraclimate, a high-resolution global dataset of monthly climate and climatic water balance from 1958-2015. Scientific Data, 5, Article number: 170191. doi: 10.1038/sdata.2017.191(2018). Database URL: https://www.climatologylab.org/terraclimate.html
+}
+\seealso{
+\code{\link[=varsAvailable]{varsAvailable()}}
+}
+\author{
+A. Marcia Barbosa
 }

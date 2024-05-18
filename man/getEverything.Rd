@@ -20,3 +20,6 @@ getEverything(occs, vars = "all", years = 1979:2013, region = NULL, res = 5)
 \description{
 Get everything (package wrapper)
 }
+\author{
+A. Marcia Barbosa
+}

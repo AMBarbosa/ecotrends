@@ -2,7 +2,7 @@
 % Please edit documentation in R/getRegion.R
 \name{getRegion}
 \alias{getRegion}
-\title{getRegion}
+\title{Get region}
 \usage{
 getRegion(occs, type = "mean", prop = 0.5)
 }
@@ -14,5 +14,11 @@ getRegion(occs, type = "mean", prop = 0.5)
 \item{prop}{if type="width", proportion of the width to use. Default 0.5}
 }
 \description{
-getRegion
+This function suggests a region for building an ecological niche model around a given set of species occurrence point coordinates. Mind that this region does not consider survey effort, geographical barriers or other factors that should also be taken into account when delimiting a region for modelling.
+}
+\seealso{
+\code{\link[terra:buffer]{terra::buffer()}}, \code{\link[terra:width]{terra::width()}}
+}
+\author{
+A. Marcia Barbosa
 }

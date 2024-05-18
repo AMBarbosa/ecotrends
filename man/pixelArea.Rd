@@ -2,24 +2,37 @@
 % Please edit documentation in R/pixelArea.R
 \name{pixelArea}
 \alias{pixelArea}
-\title{Pixel area}
+\title{Average pixel area}
 \usage{
-pixelArea(r, type = "mean", unit = "m", mask = TRUE, map = TRUE)
+pixelArea(rast, type = "mean", unit = "m", mask = TRUE, map = TRUE)
 }
 \arguments{
-\item{r}{SpatRaster for which to compute the pixel area}
+\item{rast}{SpatRaster for which to compute the pixel area}
 
 \item{type}{character value indicating whether the output value should be the "mean" (default) or "centroid" pixel area}
 
 \item{unit}{numeric value indicating the units for the output value: either "m" (default) or "km" squared.}
 
-\item{mask}{logical value (default TRUE) indicating whether to include only the areas of non-NA pixels}
+\item{mask}{logical value (default TRUE) indicating whether to consider only the areas of non-NA pixels}
 
-\item{map}{logical value (default TRUE) indicating whether to plot a map}
+\item{map}{logical value (default TRUE) indicating whether to also plot a map}
 }
 \value{
 numeric value
 }
 \description{
-Pixel area
+This function uses the \code{\link[terra:cellSize]{terra::cellSize()}} function to compute (and optionally map) the area covered by each (optionally non-NA) pixel in a raster map; and then it computes either the mean or the centroid pixel area in that map, for an idea of pixel size in that region. Pixel size can vary widely across latitudes, especially in unprojected longitude-latitude rasters, but also in rasters projected to other non-equal-area coordinate reference systems.
+}
+\examples{
+r <- terra::rast(system.file("ex/elev.tif", package = "terra"))
+
+pixelArea(r)
+
+pixelArea(r, unit = "km")
+}
+\seealso{
+\code{\link[terra:cellSize]{terra::cellSize()}}, which this function wraps
+}
+\author{
+A. Marcia Barbosa, wrapping 'terra' functions by Robert H. Hijmans
 }

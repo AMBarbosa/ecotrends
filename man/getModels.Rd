@@ -17,20 +17,24 @@ getModels(
 \arguments{
 \item{occs}{species occurrence coordinates (2 columns in this order: x, y or longitude, latitude) in an object coercible to a data.frame (e.g. a data.frame, matrix, tibble, sf object or SpatVector of points)}
 
-\item{rasts}{(multi-layer) SpatRaster with the variables to use in the models}
+\item{rasts}{(multi-layer) SpatRaster with the variables to use in the models. The layer names should be in the form 'varname_year', e.g. 'tmin_1981', as in the output of \code{\link[=getVariables]{getVariables()}}}
 
 \item{region}{optional SpatExtent or SpatVector polygon delimiting the region of 'rasts' within which to compute the models; see ?getRegion for suggestions}
 
 \item{nbg}{integer value indicating the maximum number of background pixels to use in the models. The default is 10,000, or the total number of pixels in the modelling region if that's less.}
 
-\item{nreps}{integer value indicating the number of replicates to compute for each model. The default is 1.}
+\item{nreps}{integer value indicating the number of replicates to compute for each model. One 1 is implemented currently.}
 
-\item{collin}{logical value indicating whether multicollinearity among the variables should be reduced prior to modelling. The default is TRUE, in which case the collinear::collinear function is used.
-#' @param file optional file name (including path, not including extension) if you want the output list of model objects to be saved on disk}
+\item{collin}{logical value indicating whether multicollinearity among the variables should be reduced prior to computing each model. The default is TRUE, in which case the \code{\link[collinear:collinear]{collinear::collinear()}} function is used.}
+
+\item{file}{optional file name (including path, not including extension) if you want the output list of model objects to be saved on disk}
 }
 \value{
 a list of 'maxnet' model objects
 }
 \description{
-Get models
+This function computes one ecological niche model (\code{\link[maxnet:maxnet]{maxnet::maxnet()}}) per year, given a set of presence point coordinates and yearly environmental layers.
+}
+\author{
+A. Marcia Barbosa
 }
