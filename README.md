@@ -8,8 +8,8 @@
 
 The goal of `ecotrends` is to **compute a time series of ecological
 niche models**, using species occurrence data and environmental
-variables, and then analyse the **trend in environmental suitability
-over time**, as in [Arenas-Castro & Sillero
+variables, and then map the existence and direction of **linear temporal
+trends in environmental suitability**, as in [Arenas-Castro & Sillero
 (2021)](https://doi.org/10.1016/j.scitotenv.2021.147172).
 
 This package is part of the [MontObEO
@@ -37,7 +37,7 @@ occ_raw <- geodata::sp_occurrence(genus = "Chioglossa",
                                   species = "lusitanica", 
                                   fixnames = FALSE)
 
-occ_clean <- fuzzySim::cleanCoords(occ_raw, 
+occ_clean <- fuzzySim::cleanCoords(data = occ_raw, 
                                    coord.cols = c("decimalLongitude", "decimalLatitude"), 
                                    uncert.col = "coordinateUncertaintyInMeters",
                                    uncert.limit = 10000, 
@@ -98,7 +98,7 @@ summary(occ_clean$coordinateUncertaintyInMeters, na.rm = TRUE)
 ```
 
 You can see there are several occurrence points with spatial uncertainty
-larger than the pixel size, so it might be a good idea to **coarsen the
+larger than our pixel size, so it might be a good idea to **coarsen the
 spatial resolution** of the variable layers:
 
 ``` r
@@ -112,8 +112,8 @@ occurrences. We can now **compute yearly ecological niche models** with
 these occurrences and variables:
 
 ``` r
-mods <- ecotrends::getModels(occ_coords, 
-                             vars_agg, 
+mods <- ecotrends::getModels(occs = occ_coords, 
+                             rasts = vars_agg, 
                              region = reg, 
                              collin = TRUE, 
                              file = "models")
@@ -122,18 +122,18 @@ mods <- ecotrends::getModels(occ_coords,
 Let’s now **compute the model predictions** for each year:
 
 ``` r
-preds <- ecotrends::getPredictions(vars_agg, 
-                                   mods, 
+preds <- ecotrends::getPredictions(rasts = vars_agg, 
+                                   mods = mods, 
                                    file = "predictions")
 
 plot(preds)
 ```
 
-Finally, you can use the `getTrend` function to **check for a monotonic
-temporal trend in suitability** in each pixel:
+Finally, you can use the `getTrend` function to **check for a linear
+(monotonic) temporal trend in suitability** in each pixel:
 
 ``` r
-trend <- getTrend(preds, 
+trend <- getTrend(rasts = preds, 
                   alpha = 0.05)
 
 plot(trend, 
@@ -143,4 +143,4 @@ plot(trend,
 
 Positive values indicate increasing suitability, and negative values
 indicate decreasing suitability over time. Pixels with no value have no
-significant trend.
+significant linear trend.
