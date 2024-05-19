@@ -3,7 +3,7 @@
 #' @description
 #' This function uses [terra::app()] to apply the [Kendall::MannKendall()] function to each pixel of a multi-layer time series SpatRaster, testing for a monotonic (either increasing or decreasing) trend in the raster values.
 
-#' @param rasts multi-layer SpatRaster with the output of getPredictions(), or another time series of values for which to detect a trend.
+#' @param rasts multi-layer SpatRaster with the output of [getPredictions()], or another time series of values for which to detect a trend
 #' @param alpha numeric value indicating the threshold significance level for Kendall's tau statistic. Default 0.05
 #'
 #' @return SpatRaster layer where each pixel has Kendall's tau statistic (positive if increasing, negative if decreasing), or NA if the trend is non-significant (i.e., if the 2-sided p-value is larger than the specified 'alpha').

@@ -8,6 +8,7 @@
 #' @param years year range to get the variables from (e.g. 1979:2013). Note that the download can take a long time for long series of years.
 #' @param region optional length-four numeric vector (xmin, xmax, ymin, ymax geodetic coordinates in degrees), SpatExtent or SpatVector polygon delimiting the region of the world for which the variables should be downloaded. See ?getRegion for suggestions. The larger the region, the slower the download.
 #' @param file optional file name (including the path, not including the filename extension) if you want the downloaded rasters to be saved on disk, in which case they are saved as a compressed multi-layer GeoTIFF
+#' @param verbosity integer value indicating the amount of messages to display. The default is 2, for the maximum number of messages available.
 #'
 #' @return multi-layer SpatRaster
 #' @author A. Marcia Barbosa
@@ -20,7 +21,7 @@
 #' @examples
 
 
-getVariables <- function(source = "TerraClimate", vars = varsAvailable(source)$vars, years = varsAvailable(source)$years, region = c(-180, 180, -90, 90), file = NULL) {
+getVariables <- function(source = "TerraClimate", vars = varsAvailable(source)$vars, years = varsAvailable(source)$years, region = c(-180, 180, -90, 90), file = NULL, verbosity = 2) {
 
   if (!is.null(file) && !exists(dirname(file))) {
     dir.create(dirname(file))
@@ -37,9 +38,12 @@ getVariables <- function(source = "TerraClimate", vars = varsAvailable(source)$v
   if (source == "TerraClimate") {
     for (v in 1:length(vars))  for (y in 1:length(years)) {
       rast_count <- rast_count + 1
-      message("\ndownloading raster ", rast_count, " of ", rast_n)
       url <- paste0("http://thredds.northwestknowledge.net:8080/thredds/fileServer/TERRACLIMATE_ALL/data/TerraClimate_", vars[v], "_", years[y], ".nc")
-      message(url)
+
+      if (verbosity > 0) {
+        message("\ndownloading raster ", rast_count, " of ", rast_n)
+        message(url)
+      }
 
       rasts_monthly <- terra::rast(url, vsi = TRUE, win = region)
 
@@ -55,5 +59,5 @@ getVariables <- function(source = "TerraClimate", vars = varsAvailable(source)$v
     terra::writeRaster(rasts, filename = paste0(file, ".tif"), gdal = c("COMPRESS=DEFLATE"))
   }
 
-  return(rasts[[sort(names(rasts))]])
+  return(rasts[[sort(names(rasts))]])  # reordered by year
 }

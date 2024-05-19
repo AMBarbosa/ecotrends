@@ -9,7 +9,8 @@ getVariables(
   vars = varsAvailable(source)$vars,
   years = varsAvailable(source)$years,
   region = c(-180, 180, -90, 90),
-  file = NULL
+  file = NULL,
+  verbosity = 2
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ getVariables(
 \item{region}{optional length-four numeric vector (xmin, xmax, ymin, ymax geodetic coordinates in degrees), SpatExtent or SpatVector polygon delimiting the region of the world for which the variables should be downloaded. See ?getRegion for suggestions. The larger the region, the slower the download.}
 
 \item{file}{optional file name (including the path, not including the filename extension) if you want the downloaded rasters to be saved on disk, in which case they are saved as a compressed multi-layer GeoTIFF}
+
+\item{verbosity}{integer value indicating the amount of messages to display. The default is 2, for the maximum number of messages available.}
 }
 \value{
 multi-layer SpatRaster

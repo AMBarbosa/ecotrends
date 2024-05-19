@@ -4,14 +4,16 @@
 \alias{getRegion}
 \title{Get region}
 \usage{
-getRegion(occs, type = "mean", prop = 0.5)
+getRegion(occs, type = "mean", prop = 0.5, crs = "EPSG:4326")
 }
 \arguments{
-\item{occs}{species occurrence coordinates (in this order: x, y or LONgitude, LATitude) in geodetic degrees, or an object from which such coordinates can be extracted (e.g. a SpatVector of points)}
+\item{occs}{species occurrence coordinates (2 columns in this order: x, y or LONgitude, LATitude) in an object coercible to a data.frame (e.g. a data.frame, matrix, tibble, sf object or SpatVector of points)}
 
-\item{type}{character indicating whether to use the "mean" pairwise distance among points (the default), or a fraction of the "width" (minimum diameter) of the points' spatial extent}
+\item{type}{character indicating whether to use the "mean" pairwise \code{\link[terra:distance]{terra::distance()}} among points (the default), or a proportion of the "width" (minimum diameter, computed with \code{\link[terra:width]{terra::width()}}) of the points' spatial extent}
 
-\item{prop}{if type="width", proportion of the width to use. Default 0.5}
+\item{prop}{if type="width", proportion of the width to use for the buffer radius. Default 0.5}
+
+\item{crs}{coordinate reference system of 'occs', in one of the following formats: WKT/WKT2, \if{html}{\out{<authority>}}:\if{html}{\out{<code>}}, or PROJ-string notation (see \code{\link[terra:crs]{terra::crs()}}). The default is unprojected longitude-latitude coordinates in geodetic degrees, datum WGS 1984.}
 }
 \description{
 This function suggests a region for building an ecological niche model around a given set of species occurrence point coordinates. Mind that this region does not consider survey effort, geographical barriers or other factors that should also be taken into account when delimiting a region for modelling.

@@ -4,14 +4,16 @@
 \alias{getPredictions}
 \title{Get predictions}
 \usage{
-getPredictions(rasts, mods, file = NULL)
+getPredictions(rasts, mods, file = NULL, verbosity = 2)
 }
 \arguments{
 \item{rasts}{(multi-layer) SpatRaster containing the variables (with the same names) used in the models}
 
-\item{mods}{list of model objects produced with getModels()}
+\item{mods}{list of \link{maxnet} model objects, output of \code{\link[=getModels]{getModels()}}}
 
 \item{file}{optional file name (including path, not including extension) if you want the output rasters to be saved on disk}
+
+\item{verbosity}{integer value indicating the amount of messages to display. The default is 2, for the maximum number of messages available.}
 }
 \value{
 multi-layer SpatRaster with the predicted values from the variables for each year

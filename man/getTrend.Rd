@@ -7,7 +7,7 @@
 getTrend(rasts, alpha = 0.05)
 }
 \arguments{
-\item{rasts}{multi-layer SpatRaster with the output of getPredictions(), or another time series of values for which to detect a trend.}
+\item{rasts}{multi-layer SpatRaster with the output of \code{\link[=getPredictions]{getPredictions()}}, or another time series of values for which to detect a trend}
 
 \item{alpha}{numeric value indicating the threshold significance level for Kendall's tau statistic. Default 0.05}
 }

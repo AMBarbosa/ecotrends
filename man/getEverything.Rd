@@ -7,7 +7,7 @@
 getEverything(occs, vars = "all", years = 1979:2013, region = NULL, res = 5)
 }
 \arguments{
-\item{occs}{species occurrence coordinates (in this order: x, y or LONgitude, LATitude), or an object from which coordinates can be extracted (e.g. a SpatVector of points)}
+\item{occs}{species occurrence coordinates (2 columns in this order: x, y or LONgitude, LATitude) in an object coercible to a data.frame (e.g. a data.frame, matrix, tibble, sf object or SpatVector of points), and in the same coordinate reference system as 'rasts'}
 
 \item{vars}{character vector of the names of the variables to use - see varsAvailable()}
 

@@ -11,11 +11,12 @@ getModels(
   nbg = 10000,
   nreps = 1,
   collin = TRUE,
-  file = NULL
+  file = NULL,
+  verbosity = 2
 )
 }
 \arguments{
-\item{occs}{species occurrence coordinates (2 columns in this order: x, y or longitude, latitude) in an object coercible to a data.frame (e.g. a data.frame, matrix, tibble, sf object or SpatVector of points)}
+\item{occs}{species occurrence coordinates (2 columns in this order: x, y or LONgitude, LATitude) in an object coercible to a data.frame (e.g. a data.frame, matrix, tibble, sf object or SpatVector of points), and in the same coordinate reference system as 'rasts'}
 
 \item{rasts}{(multi-layer) SpatRaster with the variables to use in the models. The layer names should be in the form 'varname_year', e.g. 'tmin_1981', as in the output of \code{\link[=getVariables]{getVariables()}}}
 
@@ -25,15 +26,17 @@ getModels(
 
 \item{nreps}{integer value indicating the number of replicates to compute for each model. One 1 is implemented currently.}
 
-\item{collin}{logical value indicating whether multicollinearity among the variables should be reduced prior to computing each model. The default is TRUE, in which case the \code{\link[collinear:collinear]{collinear::collinear()}} function is used.}
+\item{collin}{logical value indicating whether multicollinearity among the variables should be reduced prior to computing each model. The default is TRUE, in which case the \code{\link[collinear:collinear]{collinear::collinear()}} function is used, with the default values and with the species presences as 'response'.}
 
 \item{file}{optional file name (including path, not including extension) if you want the output list of model objects to be saved on disk}
+
+\item{verbosity}{integer value indicating the amount of messages to display. The default is 2, for the maximum number of messages available.}
 }
 \value{
-a list of 'maxnet' model objects
+a list of model objects of class \link{maxnet}
 }
 \description{
-This function computes one ecological niche model (\code{\link[maxnet:maxnet]{maxnet::maxnet()}}) per year, given a set of presence point coordinates and yearly environmental layers.
+This function computes a \code{\link[maxnet:maxnet]{maxnet::maxnet()}} ecological niche model per year, given a set of presence point coordinates and yearly environmental layers.
 }
 \author{
 A. Marcia Barbosa
