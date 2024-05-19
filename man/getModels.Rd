@@ -20,7 +20,7 @@ getModels(
 
 \item{rasts}{(multi-layer) SpatRaster with the variables to use in the models. The layer names should be in the form 'varname_year', e.g. 'tmin_1981', as in the output of \code{\link[=getVariables]{getVariables()}}}
 
-\item{region}{optional SpatExtent or SpatVector polygon delimiting the region of 'rasts' within which to compute the models; see ?getRegion for suggestions}
+\item{region}{optional SpatExtent or SpatVector polygon delimiting the region of 'rasts' within which to compute the models; see \code{\link[=getRegion]{getRegion()}} for suggestions}
 
 \item{nbg}{integer value indicating the maximum number of background pixels to use in the models. The default is 10,000, or the total number of pixels in the modelling region if that's less.}
 

@@ -11,9 +11,9 @@ getRegion(occs, type = "mean", prop = 0.5, crs = "EPSG:4326")
 
 \item{type}{character indicating whether to use the "mean" pairwise \code{\link[terra:distance]{terra::distance()}} among points (the default), or a proportion of the "width" (minimum diameter, computed with \code{\link[terra:width]{terra::width()}}) of the points' spatial extent}
 
-\item{prop}{if type="width", proportion of the width to use for the buffer radius. Default 0.5}
+\item{prop}{if type="width", proportion of the width to use for the \code{\link[terra:buffer]{terra::buffer()}} radius. Default 0.5}
 
-\item{crs}{coordinate reference system of 'occs', in one of the following formats: WKT/WKT2, \if{html}{\out{<authority>}}:\if{html}{\out{<code>}}, or PROJ-string notation (see \code{\link[terra:crs]{terra::crs()}}). The default is unprojected longitude-latitude coordinates in geodetic degrees, datum WGS 1984.}
+\item{crs}{coordinate reference system behind the coordinates of 'occs', in one of the following formats: WKT/WKT2, authority:code (e.g. EPSG:4326), or PROJ-string notation (see \code{\link[terra:crs]{terra::crs()}}). The default is EPSG:4326, i.e. unprojected longitude-latitude coordinates in geodetic degrees, datum WGS 1984.}
 }
 \description{
 This function suggests a region for building an ecological niche model around a given set of species occurrence point coordinates. Mind that this region does not consider survey effort, geographical barriers or other factors that should also be taken into account when delimiting a region for modelling.

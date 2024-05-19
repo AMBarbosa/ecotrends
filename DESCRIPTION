@@ -1,13 +1,13 @@
 Package: ecotrends
 Title: Ecological niche model temporal trends
-Version: 0.0.0.9000
+Version: 0.1
 Authors@R: 
   c(
     person(given = "A. Marcia", family = "Barbosa", 
     email = "ana.marcia.barbosa@gmail.com", role = c("aut", "cre")),
     person(given = "Neftali", family = "Sillero", role = "aut")
   )
-Description: Compute temporal ecological niche model trends.
+Description: This package computes temporal ecological niche model trends based on a set of species presence point coordinates.
 License: file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

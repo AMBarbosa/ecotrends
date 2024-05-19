@@ -5,7 +5,7 @@
 
 #' @param occs species occurrence coordinates (2 columns in this order: x, y or LONgitude, LATitude) in an object coercible to a data.frame (e.g. a data.frame, matrix, tibble, sf object or SpatVector of points), and in the same coordinate reference system as 'rasts'
 #' @param rasts (multi-layer) SpatRaster with the variables to use in the models. The layer names should be in the form 'varname_year', e.g. 'tmin_1981', as in the output of [getVariables()]
-#' @param region optional SpatExtent or SpatVector polygon delimiting the region of 'rasts' within which to compute the models; see ?getRegion for suggestions
+#' @param region optional SpatExtent or SpatVector polygon delimiting the region of 'rasts' within which to compute the models; see [getRegion()] for suggestions
 #' @param nbg integer value indicating the maximum number of background pixels to use in the models. The default is 10,000, or the total number of pixels in the modelling region if that's less.
 #' @param nreps integer value indicating the number of replicates to compute for each model. One 1 is implemented currently.
 #' @param collin logical value indicating whether multicollinearity among the variables should be reduced prior to computing each model. The default is TRUE, in which case the [collinear::collinear()] function is used, with the default values and with the species presences as 'response'.
