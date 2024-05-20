@@ -1,5 +1,6 @@
 Package: ecotrends
-Title: Ecological niche model temporal trends
+Type: Package
+Title: Temporal trends in ecological niche models 
 Version: 0.1
 Authors@R: 
   c(
@@ -7,15 +8,16 @@ Authors@R:
     email = "ana.marcia.barbosa@gmail.com", role = c("aut", "cre")),
     person(given = "Neftali", family = "Sillero", role = "aut")
   )
-Description: This package computes temporal ecological niche model trends based on a set of species presence point coordinates.
-License: file LICENSE
+Maintainer: A. Marcia Barbosa <ana.marcia.barbosa@gmail.com>
+Description: This package computes temporal trends in environmental suitability obtained from ecological niche models, based on a set of species presence point coordinates and predictor variables.
+License: GPL (>=3) | file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 URL: https://github.com/AMBarbosa/ecotrends
 BugReports: https://github.com/AMBarbosa/ecotrends/issues
 Depends: 
-    R (>= 2.10)
+    R (>= 3.6)
 LazyData: true
 Suggests: 
 Config/testthat/edition: 3

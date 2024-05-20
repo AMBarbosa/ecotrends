@@ -123,8 +123,8 @@ plot(preds)
 Finally, you can use the `getTrend` function to **check for a linear (monotonic) temporal trend in suitability** in each pixel:
 
 ```{r}
-trend <- getTrend(rasts = preds, 
-                  alpha = 0.05)
+trend <- ecotrends::getTrend(rasts = preds, 
+                             alpha = 0.05)
 
 plot(trend, 
      col = hcl.colors(100, "spectral"), 

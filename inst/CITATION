@@ -1,8 +1,8 @@
-citHeader("To cite templateRpackage in publications use:")
+citHeader("To cite ecotrends in publications use:")
 
 citEntry(
   entry    = "Manual",
-  title    = "ecotrends",
+  title    = "ecotrends: Temporal trends in ecological niche models",
   author   = "A.M. Barbosa, N. Sillero",
   # journal  = ,
   year     = "2024",
