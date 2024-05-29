@@ -23,7 +23,7 @@ You can install `ecotrends` from GitHub with:
 devtools::install_github("AMBarbosa/ecotrends")
 ```
 
-## Users manual
+## Usage
 
 You’ll need some **species presence coordinates**. The code below
 downloads some example occurrence data from GBIF, and then performs
@@ -58,7 +58,9 @@ additionally, you can use the `getRegion` function to compute a
 ``` r
 library(ecotrends)
 
-reg <- ecotrends::getRegion(occs = occ_coords)
+reg <- ecotrends::getRegion(occs = occ_coords,
+                            type = "mean"  # can also be "width"
+                            )
 
 plot(reg, col = "wheat")
 points(occ_coords, cex = 0.3)
@@ -109,38 +111,53 @@ sqrt(ecotrends::pixelArea(vars_agg))
 
 This is much closer to the spatial resolution of many of the species
 occurrences. We can now **compute yearly ecological niche models** with
-these occurrences and variables:
+these occurrences and variables, optionally saving the results to a
+file:
 
 ``` r
 mods <- ecotrends::getModels(occs = occ_coords, 
                              rasts = vars_agg, 
-                             region = reg, 
+                             region = reg,
                              collin = TRUE, 
                              file = "models")
+
+# or, after you've computed your models with the above 'file' argument:
+# mods <- readRDS("models.rds")
 ```
 
-Let’s now **compute the model predictions** for each year:
+Let’s now **compute the model predictions** for each year, optionally
+delimiting them to the modelled region, and optionally saving results to
+a file:
 
 ``` r
 preds <- ecotrends::getPredictions(rasts = vars_agg, 
                                    mods = mods, 
+                                   region = reg,
                                    file = "predictions")
+
+# or, after you've computed the predictions with the above 'file' argument:
+# preds <- terra::rast("predictions.tif")
 
 plot(preds)
 ```
 
 Finally, you can use the `getTrend` function to **check for a linear
-(monotonic) temporal trend in suitability** in each pixel:
+(monotonic) temporal trend in suitability** in each pixel, optionally
+providing your `occ`urrence coordinates if you want the results to be
+restricted to the pixels that overlap them:
 
 ``` r
-trend <- ecotrends::getTrend(rasts = preds, 
-                             alpha = 0.05)
+trend <- ecotrends::getTrend(rasts = preds,
+                             occs = occ_coords,
+                             alpha = 0.05,
+                             full = TRUE)
 
 plot(trend, 
-     col = hcl.colors(100, "spectral"), 
-     main = "Suitability trend")
+     col = hcl.colors(100, "spectral"))
 ```
 
-Positive values indicate increasing suitability, and negative values
+If you want just the Tau value, you can set `full = FALSE` above.
+Positive Tau values indicate increasing suitability, and negative values
 indicate decreasing suitability over time. Pixels with no value have no
-significant linear trend.
+significant linear trend (or no occurrence points, if `occs` are
+provided).
