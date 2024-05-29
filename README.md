@@ -138,12 +138,12 @@ preds <- ecotrends::getPredictions(rasts = vars_agg,
 # or, after you've computed the predictions with the above 'file' argument:
 # preds <- terra::rast("predictions.tif")
 
-plot(preds)
+plot(preds, range = c(0, 1))
 ```
 
 Finally, you can use the `getTrend` function to **check for a linear
 (monotonic) temporal trend in suitability** in each pixel, optionally
-providing your `occ`urrence coordinates if you want the results to be
+providing your occurrence coordinates if you want the results to be
 restricted to the pixels that overlap them:
 
 ``` r
