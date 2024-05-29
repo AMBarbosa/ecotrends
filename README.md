@@ -156,8 +156,9 @@ plot(trend,
      col = hcl.colors(100, "spectral"))
 ```
 
-If you want just the Tau value, you can set `full = FALSE` above.
-Positive Tau values indicate increasing suitability, and negative values
-indicate decreasing suitability over time. Pixels with no value have no
-significant linear trend (or no occurrence points, if `occs` are
-provided).
+See `?Kendall::MannKendall` (including the ‘Values’ section) to know
+more about these statistics. If you want just the Tau value, you can set
+`full = FALSE` above. Positive Tau values indicate increasing
+suitability, and negative values indicate decreasing suitability over
+time. Pixels with no value have no significant linear trend (or no
+occurrence points, if `occs` are provided).
