@@ -1,7 +1,7 @@
 Package: ecotrends
 Type: Package
 Title: Temporal trends in ecological niche models 
-Version: 0.1
+Version: 0.2
 Authors@R: 
   c(
     person(given = "A. Marcia", family = "Barbosa", 
@@ -27,4 +27,5 @@ Imports:
     collinear,
     fuzzySim (>= 3.8),
     maxnet,
+    modEvA,
     Kendall

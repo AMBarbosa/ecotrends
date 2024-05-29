@@ -4,12 +4,14 @@
 \alias{getPredictions}
 \title{Get predictions}
 \usage{
-getPredictions(rasts, mods, file = NULL, verbosity = 2)
+getPredictions(rasts, mods, region = NULL, file = NULL, verbosity = 2)
 }
 \arguments{
 \item{rasts}{(multi-layer) SpatRaster containing the variables (with the same names) used in the models}
 
 \item{mods}{list of \link{maxnet} model objects, output of \code{\link[=getModels]{getModels()}}}
+
+\item{region}{optional SpatExtent or SpatVector polygon delimiting the region of 'rasts' within which to compute the predictions. The default is NULL, to use the entire extent of 'rasts'. Note that predictions may be unreliable outside the 'region' used for \code{\link[=getModels]{getModels()}}}
 
 \item{file}{optional file name (including path, not including extension) if you want the output rasters to be saved on disk}
 

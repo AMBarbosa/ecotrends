@@ -19,13 +19,37 @@
     <loc>/news/index.html</loc>
   </url>
   <url>
+    <loc>/reference/ecotrends-package.html</loc>
+  </url>
+  <url>
     <loc>/reference/exampledata.html</loc>
+  </url>
+  <url>
+    <loc>/reference/getEverything.html</loc>
+  </url>
+  <url>
+    <loc>/reference/getModels.html</loc>
+  </url>
+  <url>
+    <loc>/reference/getPredictions.html</loc>
+  </url>
+  <url>
+    <loc>/reference/getRegion.html</loc>
+  </url>
+  <url>
+    <loc>/reference/getTrend.html</loc>
+  </url>
+  <url>
+    <loc>/reference/getVariables.html</loc>
   </url>
   <url>
     <loc>/reference/index.html</loc>
   </url>
   <url>
     <loc>/reference/make_scatterplot.html</loc>
+  </url>
+  <url>
+    <loc>/reference/pixelArea.html</loc>
   </url>
   <url>
     <loc>/reference/resta.html</loc>
@@ -35,5 +59,8 @@
   </url>
   <url>
     <loc>/reference/templateRpackage-package.html</loc>
+  </url>
+  <url>
+    <loc>/reference/varsAvailable.html</loc>
   </url>
 </urlset>

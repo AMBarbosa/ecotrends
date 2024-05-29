@@ -3,3 +3,7 @@
 .Rdata
 .httr-oauth
 .DS_Store
+
+**.rds
+**.tif
+**.Rproj

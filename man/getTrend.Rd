@@ -4,15 +4,19 @@
 \alias{getTrend}
 \title{Get trend}
 \usage{
-getTrend(rasts, alpha = 0.05)
+getTrend(rasts, occs = NULL, alpha = 0.05, full = TRUE)
 }
 \arguments{
 \item{rasts}{multi-layer SpatRaster with the output of \code{\link[=getPredictions]{getPredictions()}}, or another time series of values for which to detect a trend}
 
-\item{alpha}{numeric value indicating the threshold significance level for Kendall's tau statistic. Default 0.05}
+\item{occs}{species occurrence coordinates (2 columns in this order: x, y or LONGitude, LATitude) in an object coercible to a data.frame (e.g. a data.frame, matrix, tibble, sf object or SpatVector of points), and in the same coordinate reference system as 'rasts'. If provided, output pixels that do not overlap these points will be NA}
+
+\item{alpha}{numeric value indicating the threshold significance level for Kendall's tau statistic. Default 0.05. Pixels with p-value above this will be NA in the output.}
+
+\item{full}{logical value indicating whether to output a multi-layer raster with the full results of the Mann-Kendall test, namely the Tau value, p-value (significance), S and variance of S. If set to FALSE, a single-layer raster will be returned with the (significant) Tau values.}
 }
 \value{
-SpatRaster layer where each pixel has Kendall's tau statistic (positive if increasing, negative if decreasing), or NA if the trend is non-significant (i.e., if the 2-sided p-value is larger than the specified 'alpha').
+SpatRaster where each pixel (or each pixel with points, if 'occs' is not NULL) has Kendall's tau statistic (positive if increasing, negative if decreasing), or NA if the trend is non-significant (i.e., if the 2-sided p-value is larger than the specified 'alpha'). If full=TRUE (the default), additional layers are produced with the p value, S, and variance of S.
 }
 \description{
 This function uses \code{\link[terra:app]{terra::app()}} to apply the \code{\link[Kendall:MannKendall]{Kendall::MannKendall()}} function to each pixel of a multi-layer time series SpatRaster, testing for a monotonic (either increasing or decreasing) trend in the raster values.

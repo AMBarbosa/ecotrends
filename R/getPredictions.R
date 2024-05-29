@@ -2,19 +2,34 @@
 #'
 #' @param rasts (multi-layer) SpatRaster containing the variables (with the same names) used in the models
 #' @param mods list of [maxnet] model objects, output of [getModels()]
+#' @param region optional SpatExtent or SpatVector polygon delimiting the region of 'rasts' within which to compute the predictions. The default is NULL, to use the entire extent of 'rasts'. Note that predictions may be unreliable outside the 'region' used for [getModels()]
 #' @param file optional file name (including path, not including extension) if you want the output rasters to be saved on disk
 #' @param verbosity integer value indicating the amount of messages to display. The default is 2, for the maximum number of messages available.
 #'
 #' @return multi-layer SpatRaster with the predicted values from the variables for each year
 #' @author A. Marcia Barbosa
 #' @export
+#' @import terra
 #'
 #' @examples
 
-getPredictions <- function(rasts, mods, file = NULL, verbosity = 2) {
+getPredictions <- function(rasts, mods, region = NULL, file = NULL, verbosity = 2) {
 
   if (paste0(file, ".tif") %in% list.files(getwd())) {
     stop ("'file' already exists in the current working directory; please delete it or choose a different file name.")
+  }
+
+  if (!inherits(rasts, "SpatRaster"))
+    stop ("'rasts' must be a 'SpatRaster' object")
+
+  if (!is.null(region)) {
+    if (!(inherits(region, "SpatVector") || inherits(region, "SpatExtent")))
+      stop ("'region' must be a 'SpatVector' or a 'SpatExtent' object")
+
+    if (verbosity > 0)
+      message("masking 'rasts' with 'region'...")
+
+    rasts <- terra::crop(rasts, region, mask = TRUE, snap = "out")
   }
 
   n_mods <- length(mods)

@@ -15,6 +15,11 @@
 #' @return a list of model objects of class [maxnet]
 #' @author A. Marcia Barbosa
 #' @export
+#' @import terra
+#' @import collinear
+#' @import maxnet
+#' @importFrom methods is
+#' @importFrom fuzzySim gridRecords selectAbsences
 #'
 #' @examples
 

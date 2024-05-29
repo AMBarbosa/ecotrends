@@ -14,6 +14,7 @@
 #' @seealso [terra::cellSize()], which this function wraps
 #'
 #' @export
+#' @import terra
 #'
 #' @examples
 #' r <- terra::rast(system.file("ex/elev.tif", package = "terra"))

@@ -5,14 +5,14 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="What the package does (one paragraph).">
-<title>What the Package Does (One Line, Title Case) • templateRpackage</title>
+<meta name="description" content="This package computes temporal trends in environmental suitability obtained from ecological niche models, based on a set of species presence point coordinates and predictor variables.">
+<title>Temporal trends in ecological niche models  • ecotrends</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="What the Package Does (One Line, Title Case)">
-<meta property="og:description" content="What the package does (one paragraph).">
+<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Temporal trends in ecological niche models ">
+<meta property="og:description" content="This package computes temporal trends in environmental suitability obtained from ecological niche models, based on a set of species presence point coordinates and predictor variables.">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -24,9 +24,9 @@
 
     <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
     
-    <a class="navbar-brand me-2" href="index.html">templateRpackage</a>
+    <a class="navbar-brand me-2" href="index.html">ecotrends</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,7 +48,7 @@
 
       <ul class="navbar-nav">
 <li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/EcologyR/templateRpackage/" aria-label="github">
+  <a class="external-link nav-link" href="https://github.com/AMBarbosa/ecotrends/" aria-label="github">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -61,74 +61,103 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="templaterpackage">templateRpackage<a class="anchor" aria-label="anchor" href="#templaterpackage"></a>
+<div class="page-header"><h1 id="ecotrends">ecotrends<a class="anchor" aria-label="anchor" href="#ecotrends"></a>
 </h1></div>
 <!-- badges: start -->
-
-<p>The goal of templateRpackage is to …</p>
+<!-- badges: end -->
+<p>The goal of <code>ecotrends</code> is to <strong>compute a time series of ecological niche models</strong>, using species occurrence data and environmental variables, and then map the existence and direction of <strong>linear temporal trends in environmental suitability</strong>, as in <a href="https://doi.org/10.1016/j.scitotenv.2021.147172" class="external-link">Arenas-Castro &amp; Sillero (2021)</a>.</p>
+<p>This package is part of the <a href="https://montobeo.wordpress.com/" class="external-link">MontObEO project</a>.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
+<p>You can install <code>ecotrends</code> from GitHub with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"EcologyR/templateRpackage"</span><span class="op">)</span></span></code></pre></div>
-<p>The code to create this package is available <a href="https://gist.github.com/Pakillo/999e34301c56011138ef164363502465" class="external-link">here</a>.</p>
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"AMBarbosa/ecotrends"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+<h2 id="users-manual">Users manual<a class="anchor" aria-label="anchor" href="#users-manual"></a>
 </h2>
-<p>This is a basic example which shows you how to solve a common problem:</p>
+<p>You’ll need some <strong>species presence coordinates</strong>. The code below downloads some example occurrence data from GBIF, and then performs <strong>just a basic automatic cleaning</strong>:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># library(templateRpackage)</span></span>
-<span><span class="co">## basic example code</span></span></code></pre></div>
-<p>What is special about using <code>README.Rmd</code> instead of just <code>README.md</code>? You can include R chunks like so:</p>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">geodata</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://CRAN.R-project.org/package=fuzzySim" class="external-link">fuzzySim</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">occ_raw</span> <span class="op">&lt;-</span> <span class="fu">geodata</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/geodata/man/sp_occurrence.html" class="external-link">sp_occurrence</a></span><span class="op">(</span>genus <span class="op">=</span> <span class="st">"Chioglossa"</span>, </span>
+<span>                                  species <span class="op">=</span> <span class="st">"lusitanica"</span>, </span>
+<span>                                  fixnames <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">occ_clean</span> <span class="op">&lt;-</span> <span class="fu">fuzzySim</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/fuzzySim/man/cleanCoords.html" class="external-link">cleanCoords</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">occ_raw</span>, </span>
+<span>                                   coord.cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"decimalLongitude"</span>, <span class="st">"decimalLatitude"</span><span class="op">)</span>, </span>
+<span>                                   uncert.col <span class="op">=</span> <span class="st">"coordinateUncertaintyInMeters"</span>,</span>
+<span>                                   uncert.limit <span class="op">=</span> <span class="fl">10000</span>, </span>
+<span>                                   year.col <span class="op">=</span> <span class="st">"year"</span>, </span>
+<span>                                   year.min <span class="op">=</span> <span class="fl">1970</span>, </span>
+<span>                                   abs.col <span class="op">=</span> <span class="st">"occurrenceStatus"</span>, </span>
+<span>                                   plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">occ_coords</span> <span class="op">&lt;-</span> <span class="va">occ_clean</span><span class="op">[</span> , <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"decimalLongitude"</span>, <span class="st">"decimalLatitude"</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
+<p>You should also <strong>delimit a region for modelling</strong>. You can provide your own spatial extent or polygon – e.g., a biogeographical region within which your species was more or less evenly surveyed. Alternatively or additionally, you can use the <code>getRegion</code> function to compute a “reasonably sized” area around your species occurrences:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">cars</span><span class="op">)</span></span>
-<span><span class="co">#&gt;      speed           dist       </span></span>
-<span><span class="co">#&gt;  Min.   : 4.0   Min.   :  2.00  </span></span>
-<span><span class="co">#&gt;  1st Qu.:12.0   1st Qu.: 26.00  </span></span>
-<span><span class="co">#&gt;  Median :15.0   Median : 36.00  </span></span>
-<span><span class="co">#&gt;  Mean   :15.4   Mean   : 42.98  </span></span>
-<span><span class="co">#&gt;  3rd Qu.:19.0   3rd Qu.: 56.00  </span></span>
-<span><span class="co">#&gt;  Max.   :25.0   Max.   :120.00</span></span></code></pre></div>
-<p>You’ll still need to render <code>README.Rmd</code> regularly, to keep <code>README.md</code> up-to-date. <code><a href="https://devtools.r-lib.org/reference/build_rmd.html" class="external-link">devtools::build_readme()</a></code> is handy for this. You could also use GitHub Actions to re-render <code>README.Rmd</code> every time you push. An example workflow can be found here: <a href="https://github.com/r-lib/actions/tree/v1/examples" class="external-link uri">https://github.com/r-lib/actions/tree/v1/examples</a>.</p>
-<p>You can also embed plots, for example:</p>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AMBarbosa/ecotrends" class="external-link">ecotrends</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">reg</span> <span class="op">&lt;-</span> <span class="fu">ecotrends</span><span class="fu">::</span><span class="fu"><a href="reference/getRegion.html">getRegion</a></span><span class="op">(</span>occs <span class="op">=</span> <span class="va">occ_coords</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">reg</span>, col <span class="op">=</span> <span class="st">"wheat"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/lines.html" class="external-link">points</a></span><span class="op">(</span><span class="va">occ_coords</span>, cex <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></span></code></pre></div>
+<p>Now let’s <strong>download some variables</strong> with which to build a <strong>yearly time series</strong> of ecological niche models for this species in this region. You can first use the <code>varsAvailable</code> function to check which variables and years are available, and then the <code>getVariables</code> function to download the ones you choose. Mind that the download may take a long time:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">pressure</span><span class="op">)</span></span></code></pre></div>
-<p>In that case, don’t forget to commit and push the resulting figure files, so they display on GitHub and CRAN.</p>
-</div>
-<div class="section level2">
-<h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
-</h2>
-<p>If using this package, please cite it:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">citation</span>(<span class="st">"templateRpackage"</span>)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>To cite templateRpackage <span class="cf">in</span> publications use<span class="sc">:</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  Rodriguez<span class="sc">-</span>Sanchez F. <span class="fl">2023.</span> templateRpackage.</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  https<span class="sc">:</span><span class="er">//</span>ecologyr.github.io<span class="sc">/</span>templateRpackage<span class="sc">/</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>A BibTeX entry <span class="cf">for</span> LaTeX users is</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="sc">@</span>Manual{,</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    title <span class="ot">=</span> {templateRpackage},</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    author <span class="ot">=</span> {Francisco Rodriguez<span class="sc">-</span>Sanchez},</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    year <span class="ot">=</span> {<span class="dv">2023</span>},</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    url <span class="ot">=</span> {https<span class="sc">:</span><span class="er">//</span>ecologyr.github.io<span class="sc">/</span>templateRpackage<span class="sc">/</span>},</span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  }</span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="funding">Funding<a class="anchor" aria-label="anchor" href="#funding"></a>
-</h2>
-<p>The development of this software has been funded by Fondo Europeo de Desarrollo Regional (FEDER) and Consejería de Transformación Económica, Industria, Conocimiento y Universidades of Junta de Andalucía (proyecto US-1381388 led by Francisco Rodríguez Sánchez, Universidad de Sevilla).</p>
-<p><img src="https://ecologyr.github.io/workshop/images/logos.png"></p>
+<code class="sourceCode R"><span><span class="fu">ecotrends</span><span class="fu">::</span><span class="fu"><a href="reference/varsAvailable.html">varsAvailable</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">vars</span> <span class="op">&lt;-</span> <span class="fu">ecotrends</span><span class="fu">::</span><span class="fu"><a href="reference/getVariables.html">getVariables</a></span><span class="op">(</span>vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"tmin"</span>, <span class="st">"tmax"</span>, <span class="st">"ppt"</span>, <span class="st">"pet"</span>, <span class="st">"ws"</span><span class="op">)</span>, </span>
+<span>                                years <span class="op">=</span> <span class="fl">1990</span><span class="op">:</span><span class="fl">1981</span>, </span>
+<span>                                region <span class="op">=</span> <span class="va">reg</span>, </span>
+<span>                                file <span class="op">=</span> <span class="st">"variable_rasters"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># or, after you've downloaded the variables with the above 'file' argument:</span></span>
+<span><span class="co"># vars &lt;- terra::rast("variable_rasters.tif")</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">vars</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">vars</span><span class="op">[[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<p>The variable raster layers have a given pixel size <em>at the Equator</em>, but actual pixel sizes can vary widely across latitudes. So, let’s <strong>check the average pixel size in our study region</strong>, as well as the spatial uncertainty values of our occurrence coordinates:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fu">ecotrends</span><span class="fu">::</span><span class="fu"><a href="reference/pixelArea.html">pixelArea</a></span><span class="op">(</span><span class="va">vars</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">occ_clean</span><span class="op">$</span><span class="va">coordinateUncertaintyInMeters</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p>You can see there are several occurrence points with spatial uncertainty larger than our pixel size, so it might be a good idea to <strong>coarsen the spatial resolution</strong> of the variable layers:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">vars_agg</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="va">vars</span>, fact <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fu">ecotrends</span><span class="fu">::</span><span class="fu"><a href="reference/pixelArea.html">pixelArea</a></span><span class="op">(</span><span class="va">vars_agg</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>This is much closer to the spatial resolution of many of the species occurrences. We can now <strong>compute yearly ecological niche models</strong> with these occurrences and variables:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mods</span> <span class="op">&lt;-</span> <span class="fu">ecotrends</span><span class="fu">::</span><span class="fu"><a href="reference/getModels.html">getModels</a></span><span class="op">(</span>occs <span class="op">=</span> <span class="va">occ_coords</span>, </span>
+<span>                             rasts <span class="op">=</span> <span class="va">vars_agg</span>, </span>
+<span>                             region <span class="op">=</span> <span class="va">reg</span>, </span>
+<span>                             collin <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>                             file <span class="op">=</span> <span class="st">"models"</span><span class="op">)</span></span></code></pre></div>
+<p>Let’s now <strong>compute the model predictions</strong> for each year:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">preds</span> <span class="op">&lt;-</span> <span class="fu">ecotrends</span><span class="fu">::</span><span class="fu"><a href="reference/getPredictions.html">getPredictions</a></span><span class="op">(</span>rasts <span class="op">=</span> <span class="va">vars_agg</span>, </span>
+<span>                                   mods <span class="op">=</span> <span class="va">mods</span>, </span>
+<span>                                   file <span class="op">=</span> <span class="st">"predictions"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">preds</span><span class="op">)</span></span></code></pre></div>
+<p>Finally, you can use the <code>getTrend</code> function to <strong>check for a linear (monotonic) temporal trend in suitability</strong> in each pixel:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">trend</span> <span class="op">&lt;-</span> <span class="fu">ecotrends</span><span class="fu">::</span><span class="fu"><a href="reference/getTrend.html">getTrend</a></span><span class="op">(</span>rasts <span class="op">=</span> <span class="va">preds</span>, </span>
+<span>                             alpha <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">trend</span>, </span>
+<span>     col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/palettes.html" class="external-link">hcl.colors</a></span><span class="op">(</span><span class="fl">100</span>, <span class="st">"spectral"</span><span class="op">)</span>, </span>
+<span>     main <span class="op">=</span> <span class="st">"Suitability trend"</span><span class="op">)</span></span></code></pre></div>
+<p>Positive values indicate increasing suitability, and negative values indicate decreasing suitability over time. Pixels with no value have no significant linear trend.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/EcologyR/templateRpackage/" class="external-link">Browse source code</a></li>
-<li><a href="https://github.com/EcologyR/templateRpackage/issues" class="external-link">Report a bug</a></li>
+<li><a href="https://github.com/AMBarbosa/ecotrends/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/AMBarbosa/ecotrends/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
@@ -136,7 +165,7 @@
 <h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
-<li><small><a href="https://opensource.org/licenses/mit-license.php" class="external-link">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
+<li><small>GPL (&gt;=3) | file <a href="LICENSE-text.html">LICENSE</a></small></li>
 </ul>
 </div>
 
@@ -144,27 +173,19 @@
 <div class="citation">
 <h2 data-toc-skip>Citation</h2>
 <ul class="list-unstyled">
-<li><a href="authors.html#citation">Citing templateRpackage</a></li>
+<li><a href="authors.html#citation">Citing ecotrends</a></li>
 </ul>
 </div>
 
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Francisco Rodriguez-Sanchez <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-7981-1599" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>My coauthor <br><small class="roles"> Author </small>  </li>
+<li>A. Marcia Barbosa <br><small class="roles"> Author, maintainer </small>  </li>
+<li>Neftali Sillero <br><small class="roles"> Author </small>  </li>
 </ul>
 </div>
 
-<div class="dev-status">
-<h2 data-toc-skip>Dev status</h2>
-<ul class="list-unstyled">
-<li><a href="https://github.com/EcologyR/templateRpackage/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/EcologyR/templateRpackage/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
-<li><a href="https://app.codecov.io/gh/EcologyR/templateRpackage?branch=master" class="external-link"><img src="https://codecov.io/gh/EcologyR/templateRpackage/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
-<li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg"></a></li>
-<li><a href="https://www.repostatus.org/#wip" class="external-link"><img src="https://www.repostatus.org/badges/latest/wip.svg" alt="Project Status: WIP - Initial development is in progress, but there has not yet been a stable, usable release suitable for the public."></a></li>
-</ul>
-</div>
+
 
   </aside>
 </div>
@@ -172,7 +193,7 @@
 
     <footer><div class="pkgdown-footer-left">
   <p></p>
-<p>Developed by Francisco Rodriguez-Sanchez, My coauthor.</p>
+<p>Developed by A. Marcia Barbosa, Neftali Sillero.</p>
 </div>
 
 <div class="pkgdown-footer-right">
