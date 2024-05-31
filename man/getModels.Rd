@@ -16,7 +16,7 @@ getModels(
 )
 }
 \arguments{
-\item{occs}{species occurrence coordinates (2 columns in this order: x, y or LONgitude, LATitude) in an object coercible to a data.frame (e.g. a data.frame, matrix, tibble, sf object or SpatVector of points), and in the same coordinate reference system as 'rasts'}
+\item{occs}{species occurrence coordinates (2 columns in this order: x, y or LONGitude, LATitude) in an object coercible to a data.frame (e.g. a data.frame, matrix, tibble, sf object or SpatVector of points), and in the same coordinate reference system as 'rasts'}
 
 \item{rasts}{(multi-layer) SpatRaster with the variables to use in the models. The layer names should be in the form 'varname_year', e.g. 'tmin_1981', as in the output of \code{\link[=getVariables]{getVariables()}}}
 
@@ -24,7 +24,7 @@ getModels(
 
 \item{nbg}{integer value indicating the maximum number of background pixels to use in the models. The default is 10,000, or the total number of pixels in the modelling region if that's less.}
 
-\item{nreps}{integer value indicating the number of replicates to compute for each model. One 1 is implemented currently.}
+\item{nreps}{integer value indicating the number of train-test replicates to compute for evaluating each model. One 1 is implemented currently.}
 
 \item{collin}{logical value indicating whether multicollinearity among the variables should be reduced prior to computing each model. The default is TRUE, in which case the \code{\link[collinear:collinear]{collinear::collinear()}} function is used, with the default values and with the species presences as 'response'.}
 

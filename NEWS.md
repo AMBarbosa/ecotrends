@@ -1,3 +1,22 @@
+# ecotrends 0.4  [ PENDING! ]
+
+-   getModels()
+
+    -   add argument 'seed = 1' for the background sample
+    -   add argument 'reps = 10' with samples for train and test
+    -   report model evaluation (AUC, maxTSS) across the test data samples
+    -   add arguments with parameters for maxnet::maxnet()
+    -   add arguments with parameters for collinear::collinear()
+
+
+# ecotrends 0.3
+
+-   getTrend()
+
+    -   dealt with NA pixels to avoid numerous Kendall::MannKendall() warnings (thanks to Spacedman at https://gis.stackexchange.com/a/464198)
+    -   bonus: increased efficiency, as mannkendall outputs an unlisted vector (still thanks to Spacedman at https://gis.stackexchange.com/a/464198)
+
+
 # ecotrends 0.2
 
 -   getPredictions()

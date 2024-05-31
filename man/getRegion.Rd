@@ -7,7 +7,7 @@
 getRegion(occs, type = "mean", prop = 0.5, crs = "EPSG:4326")
 }
 \arguments{
-\item{occs}{species occurrence coordinates (2 columns in this order: x, y or LONgitude, LATitude) in an object coercible to a data.frame (e.g. a data.frame, matrix, tibble, sf object or SpatVector of points)}
+\item{occs}{species occurrence coordinates (2 columns in this order: x, y or LONGitude, LATitude) in an object coercible to a data.frame (e.g. a data.frame, matrix, tibble, sf object or SpatVector of points)}
 
 \item{type}{character indicating whether to use the "mean" pairwise \code{\link[terra:distance]{terra::distance()}} among points (the default), or a proportion of the "width" (minimum diameter, computed with \code{\link[terra:width]{terra::width()}}) of the points' spatial extent}
 

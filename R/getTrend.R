@@ -20,51 +20,28 @@
 
 getTrend <- function(rasts, occs = NULL, alpha = 0.05, full = TRUE) {
 
-  # mannKendEst <- function(x) cor.test(x, 1:length(x), method = "kendall")$estimate
-  # mannKendSig <- function(x) cor.test(x, 1:length(x), method = "kendall")$p.value
-  #
-  # tau <- terra::app(rasts, function(x) mannKendEst)
-  # p <- terra::app(rasts, function(x) mannKendSig)
-
-
-  # make MannKendall output a vector rather than a list, as required by terra::app:
-  # mannkend <- function(x) do.call(rbind, lapply(x, function(x) unlist(Kendall::MannKendall(x))))  # https://stackoverflow.com/questions/14820764/split-vector-and-apply-mann-kendall-test
-
-  tau <- terra::app(rasts, function(x) Kendall::MannKendall(x)$tau)
-  p <- terra::app(rasts, function(x) Kendall::MannKendall(x)$sl)
-  # tau <- terra::app(rasts, mannkend)
-
-  if (alpha < 1) {
-    out_tau <- terra::ifel(p < alpha, tau, NA)
-  } else {
-    out_tau <- tau
-  }
-
-
-  if (isFALSE(full)) {
-
-    out <- out_tau
-
-  } else {
-    s <- terra::app(rasts, function(x) Kendall::MannKendall(x)$S)
-    v <- terra::app(rasts, function(x) Kendall::MannKendall(x)$varS)
-
-    if (alpha < 1) {
-      out_p <- terra::ifel(p < alpha, p, NA)
-      out_s <- terra::ifel(p < alpha, s, NA)
-      out_v <- terra::ifel(p < alpha, v, NA)
-
+  # use Spacedman's Kendall::MannKendall adaptation to deal with NAs (https://gis.stackexchange.com/a/464198)
+  # this additionally outputs an unlisted vector, appropriate for terra::app
+  mannkend <- function(x) {
+    if(sum(!is.na(x)) > 3) {
+      return(unlist(Kendall::MannKendall(x)))
     } else {
-      out_p <- p
-      out_s <- s
-      out_v <- v
+      return(c(tau = NA, sl = NA, S = NA, D = NA, varS = NA))
     }
-
-    out <- c(out_tau, out_p, out_s, out_v)
-    names(out) <- c("Tau", "p_value", "S", "S_variance")
   }
 
+  out <- terra::app(rasts, mannkend)
 
+  out <- out[[-grep("D", names(out))]]  # denominator, tau=S/D (as per ?Kendall::MannKendall)
+
+  # remove non-significant pixels:
+  if (alpha < 1)  out <- terra::ifel(out$sl < alpha, out, NA)
+
+  names(out) <- c("tau", "p_value", "S", "varS")  # ifel() removed the names
+
+  if (isFALSE(full))  out <- out$tau
+
+  # remove non-occurrence pixels:
   if (!is.null(occs)) {
     if (inherits(occs, "data.frame")) {
       if (ncol(occs) > 2) message ("assuming 'occs' coordinates are in the first two columns")
