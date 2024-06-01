@@ -6,7 +6,7 @@
 #' @param source source to import the raster variables from, e.g. "TerraClimate" (currently the only one implemented)
 #' @param vars character vector of the names of the variables to be imported. Run varsAvailable() for options. The default is to download all available variables from the specified 'source'. Note that the download can take a long time, especially for many variables, long series of years, and/or large regions.
 #' @param years year range to get the variables from (e.g. 1979:2013). Note that the download can take a long time for long series of years.
-#' @param region optional length-four numeric vector (xmin, xmax, ymin, ymax geodetic coordinates in degrees), SpatExtent or SpatVector polygon delimiting the region of the world for which the variables should be downloaded. See ?getRegion for suggestions. The larger the region, the slower the download.
+#' @param region optional length-four numeric vector (xmin, xmax, ymin, ymax geodetic coordinates in degrees), SpatExtent or SpatVector polygon delimiting the region of the world for which the variables should be downloaded. See ?getRegion for suggestions. The larger the region, the lomger the download time.
 #' @param file optional file name (including the path, not including the filename extension) if you want the downloaded rasters to be saved on disk, in which case they are saved as a compressed multi-layer GeoTIFF
 #' @param verbosity integer value indicating the amount of messages to display. The default is 2, for the maximum number of messages available.
 #'
@@ -25,11 +25,13 @@
 getVariables <- function(source = "TerraClimate", vars = varsAvailable(source)$vars, years = varsAvailable(source)$years, region = c(-180, 180, -90, 90), file = NULL, verbosity = 2) {
 
   if (!is.null(file) && !exists(dirname(file))) {
-    dir.create(dirname(file))
-  }  # # #
+    dir.create(dirname(file), recursive = TRUE)
+  }
 
-  if (paste0(file, ".tif") %in% list.files(getwd())) {
-    stop ("'file' already exists in the current working directory; please delete it or choose a different file name.")
+  if (paste0(file, ".tif") %in% list.files(getwd(), recursive = TRUE)) {
+    # stop ("'file' already exists in the current working directory; please delete it or choose a different file name.")
+    message("Variables imported from 'file', which already exists in the current working directory. Please provide a different 'file' path/name if this is not what you want.")
+    return(terra::rast(paste0(file, ".tif")))
   }
 
   rast_n <- length(vars) * length(years)
@@ -39,14 +41,17 @@ getVariables <- function(source = "TerraClimate", vars = varsAvailable(source)$v
   if (source == "TerraClimate") {
     for (v in 1:length(vars))  for (y in 1:length(years)) {
       rast_count <- rast_count + 1
-      url <- paste0("http://thredds.northwestknowledge.net:8080/thredds/fileServer/TERRACLIMATE_ALL/data/TerraClimate_", vars[v], "_", years[y], ".nc")
+      # url <- paste0("http://thredds.northwestknowledge.net:8080/thredds/fileServer/TERRACLIMATE_ALL/data/TerraClimate_", vars[v], "_", years[y], ".nc")
+      url <- paste0("https://climate.northwestknowledge.net/TERRACLIMATE-DATA/TerraClimate_", vars[v], "_", years[y], ".nc")  # https://www.climatologylab.org/wget-terraclimate.html
+
 
       if (verbosity > 0) {
         message("\ndownloading raster ", rast_count, " of ", rast_n)
         message(url)
       }
 
-      rasts_monthly <- terra::rast(url, vsi = TRUE, win = region)
+      vsi <- ifelse(.Platform$OS.type == "unix", TRUE, FALSE)
+      rasts_monthly <- terra::rast(url, vsi = vsi, win = region)
 
       rasts[[rast_count]] <- terra::app(rasts_monthly, "mean")
 
@@ -61,4 +66,5 @@ getVariables <- function(source = "TerraClimate", vars = varsAvailable(source)$v
   }
 
   return(rasts[[sort(names(rasts))]])  # reordered by year
+
 }
