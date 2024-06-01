@@ -3,7 +3,7 @@
 #' @param rasts (multi-layer) SpatRaster containing the variables (with the same names) used in the models
 #' @param mods list of [maxnet] model objects, output of [getModels()]
 #' @param region optional SpatExtent or SpatVector polygon delimiting the region of 'rasts' within which to compute the predictions. The default is NULL, to use the entire extent of 'rasts'. Note that predictions may be unreliable outside the 'region' used for [getModels()]
-#' @param file optional file name (including path, not including extension) if you want the output rasters to be saved on disk
+#' @param file optional file name (including path, not including extension) if you want the prediction rasters to be saved on disk. If 'file' already exists in the working directory, the rasters are imported from there.
 #' @param verbosity integer value indicating the amount of messages to display. The default is 2, for the maximum number of messages available.
 #'
 #' @return multi-layer SpatRaster with the predicted values from the variables for each year
@@ -15,8 +15,10 @@
 
 getPredictions <- function(rasts, mods, region = NULL, file = NULL, verbosity = 2) {
 
-  if (paste0(file, ".tif") %in% list.files(getwd())) {
-    stop ("'file' already exists in the current working directory; please delete it or choose a different file name.")
+  if (paste0(file, ".tif") %in% list.files(getwd(), recursive = TRUE)) {
+    # stop ("'file' already exists in the current working directory; please delete it or choose a different file name.")
+    if (verbosity > 0) message("Predictions imported from the specified 'file', which already exists in the current working directory. Please provide a different 'file' path/name if this is not what you want.")
+    return(terra::rast(paste0(file, ".tif")))
   }
 
   if (!inherits(rasts, "SpatRaster"))

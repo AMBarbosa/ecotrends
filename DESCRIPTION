@@ -1,7 +1,7 @@
 Package: ecotrends
 Type: Package
 Title: Temporal trends in ecological niche models 
-Version: 0.3
+Version: 0.4
 Authors@R: 
   c(
     person(given = "A. Marcia", family = "Barbosa", 

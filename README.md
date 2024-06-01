@@ -59,8 +59,7 @@ additionally, you can use the `getRegion` function to compute a
 library(ecotrends)
 
 reg <- ecotrends::getRegion(occs = occ_coords,
-                            type = "mean"  # can also be "width"
-                            )
+                            type = "mean")
 
 plot(reg, col = "wheat")
 points(occ_coords, cex = 0.3)
@@ -80,9 +79,6 @@ vars <- ecotrends::getVariables(vars = c("tmin", "tmax", "ppt", "pet", "ws"),
                                 years = 1990:1981, 
                                 region = reg, 
                                 file = "variable_rasters")
-
-# or, after you've downloaded the variables with the above 'file' argument:
-# vars <- terra::rast("variable_rasters.tif")
 
 names(vars)
 plot(vars[[1:6]])
@@ -120,9 +116,6 @@ mods <- ecotrends::getModels(occs = occ_coords,
                              region = reg,
                              collin = TRUE, 
                              file = "models")
-
-# or, after you've computed your models with the above 'file' argument:
-# mods <- readRDS("models.rds")
 ```
 
 Let’s now **compute the model predictions** for each year, optionally
@@ -134,9 +127,6 @@ preds <- ecotrends::getPredictions(rasts = vars_agg,
                                    mods = mods, 
                                    region = reg,
                                    file = "predictions")
-
-# or, after you've computed the predictions with the above 'file' argument:
-# preds <- terra::rast("predictions.tif")
 
 plot(preds, range = c(0, 1))
 ```

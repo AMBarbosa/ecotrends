@@ -13,7 +13,7 @@ getPredictions(rasts, mods, region = NULL, file = NULL, verbosity = 2)
 
 \item{region}{optional SpatExtent or SpatVector polygon delimiting the region of 'rasts' within which to compute the predictions. The default is NULL, to use the entire extent of 'rasts'. Note that predictions may be unreliable outside the 'region' used for \code{\link[=getModels]{getModels()}}}
 
-\item{file}{optional file name (including path, not including extension) if you want the output rasters to be saved on disk}
+\item{file}{optional file name (including path, not including extension) if you want the prediction rasters to be saved on disk. If 'file' already exists in the working directory, the rasters are imported from there.}
 
 \item{verbosity}{integer value indicating the amount of messages to display. The default is 2, for the maximum number of messages available.}
 }

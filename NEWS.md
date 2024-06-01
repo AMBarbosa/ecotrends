@@ -1,12 +1,13 @@
-# ecotrends 0.4  [ PENDING! ]
+# ecotrends 0.4
 
--   getModels()
+-   getVariables()
 
-    -   add argument 'seed = 1' for the background sample
-    -   add argument 'reps = 10' with samples for train and test
-    -   report model evaluation (AUC, maxTSS) across the test data samples
-    -   add arguments with parameters for maxnet::maxnet()
-    -   add arguments with parameters for collinear::collinear()
+    -   set vsi=FALSE if on Windows, to prevent download fail
+
+
+-   getVariables(), getModels(), getPredictions()
+
+    -   objects imported from 'file', if it exists in getwd()
 
 
 # ecotrends 0.3

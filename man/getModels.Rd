@@ -28,7 +28,7 @@ getModels(
 
 \item{collin}{logical value indicating whether multicollinearity among the variables should be reduced prior to computing each model. The default is TRUE, in which case the \code{\link[collinear:collinear]{collinear::collinear()}} function is used, with the default values and with the species presences as 'response'.}
 
-\item{file}{optional file name (including path, not including extension) if you want the output list of model objects to be saved on disk}
+\item{file}{optional file name (including path, not including extension) if you want the output list of model objects to be saved on disk. If 'file' already exists in the working directory, models are imported from there.}
 
 \item{verbosity}{integer value indicating the amount of messages to display. The default is 2, for the maximum number of messages available.}
 }

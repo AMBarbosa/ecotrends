@@ -9,7 +9,7 @@
 #' @param nbg integer value indicating the maximum number of background pixels to use in the models. The default is 10,000, or the total number of pixels in the modelling region if that's less.
 #' @param nreps integer value indicating the number of train-test replicates to compute for evaluating each model. One 1 is implemented currently.
 #' @param collin logical value indicating whether multicollinearity among the variables should be reduced prior to computing each model. The default is TRUE, in which case the [collinear::collinear()] function is used, with the default values and with the species presences as 'response'.
-#' @param file optional file name (including path, not including extension) if you want the output list of model objects to be saved on disk
+#' @param file optional file name (including path, not including extension) if you want the output list of model objects to be saved on disk. If 'file' already exists in the working directory, models are imported from there.
 #' @param verbosity integer value indicating the amount of messages to display. The default is 2, for the maximum number of messages available.
 
 #' @return a list of model objects of class [maxnet]
@@ -25,8 +25,10 @@
 
 getModels <- function(occs, rasts, region = NULL, nbg = 10000, nreps = 1, collin = TRUE, file = NULL, verbosity = 2) {
 
-  if (paste0(file, ".rds") %in% list.files(getwd())) {
-    stop ("'file' already exists in the current working directory; please delete it or choose a different file name.")
+  if (paste0(file, ".rds") %in% list.files(getwd(), recursive = TRUE)) {
+    # stop ("'file' already exists in the current working directory; please delete it or choose a different file name.")
+    if (verbosity > 0) message("Models imported from the specified 'file', which already exists in the current working directory. Please provide a different 'file' path/name if this is not what you want.")
+    return(readRDS(paste0(file, ".rds")))
   }
 
   if (nreps != 1) warning("sorry, argument 'nreps' not yet implemented, currently ignored")

@@ -20,9 +20,9 @@ getVariables(
 
 \item{years}{year range to get the variables from (e.g. 1979:2013). Note that the download can take a long time for long series of years.}
 
-\item{region}{optional length-four numeric vector (xmin, xmax, ymin, ymax geodetic coordinates in degrees), SpatExtent or SpatVector polygon delimiting the region of the world for which the variables should be downloaded. See ?getRegion for suggestions. The larger the region, the slower the download.}
+\item{region}{optional length-four numeric vector (xmin, xmax, ymin, ymax geodetic coordinates in degrees), SpatExtent or SpatVector polygon delimiting the region of the world for which the variables should be downloaded. See ?getRegion for suggestions. The larger the region, the longer the download time.}
 
-\item{file}{optional file name (including the path, not including the filename extension) if you want the downloaded rasters to be saved on disk, in which case they are saved as a compressed multi-layer GeoTIFF}
+\item{file}{optional file name (including the path, not including the filename extension) if you want the downloaded variable rasters to be saved on disk, in which case they are saved as a compressed multi-layer GeoTIFF. If 'file' already exists in the working directory, variables are imported from there.}
 
 \item{verbosity}{integer value indicating the amount of messages to display. The default is 2, for the maximum number of messages available.}
 }

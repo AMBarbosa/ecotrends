@@ -6,8 +6,8 @@
 #' @param source source to import the raster variables from, e.g. "TerraClimate" (currently the only one implemented)
 #' @param vars character vector of the names of the variables to be imported. Run varsAvailable() for options. The default is to download all available variables from the specified 'source'. Note that the download can take a long time, especially for many variables, long series of years, and/or large regions.
 #' @param years year range to get the variables from (e.g. 1979:2013). Note that the download can take a long time for long series of years.
-#' @param region optional length-four numeric vector (xmin, xmax, ymin, ymax geodetic coordinates in degrees), SpatExtent or SpatVector polygon delimiting the region of the world for which the variables should be downloaded. See ?getRegion for suggestions. The larger the region, the lomger the download time.
-#' @param file optional file name (including the path, not including the filename extension) if you want the downloaded rasters to be saved on disk, in which case they are saved as a compressed multi-layer GeoTIFF
+#' @param region optional length-four numeric vector (xmin, xmax, ymin, ymax geodetic coordinates in degrees), SpatExtent or SpatVector polygon delimiting the region of the world for which the variables should be downloaded. See ?getRegion for suggestions. The larger the region, the longer the download time.
+#' @param file optional file name (including the path, not including the filename extension) if you want the downloaded variable rasters to be saved on disk, in which case they are saved as a compressed multi-layer GeoTIFF. If 'file' already exists in the working directory, variables are imported from there.
 #' @param verbosity integer value indicating the amount of messages to display. The default is 2, for the maximum number of messages available.
 #'
 #' @return multi-layer SpatRaster
@@ -25,12 +25,12 @@
 getVariables <- function(source = "TerraClimate", vars = varsAvailable(source)$vars, years = varsAvailable(source)$years, region = c(-180, 180, -90, 90), file = NULL, verbosity = 2) {
 
   if (!is.null(file) && !exists(dirname(file))) {
-    dir.create(dirname(file), recursive = TRUE)
+    dir.create(dirname(file), showWarnings = FALSE, recursive = TRUE)
   }
 
   if (paste0(file, ".tif") %in% list.files(getwd(), recursive = TRUE)) {
     # stop ("'file' already exists in the current working directory; please delete it or choose a different file name.")
-    message("Variables imported from 'file', which already exists in the current working directory. Please provide a different 'file' path/name if this is not what you want.")
+    if (verbosity > 0) message("Variables imported from the specified 'file', which already exists in the current working directory. Please provide a different 'file' path/name if this is not what you want.")
     return(terra::rast(paste0(file, ".tif")))
   }
 
