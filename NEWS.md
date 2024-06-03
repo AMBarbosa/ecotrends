@@ -2,12 +2,13 @@
 
 -   getVariables()
 
-    -   set vsi=FALSE if on Windows, to prevent download fail
-
+    -   changed url, following TerraClimate Batch Downloads instructions (https://www.climatologylab.org/wget-terraclimate.html)
+    -   set vsi=FALSE if not on unix platform, to prevent download fail
+    
 
 -   getVariables(), getModels(), getPredictions()
 
-    -   objects imported from 'file', if it exists in getwd()
+    -   object imported from 'file', if it exists in getwd()
 
 
 # ecotrends 0.3

@@ -42,7 +42,7 @@ getVariables <- function(source = "TerraClimate", vars = varsAvailable(source)$v
     for (v in 1:length(vars))  for (y in 1:length(years)) {
       rast_count <- rast_count + 1
       # url <- paste0("http://thredds.northwestknowledge.net:8080/thredds/fileServer/TERRACLIMATE_ALL/data/TerraClimate_", vars[v], "_", years[y], ".nc")
-      url <- paste0("https://climate.northwestknowledge.net/TERRACLIMATE-DATA/TerraClimate_", vars[v], "_", years[y], ".nc")  # https://www.climatologylab.org/wget-terraclimate.html
+      url <- paste0("https://climate.northwestknowledge.net/TERRACLIMATE-DATA/TerraClimate_", vars[v], "_", years[y], ".nc")  # "Batch Downloads", https://www.climatologylab.org/wget-terraclimate.html
 
 
       if (verbosity > 0) {
