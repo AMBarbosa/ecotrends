@@ -115,6 +115,10 @@ mods <- ecotrends::getModels(occs = occ_coords,
                              rasts = vars_agg, 
                              region = reg,
                              collin = TRUE, 
+                             maxcor = 0.75,
+                             maxvif = 5,
+                             classes = "default", 
+                             regmult = 1, 
                              file = "models")
 ```
 
@@ -126,6 +130,8 @@ a file:
 preds <- ecotrends::getPredictions(rasts = vars_agg, 
                                    mods = mods, 
                                    region = reg,
+                                   type = "cloglog",
+                                   clamp = TRUE,
                                    file = "predictions")
 
 plot(preds, range = c(0, 1))

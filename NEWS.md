@@ -1,3 +1,20 @@
+# ecotrends 0.5
+
+-   getModels()
+
+    -   added argument 'seed = 1' for the background sample
+    -   added arguments 'maxcor' and 'maxvif' to pass to collinear::collinear()
+    -   added argument 'classes' to pass to maxnet::maxnet.formula()
+    -   added argument 'regmult' to pass to maxnet::maxnet()
+    -   default 'nreps' currently 0
+    -   added argument 'test = 0.2' for the test data proportion [STILL PENDING IMPLEMENTATION]
+    
+    
+-   getPredictions()
+
+    -   added arguments 'clamp' and 'type' to pass to maxnet::predict()
+
+
 # ecotrends 0.4
 
 -   getVariables()

@@ -4,7 +4,15 @@
 \alias{getPredictions}
 \title{Get predictions}
 \usage{
-getPredictions(rasts, mods, region = NULL, file = NULL, verbosity = 2)
+getPredictions(
+  rasts,
+  mods,
+  region = NULL,
+  type = "cloglog",
+  clamp = TRUE,
+  file = NULL,
+  verbosity = 2
+)
 }
 \arguments{
 \item{rasts}{(multi-layer) SpatRaster containing the variables (with the same names) used in the models}
@@ -12,6 +20,10 @@ getPredictions(rasts, mods, region = NULL, file = NULL, verbosity = 2)
 \item{mods}{list of \link{maxnet} model objects, output of \code{\link[=getModels]{getModels()}}}
 
 \item{region}{optional SpatExtent or SpatVector polygon delimiting the region of 'rasts' within which to compute the predictions. The default is NULL, to use the entire extent of 'rasts'. Note that predictions may be unreliable outside the 'region' used for \code{\link[=getModels]{getModels()}}}
+
+\item{type}{character value to pass to \code{\link[=predict]{predict()}} indicating the type of response to compute. Can be "cloglog" (the default), "logistic", "exponential" or "link"}
+
+\item{clamp}{logical value to pass to \code{\link[=predict]{predict()}} indicating whether predictors and features should be restricted to the range seen during model training. Default TRUE}
 
 \item{file}{optional file name (including path, not including extension) if you want the prediction rasters to be saved on disk. If 'file' already exists in the working directory, the rasters are imported from there.}
 

@@ -3,6 +3,8 @@
 #' @param rasts (multi-layer) SpatRaster containing the variables (with the same names) used in the models
 #' @param mods list of [maxnet] model objects, output of [getModels()]
 #' @param region optional SpatExtent or SpatVector polygon delimiting the region of 'rasts' within which to compute the predictions. The default is NULL, to use the entire extent of 'rasts'. Note that predictions may be unreliable outside the 'region' used for [getModels()]
+#' @param type character value to pass to [predict()] indicating the type of response to compute. Can be "cloglog" (the default), "logistic", "exponential" or "link"
+#' @param clamp logical value to pass to [predict()] indicating whether predictors and features should be restricted to the range seen during model training. Default TRUE
 #' @param file optional file name (including path, not including extension) if you want the prediction rasters to be saved on disk. If 'file' already exists in the working directory, the rasters are imported from there.
 #' @param verbosity integer value indicating the amount of messages to display. The default is 2, for the maximum number of messages available.
 #'
@@ -13,7 +15,7 @@
 #'
 #' @examples
 
-getPredictions <- function(rasts, mods, region = NULL, file = NULL, verbosity = 2) {
+getPredictions <- function(rasts, mods, region = NULL, type = "cloglog", clamp = TRUE, file = NULL, verbosity = 2) {
 
   if (paste0(file, ".tif") %in% list.files(getwd(), recursive = TRUE)) {
     # stop ("'file' already exists in the current working directory; please delete it or choose a different file name.")
@@ -47,7 +49,7 @@ getPredictions <- function(rasts, mods, region = NULL, file = NULL, verbosity = 
 
     rasts_year <- rasts[[grep(year, names(rasts))]]
 
-    preds[[m]] <- terra::predict(rasts_year, mods[[m]], type = "cloglog", na.rm = TRUE)
+    preds[[m]] <- terra::predict(rasts_year, mods[[m]], clamp = clamp, type = type, na.rm = TRUE)
   }
 
   preds <- terra::rast(preds)

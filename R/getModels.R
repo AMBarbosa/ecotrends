@@ -6,13 +6,26 @@
 #' @param occs species occurrence coordinates (2 columns in this order: x, y or LONGitude, LATitude) in an object coercible to a data.frame (e.g. a data.frame, matrix, tibble, sf object or SpatVector of points), and in the same coordinate reference system as 'rasts'
 #' @param rasts (multi-layer) SpatRaster with the variables to use in the models. The layer names should be in the form 'varname_year', e.g. 'tmin_1981', as in the output of [getVariables()]
 #' @param region optional SpatExtent or SpatVector polygon delimiting the region of 'rasts' within which to compute the models; see [getRegion()] for suggestions
-#' @param nbg integer value indicating the maximum number of background pixels to use in the models. The default is 10,000, or the total number of pixels in the modelling region if that's less.
-#' @param nreps integer value indicating the number of train-test replicates to compute for evaluating each model. One 1 is implemented currently.
-#' @param collin logical value indicating whether multicollinearity among the variables should be reduced prior to computing each model. The default is TRUE, in which case the [collinear::collinear()] function is used, with the default values and with the species presences as 'response'.
+#' @param nbg integer value indicating the maximum number of background pixels to use in the models. The default is 10,000, or the total number of non-NA pixels in 'rasts' if that's less.
+#' @param seed optional integer value to pass to [set.seed()] specifying the random seed to use for sampling the background pixels (if 'nbg' is smaller than the number of pixels in 'rasts')
+#' @param collin logical value indicating whether multicollinearity among the variables should be reduced prior to computing each model. The default is TRUE, in which case the [collinear::collinear()] function is used
+#' @param maxcor numeric value to pass to [collinear::collinear()] (if collin = TRUE) indicating the maximum correlation allowed between any pair of predictor variables. The default is 0.75
+#' @param maxvif numeric value to pass to [collinear::collinear()] (if collin = TRUE) indicating the maximum VIF allowed for selected predictor variables. The default is 5
+#' @param classes character value to pass to [maxnet::maxnet.formula()] indicating the continuous feature classes desired. Can be "default" or any subset of "lqpht" (linear, quadratic, product, hinge, threshold) -- for example, "lq" for just linear and quadratic features. See References for guidance
+#' @param regmult numeric value to pass to [maxnet::maxnet()] indicating the constant to adjust regularization. The default is 1
+#' @param nreps integer value indicating the number of train-test data replicates for testing each model. The default (AND ONLY VALUE IMPLEMENTED SO FAR) is 0, for no train-test replicates
+#' @param test numeric value indicating the proportion of pixels to set aside for testing each replicate model (if 'nreps' > 0). The default is 0.2, i.e. 20% (NOT YET IMPLEMENTED)
 #' @param file optional file name (including path, not including extension) if you want the output list of model objects to be saved on disk. If 'file' already exists in the working directory, models are imported from there.
 #' @param verbosity integer value indicating the amount of messages to display. The default is 2, for the maximum number of messages available.
 
 #' @return a list of model objects of class [maxnet]
+#' @seealso [maxnet::maxnet()]
+#'
+#' @references
+#' Elith J., Phillips S.J., Hastie T., Dudik M., Chee Y.E., Yates, C.J. (2011) A Statistical Explanation of MaxEnt for Ecologists. Diversity and Distributions 17:43-57. http://dx.doi.org/10.1111/j.1472-4642.2010.00725.x
+#'
+#' Merow C., Smith M.J., Silander J.A. (2013) A practical guide to MaxEnt for modeling species' distributions: what it does, and why inputs and settings matter. Ecography 36:1058-1069. https://doi.org/10.1111/j.1600-0587.2013.07872.x
+
 #' @author A. Marcia Barbosa
 #' @export
 #' @import terra
@@ -20,10 +33,10 @@
 #' @import maxnet
 #' @importFrom methods is
 #' @importFrom fuzzySim gridRecords selectAbsences
-#'
+
 #' @examples
 
-getModels <- function(occs, rasts, region = NULL, nbg = 10000, nreps = 1, collin = TRUE, file = NULL, verbosity = 2) {
+getModels <- function(occs, rasts, region = NULL, nbg = 10000, seed = NULL, collin = TRUE, maxcor = 0.75, maxvif = 5, classes = "default", regmult = 1, nreps = 0, test = 0.2, file = NULL, verbosity = 2) {
 
   if (paste0(file, ".rds") %in% list.files(getwd(), recursive = TRUE)) {
     # stop ("'file' already exists in the current working directory; please delete it or choose a different file name.")
@@ -31,7 +44,7 @@ getModels <- function(occs, rasts, region = NULL, nbg = 10000, nreps = 1, collin
     return(readRDS(paste0(file, ".rds")))
   }
 
-  if (nreps != 1) warning("sorry, argument 'nreps' not yet implemented, currently ignored")
+  if (nreps > 0) warning("sorry, argument 'nreps' not yet implemented, currently ignored")
 
   if (methods::is(region, "SpatVector") && terra::geomtype(region) == "polygons") {
     rasts <- terra::crop(rasts, region, mask = TRUE, snap = "out")
@@ -42,7 +55,7 @@ getModels <- function(occs, rasts, region = NULL, nbg = 10000, nreps = 1, collin
   npres <- sum(dat$presence == 1)
 
   if (nbg < nrow(dat)) {
-    dat <- fuzzySim::selectAbsences(dat, sp.cols = "presence", n = nbg - npres, df = TRUE, verbosity = 0)  # same bg points for all models
+    dat <- fuzzySim::selectAbsences(dat, sp.cols = "presence", n = nbg - npres, seed = seed, df = TRUE, verbosity = 0)  # same bg points for all models
   }
 
   var_cols <- names(dat)[-(1:4)]
@@ -65,12 +78,12 @@ getModels <- function(occs, rasts, region = NULL, nbg = 10000, nreps = 1, collin
     vars_year <- var_cols[grep(y, var_cols)]
 
     if (collin) {
-      vars_sel <- collinear::collinear(dat, response = "presence", predictors = vars_year)
+      vars_sel <- collinear::collinear(dat, response = "presence", predictors = vars_year, max_cor = maxcor, max_vif = maxvif)
     } else {
       vars_sel <- vars_year
     }
 
-    mods[[y]] <- maxnet::maxnet(dat$presence, dat[ , vars_sel])
+    mods[[y]] <- maxnet::maxnet(dat$presence, dat[ , vars_sel], f = maxnet.formula(dat$presence, dat[ , vars_sel], classes = classes), regmult = regmult)
   }
 
   if (!is.null(file)) {
@@ -78,4 +91,6 @@ getModels <- function(occs, rasts, region = NULL, nbg = 10000, nreps = 1, collin
   }
 
   return(mods)
+  # return(list(models = mods, replicates = reps, data = dat))
+
 }

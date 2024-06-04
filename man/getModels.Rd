@@ -9,8 +9,14 @@ getModels(
   rasts,
   region = NULL,
   nbg = 10000,
-  nreps = 1,
+  seed = NULL,
   collin = TRUE,
+  maxcor = 0.75,
+  maxvif = 5,
+  classes = "default",
+  regmult = 1,
+  nreps = 0,
+  test = 0.2,
   file = NULL,
   verbosity = 2
 )
@@ -22,11 +28,23 @@ getModels(
 
 \item{region}{optional SpatExtent or SpatVector polygon delimiting the region of 'rasts' within which to compute the models; see \code{\link[=getRegion]{getRegion()}} for suggestions}
 
-\item{nbg}{integer value indicating the maximum number of background pixels to use in the models. The default is 10,000, or the total number of pixels in the modelling region if that's less.}
+\item{nbg}{integer value indicating the maximum number of background pixels to use in the models. The default is 10,000, or the total number of non-NA pixels in 'rasts' if that's less.}
 
-\item{nreps}{integer value indicating the number of train-test replicates to compute for evaluating each model. One 1 is implemented currently.}
+\item{seed}{optional integer value to pass to \code{\link[=set.seed]{set.seed()}} specifying the random seed to use for sampling the background pixels (if 'nbg' is smaller than the number of pixels in 'rasts')}
 
-\item{collin}{logical value indicating whether multicollinearity among the variables should be reduced prior to computing each model. The default is TRUE, in which case the \code{\link[collinear:collinear]{collinear::collinear()}} function is used, with the default values and with the species presences as 'response'.}
+\item{collin}{logical value indicating whether multicollinearity among the variables should be reduced prior to computing each model. The default is TRUE, in which case the \code{\link[collinear:collinear]{collinear::collinear()}} function is used}
+
+\item{maxcor}{numeric value to pass to \code{\link[collinear:collinear]{collinear::collinear()}} (if collin = TRUE) indicating the maximum correlation allowed between any pair of predictor variables. The default is 0.75}
+
+\item{maxvif}{numeric value to pass to \code{\link[collinear:collinear]{collinear::collinear()}} (if collin = TRUE) indicating the maximum VIF allowed for selected predictor variables. The default is 5}
+
+\item{classes}{character value to pass to \code{\link[maxnet:maxnet]{maxnet::maxnet.formula()}} indicating the continuous feature classes desired. Can be "default" or any subset of "lqpht" (linear, quadratic, product, hinge, threshold) -- for example, "lq" for just linear and quadratic features. See References for guidance}
+
+\item{regmult}{numeric value to pass to \code{\link[maxnet:maxnet]{maxnet::maxnet()}} indicating the constant to adjust regularization. The default is 1}
+
+\item{nreps}{integer value indicating the number of train-test data replicates for testing each model. The default (AND ONLY VALUE IMPLEMENTED SO FAR) is 0, for no train-test replicates}
+
+\item{test}{numeric value indicating the proportion of pixels to set aside for testing each replicate model (if 'nreps' > 0). The default is 0.2, i.e. 20\% (NOT YET IMPLEMENTED)}
 
 \item{file}{optional file name (including path, not including extension) if you want the output list of model objects to be saved on disk. If 'file' already exists in the working directory, models are imported from there.}
 
@@ -37,6 +55,14 @@ a list of model objects of class \link{maxnet}
 }
 \description{
 This function computes a \code{\link[maxnet:maxnet]{maxnet::maxnet()}} ecological niche model per year, given a set of presence point coordinates and yearly environmental layers.
+}
+\references{
+Elith J., Phillips S.J., Hastie T., Dudik M., Chee Y.E., Yates, C.J. (2011) A Statistical Explanation of MaxEnt for Ecologists. Diversity and Distributions 17:43-57. http://dx.doi.org/10.1111/j.1472-4642.2010.00725.x
+
+Merow C., Smith M.J., Silander J.A. (2013) A practical guide to MaxEnt for modeling species' distributions: what it does, and why inputs and settings matter. Ecography 36:1058-1069. https://doi.org/10.1111/j.1600-0587.2013.07872.x
+}
+\seealso{
+\code{\link[maxnet:maxnet]{maxnet::maxnet()}}
 }
 \author{
 A. Marcia Barbosa
