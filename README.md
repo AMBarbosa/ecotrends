@@ -76,9 +76,9 @@ time:
 ecotrends::varsAvailable()
 
 vars <- ecotrends::getVariables(vars = c("tmin", "tmax", "ppt", "pet", "ws"), 
-                                years = 1990:1981, 
+                                years = 1981:1990, 
                                 region = reg, 
-                                file = "variable_rasters")
+                                file = "outputs/variables")
 
 names(vars)
 plot(vars[[1:6]])
@@ -100,7 +100,8 @@ larger than our pixel size, so it might be a good idea to **coarsen the
 spatial resolution** of the variable layers:
 
 ``` r
-vars_agg <- terra::aggregate(vars, fact = 2)
+vars_agg <- terra::aggregate(vars, 
+                             fact = 2)
 
 sqrt(ecotrends::pixelArea(vars_agg))
 ```
@@ -119,7 +120,7 @@ mods <- ecotrends::getModels(occs = occ_coords,
                              maxvif = 5,
                              classes = "default", 
                              regmult = 1, 
-                             file = "models")
+                             file = "outputs/models")
 ```
 
 Let’s now **compute the model predictions** for each year, optionally
@@ -128,13 +129,24 @@ a file:
 
 ``` r
 preds <- ecotrends::getPredictions(rasts = vars_agg, 
-                                   mods = mods, 
+                                   mods = mods$models, 
                                    region = reg,
                                    type = "cloglog",
                                    clamp = TRUE,
-                                   file = "predictions")
+                                   file = "outputs/predictions")
 
 plot(preds, range = c(0, 1))
+```
+
+You can **evaluate the fit** of these predictions to the model training
+data:
+
+``` r
+perf <- ecotrends::getPerformance(rasts = preds, 
+                                  data = mods$data,
+                                  plot = TRUE)
+
+perf
 ```
 
 Finally, you can use the `getTrend` function to **check for a linear
@@ -146,7 +158,8 @@ restricted to the pixels that overlap them:
 trend <- ecotrends::getTrend(rasts = preds,
                              occs = occ_coords,
                              alpha = 0.05,
-                             full = TRUE)
+                             full = TRUE,
+                             file = "outputs/trend")
 
 plot(trend, 
      col = hcl.colors(100, "spectral"))
