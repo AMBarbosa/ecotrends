@@ -74,9 +74,9 @@ Now let's **download some variables** with which to build a **yearly time series
 ecotrends::varsAvailable()
 
 vars <- ecotrends::getVariables(vars = c("tmin", "tmax", "ppt", "pet", "ws"), 
-                                years = 1990:1981, 
+                                years = 1981:1990, 
                                 region = reg, 
-                                file = "variable_rasters")
+                                file = "outputs/variables")
 
 names(vars)
 plot(vars[[1:6]])
@@ -92,8 +92,9 @@ summary(occ_clean$coordinateUncertaintyInMeters, na.rm = TRUE)
 
 You can see there are several occurrence points with spatial uncertainty larger than our pixel size, so it might be a good idea to **coarsen the spatial resolution** of the variable layers:
 
-```{r resolution}
-vars_agg <- terra::aggregate(vars, fact = 2)
+```{r aggregate}
+vars_agg <- terra::aggregate(vars, 
+                             fact = 2)
 
 sqrt(ecotrends::pixelArea(vars_agg))
 ```
@@ -109,20 +110,30 @@ mods <- ecotrends::getModels(occs = occ_coords,
                              maxvif = 5,
                              classes = "default", 
                              regmult = 1, 
-                             file = "models")
+                             file = "outputs/models")
 ```
 
 Let's now **compute the model predictions** for each year, optionally delimiting them to the modelled region, and optionally saving results to a file:
 
 ```{r predictions}
 preds <- ecotrends::getPredictions(rasts = vars_agg, 
-                                   mods = mods, 
+                                   mods = mods$models, 
                                    region = reg,
                                    type = "cloglog",
                                    clamp = TRUE,
-                                   file = "predictions")
+                                   file = "outputs/predictions")
 
 plot(preds, range = c(0, 1))
+```
+
+You can **evaluate the fit** of these predictions to the model training data:
+
+```{r performance}
+perf <- ecotrends::getPerformance(rasts = preds, 
+                                  data = mods$data,
+                                  plot = TRUE)
+
+perf
 ```
 
 Finally, you can use the `getTrend` function to **check for a linear (monotonic) temporal trend in suitability** in each pixel, optionally providing your occurrence coordinates if you want the results to be restricted to the pixels that overlap them:
@@ -131,7 +142,8 @@ Finally, you can use the `getTrend` function to **check for a linear (monotonic)
 trend <- ecotrends::getTrend(rasts = preds,
                              occs = occ_coords,
                              alpha = 0.05,
-                             full = TRUE)
+                             full = TRUE,
+                             file = "outputs/trend")
 
 plot(trend, 
      col = hcl.colors(100, "spectral"))

@@ -18,7 +18,13 @@
 #' @param file optional file name (including path, not including extension) if you want the output list of model objects to be saved on disk. If 'file' already exists in the working directory, models are imported from there.
 #' @param verbosity integer value indicating the amount of messages to display. The default is 2, for the maximum number of messages available.
 
-#' @return a list of model objects of class [maxnet]
+#' @return A list of three elements:
+#'
+#' $models: a list of model objects of class [maxnet] computed on the entire dataset
+#'
+#' $replicates: a list of lists of model objects of class [maxnet], each computed on a different train-test data sample. NULL if nreps = 0
+#'
+#' $data: a data frame with the presences, remaining background points and their environmental values used in the models
 #' @seealso [maxnet::maxnet()]
 #'
 #' @references
@@ -28,9 +34,9 @@
 
 #' @author A. Marcia Barbosa
 #' @export
-#' @import terra
-#' @import collinear
-#' @import maxnet
+#' @importFrom collinear collinear
+#' @importFrom maxnet maxnet maxnet.formula
+#' @importFrom terra geomtype crop
 #' @importFrom methods is
 #' @importFrom fuzzySim gridRecords selectAbsences
 
@@ -38,13 +44,19 @@
 
 getModels <- function(occs, rasts, region = NULL, nbg = 10000, seed = NULL, collin = TRUE, maxcor = 0.75, maxvif = 5, classes = "default", regmult = 1, nreps = 0, test = 0.2, file = NULL, verbosity = 2) {
 
-  if (paste0(file, ".rds") %in% list.files(getwd(), recursive = TRUE)) {
-    # stop ("'file' already exists in the current working directory; please delete it or choose a different file name.")
-    if (verbosity > 0) message("Models imported from the specified 'file', which already exists in the current working directory. Please provide a different 'file' path/name if this is not what you want.")
-    return(readRDS(paste0(file, ".rds")))
-  }
-
   if (nreps > 0) warning("sorry, argument 'nreps' not yet implemented, currently ignored")
+  reps <- NULL  # output placeholder
+
+  if (!is.null(file)) {
+    if (paste0(file, ".rds") %in% list.files(getwd(), recursive = TRUE)) {
+      if (verbosity > 0) message("Models imported from the specified 'file', which already exists in the current working directory. Please provide a different 'file' path/name if this is not what you want.")
+      return(readRDS(paste0(file, ".rds")))
+    }
+
+    if (!(dirname(file) %in% list.files(getwd()))) {
+      dir.create(dirname(file), recursive = TRUE)
+    }
+  }
 
   if (methods::is(region, "SpatVector") && terra::geomtype(region) == "polygons") {
     rasts <- terra::crop(rasts, region, mask = TRUE, snap = "out")
@@ -66,6 +78,7 @@ getModels <- function(occs, rasts, region = NULL, nbg = 10000, seed = NULL, coll
   mods <- vector("list", length(years))
   names(mods) <- years
   mod_count <- 0
+  rep_count <- 0  # placeholder
 
   for (y in years) {
 
@@ -90,7 +103,6 @@ getModels <- function(occs, rasts, region = NULL, nbg = 10000, seed = NULL, coll
     saveRDS(mods, paste0(file, ".rds"))
   }
 
-  return(mods)
-  # return(list(models = mods, replicates = reps, data = dat))
+  return(list(models = mods, replicates = reps, data = dat))
 
 }

@@ -17,21 +17,22 @@
 #' Abatzoglou, J.T., S.Z. Dobrowski, S.A. Parks, K.C. Hegewisch (2018) Terraclimate, a high-resolution global dataset of monthly climate and climatic water balance from 1958-2015. Scientific Data, 5, Article number: 170191. doi: 10.1038/sdata.2017.191(2018). Database URL: https://www.climatologylab.org/terraclimate.html
 
 #' @export
-#' @import terra
+#' @importFrom terra app rast writeRaster
 #'
 #' @examples
 
 
 getVariables <- function(source = "TerraClimate", vars = varsAvailable(source)$vars, years = varsAvailable(source)$years, region = c(-180, 180, -90, 90), file = NULL, verbosity = 2) {
 
-  if (!is.null(file) && !exists(dirname(file))) {
-    dir.create(dirname(file), showWarnings = FALSE, recursive = TRUE)
-  }
+  if (!is.null(file)) {
+    if (paste0(file, ".tif") %in% list.files(getwd(), recursive = TRUE)) {
+      if (verbosity > 0) message("Varibales imported from the specified 'file', which already exists in the current working directory. Please provide a different 'file' path/name if this is not what you want.")
+      return(terra::rast(paste0(file, ".tif")))
+    }
 
-  if (paste0(file, ".tif") %in% list.files(getwd(), recursive = TRUE)) {
-    # stop ("'file' already exists in the current working directory; please delete it or choose a different file name.")
-    if (verbosity > 0) message("Variables imported from the specified 'file', which already exists in the current working directory. Please provide a different 'file' path/name if this is not what you want.")
-    return(terra::rast(paste0(file, ".tif")))
+    if (!(dirname(file) %in% list.files(getwd()))) {
+      dir.create(dirname(file), recursive = TRUE)
+    }
   }
 
   rast_n <- length(vars) * length(years)

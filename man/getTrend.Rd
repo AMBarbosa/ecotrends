@@ -4,7 +4,14 @@
 \alias{getTrend}
 \title{Get trend}
 \usage{
-getTrend(rasts, occs = NULL, alpha = 0.05, full = TRUE)
+getTrend(
+  rasts,
+  occs = NULL,
+  alpha = 0.05,
+  file = NULL,
+  full = TRUE,
+  verbosity = 2
+)
 }
 \arguments{
 \item{rasts}{multi-layer SpatRaster with the output of \code{\link[=getPredictions]{getPredictions()}}, or another time series of values for which to detect a trend}
@@ -13,7 +20,11 @@ getTrend(rasts, occs = NULL, alpha = 0.05, full = TRUE)
 
 \item{alpha}{numeric value indicating the threshold significance level for Kendall's tau statistic. Default 0.05. Pixels with p-value above this will be NA in the output.}
 
+\item{file}{optional file name (including path, not including extension) if you want the outputs raster(s) to be saved on disk. If 'file' already exists in the working directory, the rasters are imported from there.}
+
 \item{full}{logical value indicating whether to output a multi-layer raster with the full results of the Mann-Kendall test, namely the Tau value, p-value (significance), S and variance of S. If set to FALSE, a single-layer raster will be returned with the (significant) Tau values.}
+
+\item{verbosity}{integer value indicating the amount of messages to display. The default is 2, for the maximum number of messages available.}
 }
 \value{
 SpatRaster where each pixel (or each pixel with points, if 'occs' is not NULL) has Kendall's tau statistic (positive if increasing, negative if decreasing), or NA if the trend is non-significant (i.e., if the 2-sided p-value is larger than the specified 'alpha'). If full=TRUE (the default), additional layers are produced with the p value, S, and variance of S.

@@ -11,16 +11,21 @@
 #' @return multi-layer SpatRaster with the predicted values from the variables for each year
 #' @author A. Marcia Barbosa
 #' @export
-#' @import terra
+#' @importFrom terra crop predict rast writeRaster
 #'
 #' @examples
 
 getPredictions <- function(rasts, mods, region = NULL, type = "cloglog", clamp = TRUE, file = NULL, verbosity = 2) {
 
-  if (paste0(file, ".tif") %in% list.files(getwd(), recursive = TRUE)) {
-    # stop ("'file' already exists in the current working directory; please delete it or choose a different file name.")
-    if (verbosity > 0) message("Predictions imported from the specified 'file', which already exists in the current working directory. Please provide a different 'file' path/name if this is not what you want.")
-    return(terra::rast(paste0(file, ".tif")))
+  if (!is.null(file)) {
+    if (paste0(file, ".tif") %in% list.files(getwd(), recursive = TRUE)) {
+      if (verbosity > 0) message("Predictions imported from the specified 'file', which already exists in the current working directory. Please provide a different 'file' path/name if this is not what you want.")
+      return(terra::rast(paste0(file, ".tif")))
+    }
+
+    if (!(dirname(file) %in% list.files(getwd()))) {
+      dir.create(dirname(file), recursive = TRUE)
+    }
   }
 
   if (!inherits(rasts, "SpatRaster"))

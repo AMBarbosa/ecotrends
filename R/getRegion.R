@@ -12,7 +12,7 @@
 #' @author A. Marcia Barbosa
 #' @seealso [terra::buffer()], [terra::width()]
 
-#' @import terra
+#' @importFrom terra aggregate buffer crs distance vect width
 #' @export
 #'
 #' @examples

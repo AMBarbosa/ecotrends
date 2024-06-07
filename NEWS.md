@@ -1,3 +1,31 @@
+# ecotrends 0.6
+
+-   getPerformance()
+    
+    -   new function
+
+
+-   getModels()
+
+    -   output now includes three elements: $models, $replicates, $data (needed for getPerformance)
+
+    
+-   getTrend()
+
+    -    added arguments 'file', 'verbosity'
+
+
+-   getVariables(), getModels(), getPredictions(), getTrend(), README
+
+    -   implemented 'file' including a folder path, e.g. "outputs/models"
+    -   folder created if not in getwd()
+    
+
+-   all functions
+    
+    -   replaced instances of @import with @importFrom in roxygen skeleton
+
+
 # ecotrends 0.5
 
 -   getModels()

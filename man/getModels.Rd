@@ -51,7 +51,13 @@ getModels(
 \item{verbosity}{integer value indicating the amount of messages to display. The default is 2, for the maximum number of messages available.}
 }
 \value{
-a list of model objects of class \link{maxnet}
+A list of three elements:
+
+$models: a list of model objects of class \link{maxnet} computed on the entire dataset
+
+$replicates: a list of lists of model objects of class \link{maxnet}, each computed on a different train-test data sample. NULL if nreps = 0
+
+$data: a data frame with the presences, remaining background points and their environmental values used in the models
 }
 \description{
 This function computes a \code{\link[maxnet:maxnet]{maxnet::maxnet()}} ecological niche model per year, given a set of presence point coordinates and yearly environmental layers.
