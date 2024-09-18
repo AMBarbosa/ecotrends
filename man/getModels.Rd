@@ -38,7 +38,7 @@ getModels(
 
 \item{maxvif}{numeric value to pass to \code{\link[collinear:collinear]{collinear::collinear()}} (if collin = TRUE) indicating the maximum VIF allowed for selected predictor variables. The default is 5}
 
-\item{classes}{character value to pass to \code{\link[maxnet:maxnet]{maxnet::maxnet.formula()}} indicating the continuous feature classes desired. Can be "default" or any subset of "lqpht" (linear, quadratic, product, hinge, threshold) -- for example, "lq" for just linear and quadratic features. See References for guidance}
+\item{classes}{character value to pass to \code{\link[maxnet:maxnet]{maxnet::maxnet.formula()}} indicating the continuous feature classes desired. Can be "default" or any subset of "lqpht" (linear, quadratic, product, hinge, threshold) -- for example, "lqh" for just linear, quadratic and hinge features. See References for guidance}
 
 \item{regmult}{numeric value to pass to \code{\link[maxnet:maxnet]{maxnet::maxnet()}} indicating the constant to adjust regularization. The default is 1}
 

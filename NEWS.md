@@ -1,3 +1,10 @@
+# ecotrends 0.7
+
+-   getModels()
+
+    -   warning if input 'rasts' is not SpatRaster, which will work here but fail elsewhere
+    
+
 # ecotrends 0.6
 
 -   getPerformance()

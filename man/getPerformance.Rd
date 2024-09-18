@@ -17,7 +17,7 @@ getPerformance(
 
 \item{data}{dataset used in the models: \verb{$data} output of \code{\link[=getModels]{getModels()}}}
 
-\item{metrics}{character vector with the metrics to compute. Can be any subset of c("AUC", "TSS"). The default is all of these}
+\item{metrics}{character vector with the metrics to compute. Can be any subset of c("AUC", "TSS") -- the latter is computed at its optimal threshold. The default is both}
 
 \item{plot}{logical value indicating whether plots should also be produced to illustrate the performance metrics}
 
