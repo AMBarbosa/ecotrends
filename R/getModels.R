@@ -11,7 +11,7 @@
 #' @param collin logical value indicating whether multicollinearity among the variables should be reduced prior to computing each model. The default is TRUE, in which case the [collinear::collinear()] function is used
 #' @param maxcor numeric value to pass to [collinear::collinear()] (if collin = TRUE) indicating the maximum correlation allowed between any pair of predictor variables. The default is 0.75
 #' @param maxvif numeric value to pass to [collinear::collinear()] (if collin = TRUE) indicating the maximum VIF allowed for selected predictor variables. The default is 5
-#' @param classes character value to pass to [maxnet::maxnet.formula()] indicating the continuous feature classes desired. Can be "default" or any subset of "lqpht" (linear, quadratic, product, hinge, threshold) -- for example, "lq" for just linear and quadratic features. See References for guidance
+#' @param classes character value to pass to [maxnet::maxnet.formula()] indicating the continuous feature classes desired. Can be "default" or any subset of "lqpht" (linear, quadratic, product, hinge, threshold) -- for example, "lqh" for just linear, quadratic and hinge features. See References for guidance
 #' @param regmult numeric value to pass to [maxnet::maxnet()] indicating the constant to adjust regularization. The default is 1
 #' @param nreps integer value indicating the number of train-test data replicates for testing each model. The default (AND ONLY VALUE IMPLEMENTED SO FAR) is 0, for no train-test replicates
 #' @param test numeric value indicating the proportion of pixels to set aside for testing each replicate model (if 'nreps' > 0). The default is 0.2, i.e. 20% (NOT YET IMPLEMENTED)
@@ -46,6 +46,8 @@ getModels <- function(occs, rasts, region = NULL, nbg = 10000, seed = NULL, coll
 
   if (nreps > 0) warning("sorry, argument 'nreps' not yet implemented, currently ignored")
   reps <- NULL  # output placeholder
+
+  if (!is(rasts, "SpatRaster")) warning("Note 'rasts' should be a SpatRaster object of package terra. While older formats may still work in some cases, they should be abandonded as they may cause problems downstream.")
 
   if (!is.null(file)) {
     if (paste0(file, ".rds") %in% list.files(getwd(), recursive = TRUE)) {
@@ -96,8 +98,10 @@ getModels <- function(occs, rasts, region = NULL, nbg = 10000, seed = NULL, coll
       vars_sel <- vars_year
     }
 
-    mods[[y]] <- maxnet::maxnet(dat$presence, dat[ , vars_sel], f = maxnet.formula(dat$presence, dat[ , vars_sel], classes = classes), regmult = regmult)
+    mods[[y]] <- maxnet::maxnet(dat$presence, dat[ , vars_sel], f = maxnet::maxnet.formula(dat$presence, dat[ , vars_sel], classes = classes), regmult = regmult)
   }
+
+  if (verbosity > 0) message("")  # introduces one blank line between messages and possible warning
 
   if (!is.null(file)) {
     saveRDS(mods, paste0(file, ".rds"))
