@@ -26,7 +26,7 @@ getModels(
 
 \item{rasts}{(multi-layer) SpatRaster with the variables to use in the models. The layer names should be in the form 'varname_year', e.g. 'tmin_1981', as in the output of \code{\link[=getVariables]{getVariables()}}}
 
-\item{region}{optional SpatExtent or SpatVector polygon delimiting the region of 'rasts' within which to compute the models; see \code{\link[=getRegion]{getRegion()}} for suggestions}
+\item{region}{optional SpatExtent or SpatVector polygon delimiting the region of 'rasts' within which to compute the models. See \code{\link[=getRegion]{getRegion()}} for suggestions. The default is NULL, to use the entire extent of 'rasts'. Note that 'region' should only include reasonably surveyed areas, as pixels that don't overlap presence points are taken by Maxent as available and not occupied by the species.}
 
 \item{nbg}{integer value indicating the maximum number of background pixels to use in the models. The default is 10,000, or the total number of non-NA pixels in 'rasts' if that's less.}
 

@@ -19,9 +19,9 @@ getPredictions(
 
 \item{mods}{list of \link{maxnet} model objects, output of \code{\link[=getModels]{getModels()}}}
 
-\item{region}{optional SpatExtent or SpatVector polygon delimiting the region of 'rasts' within which to compute the predictions. The default is NULL, to use the entire extent of 'rasts'. Note that predictions may be unreliable outside the 'region' used for \code{\link[=getModels]{getModels()}}}
+\item{region}{optional SpatExtent or SpatVector polygon delimiting the region of 'rasts' within which to compute the predictions. The default is NULL, to use the entire extent of 'rasts'. Note that predictions may be unreliable outside the 'region' used for \code{\link[=getModels]{getModels()}}, as they are extrapolating beyond the analysed conditions.}
 
-\item{type}{character value to pass to \code{\link[=predict]{predict()}} indicating the type of response to compute. Can be "cloglog" (the default), "logistic", "exponential" or "link"}
+\item{type}{character value to pass to \code{\link[=predict]{predict()}} indicating the type of response to compute. Can be "cloglog" (the default and currently recommended), "logistic" (previously but no longer recommended) (Phillips et al., 2017), "exponential", or "link"}
 
 \item{clamp}{logical value to pass to \code{\link[=predict]{predict()}} indicating whether predictors and features should be restricted to the range seen during model training. Default TRUE}
 
@@ -30,10 +30,13 @@ getPredictions(
 \item{verbosity}{integer value indicating the amount of messages to display. The default is 2, for the maximum number of messages available.}
 }
 \value{
-multi-layer SpatRaster with the predicted values from the variables for each year
+multi-layer SpatRaster with the predicted values for each year
 }
 \description{
 Get predictions
+}
+\references{
+Phillips, S.J., Anderson, R.P., Dudik, M., Schapire, R.E., Blair, M.E., 2017. Opening the black box: an open-source release of Maxent. Ecography 40, 887-893. https://doi.org/10.1111/ecog.03049
 }
 \author{
 A. Marcia Barbosa
