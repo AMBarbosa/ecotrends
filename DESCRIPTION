@@ -1,10 +1,10 @@
 Package: ecotrends
 Type: Package
 Title: Temporal trends in ecological niche models 
-Version: 0.7
+Version: 0.8
 Authors@R: 
   c(
-    person(given = "A. Marcia", family = "Barbosa", 
+    person(given = c("A.", "Marcia"), family = "Barbosa", 
     email = "ana.marcia.barbosa@gmail.com", role = c("aut", "cre")),
     person(given = "Neftali", family = "Sillero", role = "aut")
   )
