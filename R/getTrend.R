@@ -13,7 +13,7 @@
 #' @return SpatRaster where each pixel (or each pixel with points, if 'occs' is not NULL) has Kendall's tau statistic (positive if increasing, negative if decreasing), or NA if the trend is non-significant (i.e., if the 2-sided p-value is larger than the specified 'alpha'). If full=TRUE (the default), additional layers are produced with the p value, S, and variance of S.
 #'
 #' @author A. Marcia Barbosa
-#' @seealso [Kendall::MannKendall()], [spatialEco::raster.kendall()]
+#' @seealso [Kendall::MannKendall()], spatialEco::raster.kendall()
 #' @export
 #' @importFrom terra app ifel mask rast vect writeRaster
 #' @importFrom Kendall MannKendall

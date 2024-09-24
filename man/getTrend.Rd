@@ -33,7 +33,7 @@ SpatRaster where each pixel (or each pixel with points, if 'occs' is not NULL) h
 This function uses \code{\link[terra:app]{terra::app()}} to apply the \code{\link[Kendall:MannKendall]{Kendall::MannKendall()}} function to each pixel of a multi-layer time series SpatRaster, testing for a monotonic (either increasing or decreasing) trend in the raster values.
 }
 \seealso{
-\code{\link[Kendall:MannKendall]{Kendall::MannKendall()}}, \code{\link[spatialEco:raster.kendall]{spatialEco::raster.kendall()}}
+\code{\link[Kendall:MannKendall]{Kendall::MannKendall()}}, spatialEco::raster.kendall()
 }
 \author{
 A. Marcia Barbosa
