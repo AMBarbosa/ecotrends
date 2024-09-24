@@ -7,15 +7,15 @@
 #' @param rasts (multi-layer) SpatRaster with the variables to use in the models. The layer names should be in the form 'varname_year', e.g. 'tmin_1981', as in the output of [getVariables()]
 #' @param region optional SpatExtent or SpatVector polygon delimiting the region of 'rasts' within which to compute the models. See [getRegion()] for suggestions. The default is NULL, to use the entire extent of 'rasts'. Note that 'region' should only include reasonably surveyed areas, as pixels that don't overlap presence points are taken by Maxent as available and not occupied by the species.
 #' @param nbg integer value indicating the maximum number of background pixels to use in the models. The default is 10,000, or the total number of non-NA pixels in 'rasts' if that's less.
-#' @param seed optional integer value to pass to [set.seed()] specifying the random seed to use for sampling the background pixels (if 'nbg' is smaller than the number of pixels in 'rasts')
-#' @param collin logical value indicating whether multicollinearity among the variables should be reduced prior to computing each model. The default is TRUE, in which case the [collinear::collinear()] function is used
-#' @param maxcor numeric value to pass to [collinear::collinear()] (if collin = TRUE) indicating the maximum correlation allowed between any pair of predictor variables. The default is 0.75
-#' @param maxvif numeric value to pass to [collinear::collinear()] (if collin = TRUE) indicating the maximum VIF allowed for selected predictor variables. The default is 5
-#' @param classes character value to pass to [maxnet::maxnet.formula()] indicating the continuous feature classes desired. Can be "default" or any subset of "lqpht" (linear, quadratic, product, hinge, threshold) -- for example, "lqh" for just linear, quadratic and hinge features. See References for guidance
-#' @param regmult numeric value to pass to [maxnet::maxnet()] indicating the constant to adjust regularization. The default is 1
+#' @param seed optional integer value to pass to [set.seed()] specifying the random seed to use for sampling the background pixels (if 'nbg' is smaller than the number of pixels in 'rasts').
+#' @param collin logical value indicating whether multicollinearity among the variables should be reduced prior to computing each model. The default is TRUE, in which case the [collinear::collinear()] function is used.
+#' @param maxcor numeric value to pass to [collinear::collinear()] (if collin = TRUE) indicating the maximum correlation allowed between any pair of predictor variables. The default is 0.75.
+#' @param maxvif numeric value to pass to [collinear::collinear()] (if collin = TRUE) indicating the maximum VIF allowed for selected predictor variables. The default is 5.
+#' @param classes character value to pass to [maxnet::maxnet.formula()] indicating the continuous feature classes desired. Can be "default" or any subset of "lqpht" (linear, quadratic, product, hinge, threshold) -- for example, "lqh" for just linear, quadratic and hinge features. See References for guidance.
+#' @param regmult numeric value to pass to [maxnet::maxnet()] indicating the constant to adjust regularization. The default is 1. See References for guidance.
 #' @param nreps integer value indicating the number of train-test data replicates for testing each model. The default (AND ONLY VALUE IMPLEMENTED SO FAR) is 0, for no train-test replicates
 #' @param test numeric value indicating the proportion of pixels to set aside for testing each replicate model (if 'nreps' > 0). The default is 0.2, i.e. 20% (NOT YET IMPLEMENTED)
-#' @param file optional file name (including path, not including extension) if you want the output list of model objects to be saved on disk. If 'file' already exists in the working directory, models are imported from there.
+#' @param file optional file name (including path, not including extension) if you want the output list of model objects to be saved on disk. If 'file' already exists in the working directory (meaning that models were already computed), models are imported from there.
 #' @param verbosity integer value indicating the amount of messages to display. The default is 2, for the maximum number of messages available.
 
 #' @return A list of three elements:
@@ -44,10 +44,12 @@
 
 getModels <- function(occs, rasts, region = NULL, nbg = 10000, seed = NULL, collin = TRUE, maxcor = 0.75, maxvif = 5, classes = "default", regmult = 1, nreps = 0, test = 0.2, file = NULL, verbosity = 2) {
 
+  # add option for complete model (besides the replicates)??
+
   if (nreps > 0) warning("sorry, argument 'nreps' not yet implemented, currently ignored")
   reps <- NULL  # output placeholder
 
-  if (!is(rasts, "SpatRaster")) warning("Note 'rasts' should be a SpatRaster object of package terra. While older formats may still work in some cases, they should be abandonded as they may cause problems downstream.")
+  if (!is(rasts, "SpatRaster")) warning("Note 'rasts' should be a SpatRaster object of package terra. While older formats may still work in some functions, they should be abandonded as they may cause problems downstream.")
 
   if (!is.null(file)) {
     if (paste0(file, ".rds") %in% list.files(getwd(), recursive = TRUE)) {
@@ -70,6 +72,10 @@ getModels <- function(occs, rasts, region = NULL, nbg = 10000, seed = NULL, coll
 
   if (nbg < nrow(dat)) {
     dat <- fuzzySim::selectAbsences(dat, sp.cols = "presence", n = nbg - npres, seed = seed, df = TRUE, verbosity = 0)  # same bg points for all models
+  }
+
+  if (verbosity > 0 && nbg > nrow(dat)) {
+    message("number of background points ('nbg') limited to the number of pixels\nin 'rasts' within 'region', which is ", nrow(dat), "\n")
   }
 
   var_cols <- names(dat)[-(1:4)]
@@ -98,7 +104,14 @@ getModels <- function(occs, rasts, region = NULL, nbg = 10000, seed = NULL, coll
       vars_sel <- vars_year
     }
 
-    mods[[y]] <- maxnet::maxnet(dat$presence, dat[ , vars_sel], f = maxnet::maxnet.formula(dat$presence, dat[ , vars_sel], classes = classes), regmult = regmult)
+    # drop variables without variation in modelling subset (otherwise maxnet() error):
+    constants <- which(sapply(dat[ , vars_sel], function(x) length(unique(x)) <= 1))
+    if (length(constants) > 0) {
+      message(vars_sel[constants], " dropped for having no variation within the modelled data\n")
+      vars_sel <- vars_sel[-constants]
+    }
+
+    mods[[y]] <- maxnet::maxnet(p = dat$presence, data = dat[ , vars_sel], f = maxnet::maxnet.formula(dat$presence, dat[ , vars_sel], classes = classes), regmult = regmult)
   }
 
   if (verbosity > 0) message("")  # introduces one blank line between messages and possible warning

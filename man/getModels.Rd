@@ -30,23 +30,23 @@ getModels(
 
 \item{nbg}{integer value indicating the maximum number of background pixels to use in the models. The default is 10,000, or the total number of non-NA pixels in 'rasts' if that's less.}
 
-\item{seed}{optional integer value to pass to \code{\link[=set.seed]{set.seed()}} specifying the random seed to use for sampling the background pixels (if 'nbg' is smaller than the number of pixels in 'rasts')}
+\item{seed}{optional integer value to pass to \code{\link[=set.seed]{set.seed()}} specifying the random seed to use for sampling the background pixels (if 'nbg' is smaller than the number of pixels in 'rasts').}
 
-\item{collin}{logical value indicating whether multicollinearity among the variables should be reduced prior to computing each model. The default is TRUE, in which case the \code{\link[collinear:collinear]{collinear::collinear()}} function is used}
+\item{collin}{logical value indicating whether multicollinearity among the variables should be reduced prior to computing each model. The default is TRUE, in which case the \code{\link[collinear:collinear]{collinear::collinear()}} function is used.}
 
-\item{maxcor}{numeric value to pass to \code{\link[collinear:collinear]{collinear::collinear()}} (if collin = TRUE) indicating the maximum correlation allowed between any pair of predictor variables. The default is 0.75}
+\item{maxcor}{numeric value to pass to \code{\link[collinear:collinear]{collinear::collinear()}} (if collin = TRUE) indicating the maximum correlation allowed between any pair of predictor variables. The default is 0.75.}
 
-\item{maxvif}{numeric value to pass to \code{\link[collinear:collinear]{collinear::collinear()}} (if collin = TRUE) indicating the maximum VIF allowed for selected predictor variables. The default is 5}
+\item{maxvif}{numeric value to pass to \code{\link[collinear:collinear]{collinear::collinear()}} (if collin = TRUE) indicating the maximum VIF allowed for selected predictor variables. The default is 5.}
 
-\item{classes}{character value to pass to \code{\link[maxnet:maxnet]{maxnet::maxnet.formula()}} indicating the continuous feature classes desired. Can be "default" or any subset of "lqpht" (linear, quadratic, product, hinge, threshold) -- for example, "lqh" for just linear, quadratic and hinge features. See References for guidance}
+\item{classes}{character value to pass to \code{\link[maxnet:maxnet]{maxnet::maxnet.formula()}} indicating the continuous feature classes desired. Can be "default" or any subset of "lqpht" (linear, quadratic, product, hinge, threshold) -- for example, "lqh" for just linear, quadratic and hinge features. See References for guidance.}
 
-\item{regmult}{numeric value to pass to \code{\link[maxnet:maxnet]{maxnet::maxnet()}} indicating the constant to adjust regularization. The default is 1}
+\item{regmult}{numeric value to pass to \code{\link[maxnet:maxnet]{maxnet::maxnet()}} indicating the constant to adjust regularization. The default is 1. See References for guidance.}
 
 \item{nreps}{integer value indicating the number of train-test data replicates for testing each model. The default (AND ONLY VALUE IMPLEMENTED SO FAR) is 0, for no train-test replicates}
 
 \item{test}{numeric value indicating the proportion of pixels to set aside for testing each replicate model (if 'nreps' > 0). The default is 0.2, i.e. 20\% (NOT YET IMPLEMENTED)}
 
-\item{file}{optional file name (including path, not including extension) if you want the output list of model objects to be saved on disk. If 'file' already exists in the working directory, models are imported from there.}
+\item{file}{optional file name (including path, not including extension) if you want the output list of model objects to be saved on disk. If 'file' already exists in the working directory (meaning that models were already computed), models are imported from there.}
 
 \item{verbosity}{integer value indicating the amount of messages to display. The default is 2, for the maximum number of messages available.}
 }
