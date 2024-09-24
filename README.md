@@ -31,6 +31,8 @@ downloads some example occurrence data from GBIF, and then performs
 
 ``` r
 library(geodata)
+# update fuzzySim:
+# install.packages("fuzzySim", repos="http://R-Forge.R-project.org")
 library(fuzzySim)
 
 occ_raw <- geodata::sp_occurrence(genus = "Chioglossa", 
@@ -52,17 +54,17 @@ occ_coords <- occ_clean[ , c("decimalLongitude", "decimalLatitude")]
 You should also **delimit a region for modelling**. You can provide your
 own spatial extent or polygon – e.g., a biogeographical region within
 which your species was more or less evenly surveyed. Alternatively or
-additionally, you can use the `getRegion` function to compute a
-“reasonably sized” area around your species occurrences:
+additionally, you can use the `getRegion` function of package `fuzzySim`
+to compute a “reasonably sized” area around your species occurrences
+(see help file and try out different options, some of which may be much
+more adequate for your particular case!):
 
 ``` r
-library(ecotrends)
-
-reg <- ecotrends::getRegion(occs = occ_coords,
-                            type = "mean")
-
-plot(reg, col = "wheat")
-points(occ_coords, cex = 0.3)
+reg <- fuzzySim::getRegion(pres.coords = occ_coords,
+                           CRS = "EPSG:4326",  # make sure it's correct for your case!
+                           type = "width",
+                           width_mult = 0.5,
+                           dist_mult = 1)
 ```
 
 Now let’s **download some variables** with which to build a **yearly
@@ -73,6 +75,8 @@ to download the ones you choose. Mind that the download may take a long
 time:
 
 ``` r
+library(ecotrends)
+
 ecotrends::varsAvailable()
 
 vars <- ecotrends::getVariables(vars = c("tmin", "tmax", "ppt", "pet", "ws"), 

@@ -1,3 +1,22 @@
+# ecotrends 0.8
+
+-   getModels()
+
+    -    drop non-varying predictors (with message) to avoid maxnet() error
+    -    message if n pixels < nbg
+
+
+-   getPredictions()
+
+    -   'data' CRS set to the same as 'rasts', to avoid warning "[mask] CRS do not match"
+    -    added bibliographic reference for type="cloglog" recommended default
+
+
+-   getRegion()
+
+    -   removed in favour of a more complete version which was already being programmed in package {fuzzySim}
+    
+
 # ecotrends 0.7
 
 -   getModels()
