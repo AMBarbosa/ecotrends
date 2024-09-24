@@ -53,7 +53,7 @@ occ_coords <- occ_clean[ , c("decimalLongitude", "decimalLatitude")]
 
 You should also **delimit a region for modelling**. You can provide your
 own spatial extent or polygon – e.g., a biogeographical region within
-which your species was more or less evenly surveyed. Alternatively or
+which your species was reasonably surveyed. Alternatively or
 additionally, you can use the `getRegion` function of package `fuzzySim`
 to compute a “reasonably sized” area around your species occurrences
 (see help file and try out different options, some of which may be much
