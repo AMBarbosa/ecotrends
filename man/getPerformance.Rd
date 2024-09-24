@@ -15,7 +15,7 @@ getPerformance(
 \arguments{
 \item{rasts}{multi-layer SpatRaster with the output of \code{\link[=getPredictions]{getPredictions()}}}
 
-\item{data}{dataset used in the models: \verb{$data} output of \code{\link[=getModels]{getModels()}}}
+\item{data}{data.frame \verb{$data} output of \code{\link[=getModels]{getModels()}}}
 
 \item{metrics}{character vector with the metrics to compute. Can be any subset of c("AUC", "TSS") -- the latter is computed at its optimal threshold. The default is both}
 

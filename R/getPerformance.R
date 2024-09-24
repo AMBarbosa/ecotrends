@@ -1,7 +1,7 @@
 #' Get model performance
 #'
 #' @param rasts multi-layer SpatRaster with the output of [getPredictions()]
-#' @param data dataset used in the models: `$data` output of [getModels()]
+#' @param data data.frame `$data` output of [getModels()]
 #' @param metrics character vector with the metrics to compute. Can be any subset of c("AUC", "TSS") -- the latter is computed at its optimal threshold. The default is both
 #' @param plot logical value indicating whether plots should also be produced to illustrate the performance metrics
 #' @param verbosity integer value indicating the amount of messages to display. The default is 2, for the maximum number of messages available
@@ -17,7 +17,8 @@
 getPerformance <- function(rasts, data, metrics = c("AUC", "TSS"), plot = TRUE, verbosity = 2) {
 
   pres_centroids <- data[data$presence == 1, c("x", "y")]
-  mod_locs <- terra::vect(data[ , c("x", "y")], geom = c("x", "y"))
+  mod_locs <- terra::vect(data[ , c("x", "y")], geom = c("x", "y"),
+                          crs = terra::crs(rasts))
   rasts_mask <- terra::mask(rasts, mod_locs)
 
   n_mods <- terra::nlyr(rasts)
