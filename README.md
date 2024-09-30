@@ -52,16 +52,17 @@ occ_coords <- occ_clean[ , c("decimalLongitude", "decimalLatitude")]
 ```
 
 You should also **delimit a region for modelling**. You can provide your
-own spatial extent or polygon – e.g., a biogeographical region within
-which your species was reasonably surveyed. Alternatively or
-additionally, you can use the `getRegion` function of package `fuzzySim`
-to compute a “reasonably sized” area around your species occurrences
-(see help file and try out different options, some of which may be much
-more adequate for your particular case!):
+own spatial extent or polygon – e.g., a biogeographical region that is
+within your species’ reach, and within which that species was reasonably
+surveyed. Alternatively or additionally, you can use the `getRegion`
+function of package `fuzzySim` to compute a “reasonably sized” area
+around your species occurrences (see help file and try out different
+options, some of which may be much more adequate for your particular
+case!):
 
 ``` r
 reg <- fuzzySim::getRegion(pres.coords = occ_coords,
-                           CRS = "EPSG:4326",  # make sure it's correct for your case!
+                           CRS = "EPSG:4326",  # make sure it's correct for your data!
                            type = "width",
                            width_mult = 0.5,
                            dist_mult = 1)
@@ -128,8 +129,10 @@ mods <- ecotrends::getModels(occs = occ_coords,
 ```
 
 Let’s now **compute the model predictions** for each year, optionally
-delimiting them to the modelled region, and optionally saving results to
-a file:
+delimiting them to the modelled region (though you can use a larger or
+an entirely different region, assuming that the species-environment
+relationships are the same as in the modelled region), and optionally
+saving results to a file:
 
 ``` r
 preds <- ecotrends::getPredictions(rasts = vars_agg, 
@@ -154,7 +157,8 @@ perf
 ```
 
 Finally, you can use the `getTrend` function to **check for a linear
-(monotonic) temporal trend in suitability** in each pixel, optionally
+(monotonic) temporal trend in suitability** in each pixel (as long as
+there are more than 3 time steps with suitability values), optionally
 providing your occurrence coordinates if you want the results to be
 restricted to the pixels that overlap them:
 
@@ -170,9 +174,17 @@ plot(trend,
 ```
 
 See `?Kendall::MannKendall` (including the *Value* section) to know more
-about these statistics. If you want just the first raster layer (with
-the significant Tau values), set `full = FALSE` above. Positive Tau
-values indicate increasing suitability, and negative values indicate
-decreasing suitability over time. Pixels with no value have no
+about these statistics. If you want to compute only the first raster
+layer (with the significant Tau values), set `full = FALSE` above. You
+can also compute the full result but plot just the layer you’re
+interested in, and also add the region polygon:
+
+``` r
+plot(trend[["tau"]])
+plot(reg, lwd = 0.5, add = TRUE)
+```
+
+Positive Tau values indicate increasing suitability, and negative values
+indicate decreasing suitability over time. Pixels with no value have no
 significant linear trend (or no occurrence points, if `occs` are
 provided).

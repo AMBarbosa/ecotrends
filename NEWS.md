@@ -1,3 +1,17 @@
+# ecotrends 0.9
+
+-   getTrend()
+
+    -    warning if no values produced due to small sample size
+    -    'occs' can be of class 'SpatVector' or 'sf', in which case they aren' converted to data.frame and their CRS is taken
+    -    'occs' projected (with message) if not same CRS as 'rasts'
+
+
+-   README
+
+    -    some additions for improved clarity
+
+
 # ecotrends 0.8
 
 -   getModels()
