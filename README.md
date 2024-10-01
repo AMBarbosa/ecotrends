@@ -26,12 +26,12 @@ devtools::install_github("AMBarbosa/ecotrends")
 ## Usage
 
 You’ll need some **species presence coordinates**. The code below
-downloads some example occurrence data from GBIF, and then performs
-**just a basic automatic cleaning**:
+downloads some example occurrence data from GBIF, and then performs just
+a **basic automatic cleaning**:
 
 ``` r
 library(geodata)
-# update fuzzySim:
+# installl fuzzySim development version:
 # install.packages("fuzzySim", repos="http://R-Forge.R-project.org")
 library(fuzzySim)
 
@@ -56,11 +56,10 @@ own spatial extent or polygon – e.g., a biogeographical region that is
 **within your species’ reach**, and within which that species was
 **reasonably surveyed** (mind that pixels within your region that don’t
 overlap species presences are taken by Maxent models as available and
-unoccupied). Alternatively or additionally, you can use the `getRegion`
-function (of package `fuzzySim`) to compute a *reasonably sized* area
-around your species occurrences (see help file and try out different
-options, some of which may be much more adequate for your particular
-case!):
+unoccupied). Alternatively or additionally, you can use e.g. the code
+below to compute a *reasonably sized* area around your species
+occurrences (see help file and try out different options, some of which
+may be much more adequate for your particular case!):
 
 ``` r
 reg <- fuzzySim::getRegion(pres.coords = occ_coords,
@@ -75,7 +74,7 @@ time series** of ecological niche models for this species in this
 region. You can first use the `varsAvailable` function to check which
 variables and years are available through the `ecotrends` package, and
 then the `getVariables` function to download the ones you choose (unless
-you want to use your own variables form elsewhere). Mind that the
+you want to use your own variables from elsewhere). Mind that the
 download may take a long time:
 
 ``` r
