@@ -26,7 +26,7 @@ getModels(
 
 \item{rasts}{(multi-layer) SpatRaster with the variables to use in the models. The layer names should be in the form 'varname_year', e.g. 'tmin_1981', as in the output of \code{\link[=getVariables]{getVariables()}}}
 
-\item{region}{optional SpatExtent or SpatVector polygon delimiting the region of 'rasts' within which to compute the models. The default is NULL, to use the entire extent of 'rasts'. Note that 'region' should ideally include only reasonably surveyed areas accessible to the species, as pixels that don't overlap presence points are taken by Maxent as available and not occupied.}
+\item{region}{optional SpatExtent or SpatVector polygon delimiting the region of 'rasts' within which to compute the models. The default is NULL, to use the entire extent of 'rasts'. Note that 'region' should ideally include only reasonably surveyed areas accessible to the species, as pixels that don't overlap presence points are taken by Maxent as available and unoccupied.}
 
 \item{nbg}{integer value indicating the maximum number of background pixels to use in the models. The default is 10,000, or the total number of non-NA pixels in 'rasts' if that's less.}
 
@@ -44,7 +44,7 @@ getModels(
 
 \item{nreps}{integer value indicating the number of train-test data replicates for testing each model. The default (AND ONLY VALUE IMPLEMENTED SO FAR) is 0, for no train-test replicates}
 
-\item{test}{numeric value indicating the proportion of pixels to set aside for testing each replicate model (if 'nreps' > 0). The default is 0.2, i.e. 20\% (NOT YET IMPLEMENTED)}
+\item{test}{numeric value indicating the proportion of pixels to set aside for testing each replicate model (if 'nreps' > 0). The default is 0.2, i.e. 20\% (NOT YET IMPLEMENTED, CURRENTLY IGNORED)}
 
 \item{file}{optional file name (including path, not including extension) if you want the output list of model objects to be saved on disk. If 'file' already exists in the working directory (meaning that models were already computed), models are imported from there.}
 

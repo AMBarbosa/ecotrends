@@ -14,9 +14,9 @@ getTrend(
 )
 }
 \arguments{
-\item{rasts}{multi-layer SpatRaster with the output of \code{\link[=getPredictions]{getPredictions()}}, or another time series of values for which to detect a trend}
+\item{rasts}{multi-layer SpatRaster with the output of \code{\link[=getPredictions]{getPredictions()}}, or another time series of values for which to detect a trend. Note more than 3 non-NA values are required for a trend to be computed.}
 
-\item{occs}{species occurrence coordinates (2 columns in this order: x, y or LONGitude, LATitude) in an object coercible to a data.frame (e.g. a data.frame, matrix, tibble, sf object or SpatVector of points), and in the same coordinate reference system as 'rasts'. If provided, output pixels that do not overlap these points will be NA}
+\item{occs}{SpatVector of species occurrence points, or their spatial coordinates (2 columns in this order: x, y or LONGitude, LATitude) in an object coercible to a data.frame (e.g. a data.frame, matrix, tibble, sf object), and in the same coordinate reference system as 'rasts'. If provided, output pixels that do not overlap these points will be NA}
 
 \item{alpha}{numeric value indicating the threshold significance level for Kendall's tau statistic. Default 0.05. Pixels with p-value above this will be NA in the output.}
 

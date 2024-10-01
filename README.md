@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# ecotrends
+# ecotrends (version 0.10)
 
 <!-- badges: start -->
 <!-- badges: end -->
@@ -53,9 +53,11 @@ occ_coords <- occ_clean[ , c("decimalLongitude", "decimalLatitude")]
 
 You should also **delimit a region for modelling**. You can provide your
 own spatial extent or polygon – e.g., a biogeographical region that is
-within your species’ reach, and within which that species was reasonably
-surveyed. Alternatively or additionally, you can use the `getRegion`
-function of package `fuzzySim` to compute a “reasonably sized” area
+**within your species’ reach**, and within which that species was
+**reasonably surveyed** (mind that pixels within your region that don’t
+overlap species presences are taken by Maxent models as available and
+unoccupied). Alternatively or additionally, you can use the `getRegion`
+function (of package `fuzzySim`) to compute a *reasonably sized* area
 around your species occurrences (see help file and try out different
 options, some of which may be much more adequate for your particular
 case!):
@@ -71,9 +73,10 @@ reg <- fuzzySim::getRegion(pres.coords = occ_coords,
 Now let’s **download some variables** with which to build a **yearly
 time series** of ecological niche models for this species in this
 region. You can first use the `varsAvailable` function to check which
-variables and years are available, and then the `getVariables` function
-to download the ones you choose. Mind that the download may take a long
-time:
+variables and years are available through the `ecotrends` package, and
+then the `getVariables` function to download the ones you choose (unless
+you want to use your own variables form elsewhere). Mind that the
+download may take a long time:
 
 ``` r
 library(ecotrends)
@@ -89,10 +92,12 @@ names(vars)
 plot(vars[[1:6]])
 ```
 
-The variable raster layers have a given pixel size *at the Equator*, but
-actual pixel sizes can vary widely across latitudes. So, let’s **check
-the average pixel size in our study region**, as well as the spatial
-uncertainty values of our occurrence coordinates:
+These variable raster layers have a given pixel size in geographical
+degrees, with a nominal pixel size *at the Equator*, but (as the
+longitude meridians all converge towards the poles) actual pixel sizes
+can vary widely across latitudes. So, let’s **check the average pixel
+size in our study region**, as well as the spatial uncertainty values of
+our occurrence coordinates:
 
 ``` r
 sqrt(ecotrends::pixelArea(vars))
@@ -129,10 +134,10 @@ mods <- ecotrends::getModels(occs = occ_coords,
 ```
 
 Let’s now **compute the model predictions** for each year, optionally
-delimiting them to the modelled region (though you can use a larger or
-an entirely different region, assuming that the species-environment
-relationships are the same as in the modelled region), and optionally
-saving results to a file:
+delimiting them to the modelled region (though you can predict on a
+larger or an entirely different region, assuming that the
+species-environment relationships are the same as in the modelled
+region), and optionally saving results to a file:
 
 ``` r
 preds <- ecotrends::getPredictions(rasts = vars_agg, 
@@ -149,7 +154,7 @@ You can **evaluate the fit** of these predictions to the model training
 data:
 
 ``` r
-perf <- ecotrends::getPerformance(rasts = preds, 
+perf <- ecotrends::getPerformance(rasts = preds,
                                   data = mods$data,
                                   plot = TRUE)
 

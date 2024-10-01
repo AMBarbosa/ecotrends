@@ -1,3 +1,15 @@
+# ecotrends 0.10
+
+-   getModels()
+
+    -    improved code to check 'region'
+
+
+-   README
+
+    -    some more additions for improved clarity
+
+
 # ecotrends 0.9
 
 -   getTrend()
