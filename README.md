@@ -55,7 +55,7 @@ You should also **delimit a region for modelling**. You can provide your
 own spatial extent or polygon – e.g., a biogeographical region that is
 **within your species’ reach**, and within which that species was
 **reasonably surveyed** (mind that pixels within your region that don’t
-overlap species presences are taken by Maxent models as available and
+overlap species presences are taken by Maxent as available and
 unoccupied). Alternatively or additionally, you can use e.g. the code
 below to compute a *reasonably sized* area around your species
 occurrences (see help file and try out different options, some of which
@@ -91,7 +91,7 @@ names(vars)
 plot(vars[[1:6]])
 ```
 
-These variable raster layers have a given pixel size in geographical
+These variable raster layers have a given pixel size in geographic
 degrees, with a nominal pixel size *at the Equator*, but (as the
 longitude meridians all converge towards the poles) actual pixel sizes
 can vary widely across latitudes. So, let’s **check the average pixel
@@ -179,8 +179,8 @@ plot(trend,
 
 See `?Kendall::MannKendall` (including the *Value* section) to know more
 about these statistics. If you want to compute only the first raster
-layer (with the significant Tau values), set `full = FALSE` above. You
-can also compute the full result but plot just the layer you’re
+layer (with the significant Tau values), set `full = FALSE` above. Or
+you can compute the full result as above, but plot just a layer you’re
 interested in, and also add the region polygon:
 
 ``` r
