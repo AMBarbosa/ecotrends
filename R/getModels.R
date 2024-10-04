@@ -79,7 +79,7 @@ getModels <- function(occs, rasts, region = NULL, nbg = 10000, seed = NULL, coll
   }
 
   if (verbosity > 0 && nbg > nrow(dat)) {
-    message("number of background points ('nbg') limited to the number of pixels\nin 'rasts' within 'region', which is ", nrow(dat), "\n")
+    message("number of background points ('nbg') limited to the number of pixels\nin 'rasts' within 'region', which is ", nrow(dat))
   }
 
   var_cols <- names(dat)[-(1:4)]
@@ -97,25 +97,33 @@ getModels <- function(occs, rasts, region = NULL, nbg = 10000, seed = NULL, coll
     mod_count <- mod_count + 1
 
     if (verbosity > 0) {
-      message("computing model ", mod_count, " of ", length(years), ": ", y)
+      message("\ncomputing model ", mod_count, " of ", length(years), ": ", y)
     }
 
     vars_year <- var_cols[grep(y, var_cols)]
 
+    # drop variables without variation in modelling subset (otherwise maxnet() error):
+    constants <- which(sapply(dat[ , vars_year, drop = FALSE], function(x) length(unique(x)) <= 1))
+    if (length(constants) > 0) {
+      if (verbosity > 0) message("variables dropped for having no variation within the modelled data: ", paste(vars_year[constants], collapse = ", "))
+      vars_year <- vars_year[-constants]
+    }
+
     if (collin) {
       vars_sel <- collinear::collinear(dat, response = "presence", predictors = vars_year, max_cor = maxcor, max_vif = maxvif)
+      if (verbosity > 1) message("variables dropped due to multicollinearity: ", paste(setdiff(vars_year, vars_sel), collapse = ", "))
     } else {
       vars_sel <- vars_year
     }
 
     # drop variables without variation in modelling subset (otherwise maxnet() error):
-    constants <- which(sapply(dat[ , vars_sel], function(x) length(unique(x)) <= 1))
-    if (length(constants) > 0) {
-      message(vars_sel[constants], " dropped for having no variation within the modelled data\n")
-      vars_sel <- vars_sel[-constants]
-    }
+    # constants <- which(sapply(dat[ , vars_sel], function(x) length(unique(x)) <= 1))
+    # if (length(constants) > 0) {
+    #   if (verbosity > 0) message("variables dropped for having no variation within the modelled data: ", paste(vars_sel[constants], collapse = ", "), "\n")
+    #   vars_sel <- vars_sel[-constants]
+    # }
 
-    mods[[y]] <- maxnet::maxnet(p = dat$presence, data = dat[ , vars_sel], f = maxnet::maxnet.formula(dat$presence, dat[ , vars_sel], classes = classes), regmult = regmult)
+    mods[[y]] <- maxnet::maxnet(p = dat$presence, data = dat[ , vars_sel, drop = FALSE], f = maxnet::maxnet.formula(dat$presence, dat[ , vars_sel, drop = FALSE], classes = classes), regmult = regmult)
   }
 
   if (verbosity > 0) message("")  # introduces one blank line between messages and possible warning

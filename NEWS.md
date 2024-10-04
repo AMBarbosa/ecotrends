@@ -1,3 +1,13 @@
+# ecotrends 0.11
+
+-   getModels()
+
+    -    messages saying which variables removed by collinear()
+    -    constants checked before (rather than after) collin
+    -    added drop=FALSE to fix error when only one selected predictor
+
+
+
 # ecotrends 0.10
 
 -   getModels()
@@ -8,6 +18,7 @@
 -   README
 
     -    some more additions for improved clarity
+
 
 
 # ecotrends 0.9
@@ -22,6 +33,7 @@
 -   README
 
     -    some additions for improved clarity
+
 
 
 # ecotrends 0.8
@@ -42,12 +54,14 @@
 
     -   removed in favour of a more complete version which was already being programmed in package {fuzzySim}
     
+    
 
 # ecotrends 0.7
 
 -   getModels()
 
     -   warning if input 'rasts' is not SpatRaster, which will work here but fail elsewhere
+    
     
 
 # ecotrends 0.6
@@ -78,6 +92,7 @@
     -   replaced instances of @import with @importFrom in roxygen skeleton
 
 
+
 # ecotrends 0.5
 
 -   getModels()
@@ -95,6 +110,7 @@
     -   added arguments 'clamp' and 'type' to pass to maxnet::predict()
 
 
+
 # ecotrends 0.4
 
 -   getVariables()
@@ -108,12 +124,14 @@
     -   object imported from 'file', if it exists in getwd()
 
 
+
 # ecotrends 0.3
 
 -   getTrend()
 
     -   dealt with NA pixels to avoid numerous Kendall::MannKendall() warnings (thanks to Spacedman at https://gis.stackexchange.com/a/464198)
     -   bonus: increased efficiency, as mannkendall outputs an unlisted vector (still thanks to Spacedman at https://gis.stackexchange.com/a/464198)
+
 
 
 # ecotrends 0.2
@@ -129,6 +147,7 @@
     -   added Mann-Kendall outputs besides tau: p_value, S, S_variance
 
 
+
 # ecotrends 0.1
 
 -   Added the following package functions, together with documentation and users guide:
@@ -140,6 +159,7 @@
     -   getModels()
     -   getPredictions()
     -   getTrend()
+
 
 
 # ecotrends 0.0.0.9000

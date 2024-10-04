@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# ecotrends (version 0.10)
+# ecotrends (version 0.11)
 
 <!-- badges: start -->
 <!-- badges: end -->
@@ -181,7 +181,7 @@ See `?Kendall::MannKendall` (including the *Value* section) to know more
 about these statistics. If you want to compute only the first raster
 layer (with the significant Tau values), set `full = FALSE` above. Or
 you can compute the full result as above, but plot just a layer you’re
-interested in, and also add the region polygon:
+interested in, and optionally add the region polygon:
 
 ``` r
 plot(trend[["tau"]])
