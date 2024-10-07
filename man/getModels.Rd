@@ -24,15 +24,15 @@ getModels(
 \arguments{
 \item{occs}{species occurrence coordinates (2 columns in this order: x, y or LONGitude, LATitude) in an object coercible to a data.frame (e.g. a data.frame, matrix, tibble, sf object or SpatVector of points), and in the same coordinate reference system as 'rasts'}
 
-\item{rasts}{(multi-layer) SpatRaster with the variables to use in the models. The layer names should be in the form 'varname_year', e.g. 'tmin_1981', as in the output of \code{\link[=getVariables]{getVariables()}}}
+\item{rasts}{(multi-layer) SpatRaster with the variables to use in the models. The layer names should be in the form 'varname_year', e.g. 'tmin_1981', as in the output of \code{\link[=getVariables]{getVariables()}}. Note that, if a variable has no spatial variation in a given year, it is excluded (and indeed could have no effect) in that year's model, so in practice not all models will include the exact same set of variables. If verbosity > 1, messages will report which variables were excluded from each year.}
 
-\item{region}{optional SpatExtent or SpatVector polygon delimiting the region of 'rasts' within which to compute the models. The default is NULL, to use the entire extent of 'rasts'. Note that 'region' should ideally include only reasonably surveyed areas accessible to the species, as pixels that don't overlap presence points are taken by Maxent as available and unoccupied.}
+\item{region}{optional SpatExtent or SpatVector polygon delimiting the region of 'rasts' within which to compute the models. The default is NULL, to use the entire extent of 'rasts' with pixel values. Note that 'region' should ideally include only reasonably surveyed areas accessible to the species, as pixels that don't overlap presence points are taken by Maxent as available and unoccupied.}
 
 \item{nbg}{integer value indicating the maximum number of background pixels to use in the models. The default is 10,000, or the total number of non-NA pixels in 'rasts' if that's less.}
 
 \item{seed}{optional integer value to pass to \code{\link[=set.seed]{set.seed()}} specifying the random seed to use for sampling the background pixels (if 'nbg' is smaller than the number of pixels in 'rasts').}
 
-\item{collin}{logical value indicating whether multicollinearity among the variables should be reduced prior to computing each model. The default is TRUE, in which case the \code{\link[collinear:collinear]{collinear::collinear()}} function is used.}
+\item{collin}{logical value indicating whether multicollinearity among the variables should be reduced prior to computing each model. The default is TRUE, in which case the \code{\link[collinear:collinear]{collinear::collinear()}} function is used. Note that, if the collinearity structure varies among years, the set of included variables may also vary. If verbosity > 1, messages will report which variables were excluded from each year.}
 
 \item{maxcor}{numeric value to pass to \code{\link[collinear:collinear]{collinear::collinear()}} (if collin = TRUE) indicating the maximum correlation allowed between any pair of predictor variables. The default is 0.75.}
 

@@ -4,17 +4,17 @@
 #' This function computes a [maxnet::maxnet()] ecological niche model per year, given a set of presence point coordinates and yearly environmental layers.
 
 #' @param occs species occurrence coordinates (2 columns in this order: x, y or LONGitude, LATitude) in an object coercible to a data.frame (e.g. a data.frame, matrix, tibble, sf object or SpatVector of points), and in the same coordinate reference system as 'rasts'
-#' @param rasts (multi-layer) SpatRaster with the variables to use in the models. The layer names should be in the form 'varname_year', e.g. 'tmin_1981', as in the output of [getVariables()]
-#' @param region optional SpatExtent or SpatVector polygon delimiting the region of 'rasts' within which to compute the models. The default is NULL, to use the entire extent of 'rasts'. Note that 'region' should ideally include only reasonably surveyed areas accessible to the species, as pixels that don't overlap presence points are taken by Maxent as available and unoccupied.
-#' @param nbg integer value indicating the maximum number of background pixels to use in the models. The default is 10,000, or the total number of non-NA pixels in 'rasts' if that's less.
+#' @param rasts (multi-layer) SpatRaster with the variables to use in the models. The layer names should be in the form 'varname_year', e.g. 'tmin_1981', as in the output of [getVariables()]. Note that, if a variable has no spatial variation in a given year, it is excluded (and indeed could have no effect) in that year's model, so in practice not all models will include the exact same set of variables. If verbosity > 1, messages will report which variables were excluded from each year.
+#' @param region optional SpatExtent or SpatVector polygon delimiting the region of 'rasts' within which to compute the models. The default is NULL, to use the entire extent of 'rasts' with pixel values. Note that 'region' should ideally include only reasonably surveyed areas accessible to the species, as pixels that don't overlap presence points are taken by Maxent as available and unoccupied.
+#' @param nbg integer value indicating the maximum number of background pixels to select randomly for use in the models. The default is 10,000, or the total number of non-NA pixels in 'rasts' if that's less.
 #' @param seed optional integer value to pass to [set.seed()] specifying the random seed to use for sampling the background pixels (if 'nbg' is smaller than the number of pixels in 'rasts').
-#' @param collin logical value indicating whether multicollinearity among the variables should be reduced prior to computing each model. The default is TRUE, in which case the [collinear::collinear()] function is used.
+#' @param collin logical value indicating whether multicollinearity among the variables should be reduced prior to computing each model. The default is TRUE, in which case the [collinear::collinear()] function is used. Note that, if the collinearity structure varies among years, the set of included variables may also vary. If verbosity > 1, messages will report which variables were excluded from each year.
 #' @param maxcor numeric value to pass to [collinear::collinear()] (if collin = TRUE) indicating the maximum correlation allowed between any pair of predictor variables. The default is 0.75.
 #' @param maxvif numeric value to pass to [collinear::collinear()] (if collin = TRUE) indicating the maximum VIF allowed for selected predictor variables. The default is 5.
 #' @param classes character value to pass to [maxnet::maxnet.formula()] indicating the continuous feature classes desired. Can be "default" or any subset of "lqpht" (linear, quadratic, product, hinge, threshold) -- for example, "lqh" for just linear, quadratic and hinge features. See References for guidance.
 #' @param regmult numeric value to pass to [maxnet::maxnet()] indicating the constant to adjust regularization. The default is 1. See References for guidance.
 #' @param nreps integer value indicating the number of train-test data replicates for testing each model. The default (AND ONLY VALUE IMPLEMENTED SO FAR) is 0, for no train-test replicates
-#' @param test numeric value indicating the proportion of pixels to set aside for testing each replicate model (if 'nreps' > 0). The default is 0.2, i.e. 20% (NOT YET IMPLEMENTED, CURRENTLY IGNORED)
+#' @param test numeric value indicating the proportion of presence pixels to set aside for testing each replicate model (if 'nreps' > 0). The default is 0.2, i.e. 20% (NOT YET IMPLEMENTED, CURRENTLY IGNORED)
 #' @param file optional file name (including path, not including extension) if you want the output list of model objects to be saved on disk. If 'file' already exists in the working directory (meaning that models were already computed), models are imported from there.
 #' @param verbosity integer value indicating the amount of messages to display. The default is 2, for the maximum number of messages available.
 
@@ -75,7 +75,7 @@ getModels <- function(occs, rasts, region = NULL, nbg = 10000, seed = NULL, coll
   npres <- sum(dat$presence == 1)
 
   if (nbg < nrow(dat)) {
-    dat <- fuzzySim::selectAbsences(dat, sp.cols = "presence", n = nbg - npres, seed = seed, df = TRUE, verbosity = 0)  # same bg points for all models
+    dat <- fuzzySim::selectAbsences(dat, sp.cols = "presence", n = nbg - npres, seed = seed, df = TRUE, verbosity = 0)  # same bg points for all models; presences all included
   }
 
   if (verbosity > 0 && nbg > nrow(dat)) {
