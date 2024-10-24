@@ -1,3 +1,12 @@
+# ecotrends 0.13
+
+-   getModels()
+
+    -   integrated test + nreps arguments in output 'data'
+    -   named list of replicate models
+
+
+
 # ecotrends 0.12
 
 -   getModels()
