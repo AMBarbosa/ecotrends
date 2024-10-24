@@ -20,7 +20,7 @@
 
 getPredictions <- function(rasts, mods, region = NULL, type = "cloglog", clamp = TRUE, file = NULL, verbosity = 2) {
 
-  if (length(mods[[1]]) > 1) stop("Sorry, 'mods' can currently have only one model per year; with no replicates.")
+  # if (length(mods[[1]]) > 1) stop("Sorry, input 'mods' can currently have only one model per year (no replicates).")
 
   if (!is.null(file)) {
     if (paste0(file, ".tif") %in% list.files(getwd(), recursive = TRUE)) {
