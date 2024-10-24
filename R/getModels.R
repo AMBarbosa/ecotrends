@@ -89,13 +89,13 @@ getModels <- function(occs, rasts, region = NULL, nbg = 10000, seed = NULL, coll
   mod_count <- 0
   rep_count <- 0
 
-    message()  # blank line
+  message()  # blank line
   if (verbosity > 1) message (npres, " presence pixels")
   if (nreps > 0) {
     n_test_pres <- round(npres * test)
     if (verbosity > 1) message (n_test_pres, " of which reserved for each test sample")
-    message()  # blank line
   }
+  message()  # blank line
 
   for (y in years) {
 
@@ -134,9 +134,14 @@ getModels <- function(occs, rasts, region = NULL, nbg = 10000, seed = NULL, coll
 
       for (r in 1:nreps) {
         pres_test <- sample(pres_inds, n_test_pres)
-        dat_rep <- dat
-        dat_rep[pres_test, "presence"] <- 0
-        mods[[y]][[r]] <- maxnet::maxnet(p = dat_rep$presence, data = vars_mod, f = maxnet::maxnet.formula(dat_rep$presence, vars_mod, classes = classes), regmult = regmult)
+        name <- paste0("pres_rep", r)
+        dat[ , name] <- dat$presence
+        dat[pres_test, name] <- 0
+        mods[[y]][[r]] <- maxnet::maxnet(p = dat[ , name], data = vars_mod,
+                                         f = maxnet::maxnet.formula(dat[ , name],
+                                                                    vars_mod,
+                                                                    classes = classes),
+                                         regmult = regmult)
       }
     }
   }  # end for y
