@@ -131,6 +131,7 @@ getModels <- function(occs, rasts, region = NULL, nbg = 10000, seed = NULL, coll
       pres_inds <- which(dat$presence == 1)
 
       mods[[y]] <- vector("list", nreps)
+      names(mods[[y]]) <- paste0("rep", 1:nreps)
 
       for (r in 1:nreps) {
         pres_test <- sample(pres_inds, n_test_pres)
@@ -142,8 +143,8 @@ getModels <- function(occs, rasts, region = NULL, nbg = 10000, seed = NULL, coll
                                                                     vars_mod,
                                                                     classes = classes),
                                          regmult = regmult)
-      }
-    }
+      }  # end for r
+    }  # end if reps
   }  # end for y
 
   if (verbosity > 0) message("")  # introduces one blank line between messages and possible warning
