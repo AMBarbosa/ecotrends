@@ -1,3 +1,17 @@
+# ecotrends 0.12
+
+-   getModels()
+
+    -   implemented 'test' and 'nreps' arguments in output 'models'
+    -   help file mentions that constant variables and different collinearity structures may produce models with different sets of variables among years
+
+
+-   getPredictions()
+
+    -   currently stops if input 'mods' has replicates
+
+
+
 # ecotrends 0.11
 
 -   getModels()
@@ -26,7 +40,7 @@
 -   getTrend()
 
     -    warning if no values produced due to small sample size
-    -    'occs' can be of class 'SpatVector' or 'sf', in which case they aren' converted to data.frame and their CRS is taken
+    -    'occs' can be of class 'SpatVector' or 'sf', in which case they aren't converted to data.frame and their CRS is taken
     -    'occs' projected (with message) if not same CRS as 'rasts'
 
 

@@ -7,14 +7,14 @@
 #' @param rasts (multi-layer) SpatRaster with the variables to use in the models. The layer names should be in the form 'varname_year', e.g. 'tmin_1981', as in the output of [getVariables()]. Note that, if a variable has no spatial variation in a given year, it is excluded (and indeed could have no effect) in that year's model, so in practice not all models will include the exact same set of variables. If verbosity > 1, messages will report which variables were excluded from each year.
 #' @param region optional SpatExtent or SpatVector polygon delimiting the region of 'rasts' within which to compute the models. The default is NULL, to use the entire extent of 'rasts' with pixel values. Note that 'region' should ideally include only reasonably surveyed areas accessible to the species, as pixels that don't overlap presence points are taken by Maxent as available and unoccupied.
 #' @param nbg integer value indicating the maximum number of background pixels to select randomly for use in the models. The default is 10,000, or the total number of non-NA pixels in 'rasts' if that's less.
-#' @param seed optional integer value to pass to [set.seed()] specifying the random seed to use for sampling the background pixels (if 'nbg' is smaller than the number of pixels in 'rasts').
+#' @param seed optional integer value to pass to [set.seed()] specifying the random seed to use for sampling the background pixels (if 'nbg' is smaller than the number of pixels in 'rasts') and for extracting the test samples (if 'nreps' > 0).
 #' @param collin logical value indicating whether multicollinearity among the variables should be reduced prior to computing each model. The default is TRUE, in which case the [collinear::collinear()] function is used. Note that, if the collinearity structure varies among years, the set of included variables may also vary. If verbosity > 1, messages will report which variables were excluded from each year.
 #' @param maxcor numeric value to pass to [collinear::collinear()] (if collin = TRUE) indicating the maximum correlation allowed between any pair of predictor variables. The default is 0.75.
 #' @param maxvif numeric value to pass to [collinear::collinear()] (if collin = TRUE) indicating the maximum VIF allowed for selected predictor variables. The default is 5.
 #' @param classes character value to pass to [maxnet::maxnet.formula()] indicating the continuous feature classes desired. Can be "default" or any subset of "lqpht" (linear, quadratic, product, hinge, threshold) -- for example, "lqh" for just linear, quadratic and hinge features. See References for guidance.
 #' @param regmult numeric value to pass to [maxnet::maxnet()] indicating the constant to adjust regularization. The default is 1. See References for guidance.
-#' @param nreps integer value indicating the number of train-test data replicates for testing each model. The default (AND ONLY VALUE IMPLEMENTED SO FAR) is 0, for no train-test replicates
-#' @param test numeric value indicating the proportion of presence pixels to set aside for testing each replicate model (if 'nreps' > 0). The default is 0.2, i.e. 20% (NOT YET IMPLEMENTED, CURRENTLY IGNORED)
+#' @param nreps integer value indicating the number of train-test data replicates for testing each model. The default is 0, for no train-test replicates, i.e. for modelling the entire dataset. If nreps > 0, presences are randomly assigned to the train and test sample in each replicate (in the proportion defined by the 'test' argument), while the background remains the same.
+#' @param test numeric value indicating the proportion of presences to set aside for testing each replicate model (if nreps > 0). The default is 0.2, i.e. 20%.
 #' @param file optional file name (including path, not including extension) if you want the output list of model objects to be saved on disk. If 'file' already exists in the working directory (meaning that models were already computed), models are imported from there.
 #' @param verbosity integer value indicating the amount of messages to display. The default is 2, for the maximum number of messages available.
 
@@ -44,12 +44,7 @@
 
 getModels <- function(occs, rasts, region = NULL, nbg = 10000, seed = NULL, collin = TRUE, maxcor = 0.75, maxvif = 5, classes = "default", regmult = 1, nreps = 0, test = 0.2, file = NULL, verbosity = 2) {
 
-  # add option for complete model (besides the replicates)??
-
-  if (nreps > 0) warning("sorry, argument 'nreps' not yet implemented, currently ignored")
-  reps <- NULL  # output placeholder
-
-  if (!is(rasts, "SpatRaster")) warning("Note 'rasts' should be a SpatRaster object of package terra. While older formats may still work in some functions, they should be abandonded as they may cause problems downstream.")
+  if (!inherits(rasts, "SpatRaster")) warning("Note 'rasts' should be a SpatRaster object of package terra. While older formats may still work in some functions, they should be abandonded as they may cause problems downstream.")
 
   if (!is.null(file)) {
     if (paste0(file, ".rds") %in% list.files(getwd(), recursive = TRUE)) {
@@ -63,7 +58,7 @@ getModels <- function(occs, rasts, region = NULL, nbg = 10000, seed = NULL, coll
   }
 
   if (!is.null(region)) {
-  # if (methods::is(region, "SpatVector") && terra::geomtype(region) == "polygons") {
+    # if (methods::is(region, "SpatVector") && terra::geomtype(region) == "polygons") {
     if (!(methods::is(region, "SpatVector") || methods::is(region, "SpatExtent"))) {
       stop("'region' must be a SpatExtent or a SpatVector polygon.")
     }
@@ -74,8 +69,10 @@ getModels <- function(occs, rasts, region = NULL, nbg = 10000, seed = NULL, coll
   dat <- fuzzySim::gridRecords(rasts, occs)
   npres <- sum(dat$presence == 1)
 
+  set.seed(seed)  # for nbg and nreps
+
   if (nbg < nrow(dat)) {
-    dat <- fuzzySim::selectAbsences(dat, sp.cols = "presence", n = nbg - npres, seed = seed, df = TRUE, verbosity = 0)  # same bg points for all models; presences all included
+    dat <- fuzzySim::selectAbsences(dat, sp.cols = "presence", n = nbg - npres, df = TRUE, verbosity = 0)  # same bg points for all models; presences all included
   }
 
   if (verbosity > 0 && nbg > nrow(dat)) {
@@ -90,7 +87,15 @@ getModels <- function(occs, rasts, region = NULL, nbg = 10000, seed = NULL, coll
   mods <- vector("list", length(years))
   names(mods) <- years
   mod_count <- 0
-  rep_count <- 0  # placeholder
+  rep_count <- 0
+
+    message()  # blank line
+  if (verbosity > 1) message (npres, " presence pixels")
+  if (nreps > 0) {
+    n_test_pres <- round(npres * test)
+    if (verbosity > 1) message (n_test_pres, " of which reserved for each test sample")
+    message()  # blank line
+  }
 
   for (y in years) {
 
@@ -111,20 +116,30 @@ getModels <- function(occs, rasts, region = NULL, nbg = 10000, seed = NULL, coll
 
     if (collin) {
       vars_sel <- collinear::collinear(dat, response = "presence", predictors = vars_year, max_cor = maxcor, max_vif = maxvif)
-      if (verbosity > 1) message("variables dropped due to multicollinearity: ", paste(setdiff(vars_year, vars_sel), collapse = ", "))
+      if (length(vars_sel) < length(vars_year) && verbosity > 1) message("variables dropped due to multicollinearity: ", paste(setdiff(vars_year, vars_sel), collapse = ", "))
     } else {
       vars_sel <- vars_year
     }
 
-    # drop variables without variation in modelling subset (otherwise maxnet() error):
-    # constants <- which(sapply(dat[ , vars_sel], function(x) length(unique(x)) <= 1))
-    # if (length(constants) > 0) {
-    #   if (verbosity > 0) message("variables dropped for having no variation within the modelled data: ", paste(vars_sel[constants], collapse = ", "), "\n")
-    #   vars_sel <- vars_sel[-constants]
-    # }
 
-    mods[[y]] <- maxnet::maxnet(p = dat$presence, data = dat[ , vars_sel, drop = FALSE], f = maxnet::maxnet.formula(dat$presence, dat[ , vars_sel, drop = FALSE], classes = classes), regmult = regmult)
-  }
+    vars_mod <- dat[ , vars_sel, drop = FALSE]
+
+    if (nreps <= 0) {
+      mods[[y]] <- maxnet::maxnet(p = dat$presence, data = vars_mod, f = maxnet::maxnet.formula(dat$presence, vars_mod, classes = classes), regmult = regmult)
+
+    } else {
+      pres_inds <- which(dat$presence == 1)
+
+      mods[[y]] <- vector("list", nreps)
+
+      for (r in 1:nreps) {
+        pres_test <- sample(pres_inds, n_test_pres)
+        dat_rep <- dat
+        dat_rep[pres_test, "presence"] <- 0
+        mods[[y]][[r]] <- maxnet::maxnet(p = dat_rep$presence, data = vars_mod, f = maxnet::maxnet.formula(dat_rep$presence, vars_mod, classes = classes), regmult = regmult)
+      }
+    }
+  }  # end for y
 
   if (verbosity > 0) message("")  # introduces one blank line between messages and possible warning
 
@@ -132,6 +147,6 @@ getModels <- function(occs, rasts, region = NULL, nbg = 10000, seed = NULL, coll
     saveRDS(mods, paste0(file, ".rds"))
   }
 
-  return(list(models = mods, replicates = reps, data = dat))
-
+  # reps = NULL  # placeholder
+  return(list(models = mods, data = dat))
 }

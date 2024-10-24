@@ -20,6 +20,8 @@
 
 getPredictions <- function(rasts, mods, region = NULL, type = "cloglog", clamp = TRUE, file = NULL, verbosity = 2) {
 
+  if (length(mods[[1]]) > 1) stop("Sorry, 'mods' can currently have only one model per year; with no replicates.")
+
   if (!is.null(file)) {
     if (paste0(file, ".tif") %in% list.files(getwd(), recursive = TRUE)) {
       if (verbosity > 0) message("Predictions imported from the specified 'file', which already exists in the current working directory. Please provide a different 'file' path/name if this is not what you want.")
