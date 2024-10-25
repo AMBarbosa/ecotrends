@@ -1,3 +1,11 @@
+# ecotrends 0.14
+
+-   getModels()
+
+    -   added 'bias' argument
+
+
+
 # ecotrends 0.13
 
 -   getModels()
