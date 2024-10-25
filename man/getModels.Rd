@@ -10,6 +10,7 @@ getModels(
   region = NULL,
   nbg = 10000,
   seed = NULL,
+  bias = FALSE,
   collin = TRUE,
   maxcor = 0.75,
   maxvif = 5,
@@ -31,6 +32,8 @@ getModels(
 \item{nbg}{integer value indicating the maximum number of background pixels to select randomly for use in the models. The default is 10,000, or the total number of non-NA pixels in 'rasts' if that's less.}
 
 \item{seed}{optional integer value to pass to \code{\link[=set.seed]{set.seed()}} specifying the random seed to use for sampling the background pixels (if 'nbg' is smaller than the number of pixels in 'rasts') and for extracting the test samples (if 'nreps' > 0).}
+
+\item{bias}{argument to pass to \code{\link[fuzzySim:selectAbsences]{fuzzySim::selectAbsences()}} specifying if/how the selection of unoccupied background points should be biased to incorporate survey effort. Can be TRUE to make selection more likely towards the vicinity of occurrence points; or a SpatRaster of weights (bias layer) with higher values where selection should be proportionally more likely, and zero or NA where points should not be placed. Default FALSE.}
 
 \item{collin}{logical value indicating whether multicollinearity among the variables should be reduced prior to computing each model. The default is TRUE, in which case the \code{\link[collinear:collinear]{collinear::collinear()}} function is used. Note that, if the collinearity structure varies among years, the set of included variables may also vary. If verbosity > 1, messages will report which variables were excluded from each year.}
 
