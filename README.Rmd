@@ -107,6 +107,7 @@ This is much closer to the spatial resolution of many of the species occurrences
 mods <- ecotrends::getModels(occs = occ_coords, 
                              rasts = vars_agg, 
                              region = reg,
+                             nbg = 10000,
                              collin = TRUE, 
                              maxcor = 0.75,
                              maxvif = 5,
@@ -114,6 +115,8 @@ mods <- ecotrends::getModels(occs = occ_coords,
                              regmult = 1, 
                              file = "outputs/models")
 ```
+
+Note that you can add a `bias` layer to drive the selection of background points, if your study area contains more pixels than `nbg`. See the `?getModels` help file for more details.
 
 Let's now **compute the model predictions** for each year, optionally delimiting them to the modelled region (though you can predict on a larger or an entirely different region, assuming that the species-environment relationships are the same as in the modelled region), and optionally saving results to a file:
 
