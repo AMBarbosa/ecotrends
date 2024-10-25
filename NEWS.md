@@ -1,8 +1,16 @@
+# ecotrends 0.15
+
+-   getPredictions()
+
+    -   implemented for models with replicates
+
+
+
 # ecotrends 0.14
 
 -   getModels()
 
-    -   added 'bias' argument
+    -   added 'bias' argument (requires fuzzySim >= 4.25)
 
 
 

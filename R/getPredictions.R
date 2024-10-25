@@ -1,14 +1,14 @@
 #' Get predictions
 #'
 #' @param rasts (multi-layer) SpatRaster containing the variables (with the same names) used in the models
-#' @param mods list of [maxnet] model objects, output of [getModels()]
+#' @param mods list of [maxnet] model objects, as in the 'models' output of [getModels()]
 #' @param region optional SpatExtent or SpatVector polygon delimiting the region of 'rasts' within which to compute the predictions. The default is NULL, to use the entire extent of 'rasts'. Note that predictions may be unreliable outside the 'region' used for [getModels()], as they are extrapolating beyond the analysed conditions.
 #' @param type character value to pass to [predict()] indicating the type of response to compute. Can be "cloglog" (the default and currently recommended), "logistic" (previously but no longer recommended) (Phillips et al., 2017), "exponential", or "link"
 #' @param clamp logical value to pass to [predict()] indicating whether predictors and features should be restricted to the range seen during model training. Default TRUE
 #' @param file optional file name (including path, not including extension) if you want the prediction rasters to be saved on disk. If 'file' already exists in the working directory, the rasters are imported from there.
 #' @param verbosity integer value indicating the amount of messages to display. The default is 2, for the maximum number of messages available.
 #'
-#' @return multi-layer SpatRaster with the predicted values for each year
+#' @return This function returns a multi-layer SpatRaster with the predictions for each year; or (if the input 'mods' have replicates) a list of multi-layer SpatRasters, one per year, each with the predictions from each replicate for that year.
 #' @author A. Marcia Barbosa
 #' @export
 #' @importFrom terra crop predict rast writeRaster
@@ -19,8 +19,6 @@
 #' @examples
 
 getPredictions <- function(rasts, mods, region = NULL, type = "cloglog", clamp = TRUE, file = NULL, verbosity = 2) {
-
-  if (!inherits(mods[[1]], "maxnet")) stop("Sorry, input 'mods' can currently have only one model per year (no replicates).")
 
   if (!is.null(file)) {
     if (paste0(file, ".tif") %in% list.files(getwd(), recursive = TRUE)) {
@@ -46,23 +44,37 @@ getPredictions <- function(rasts, mods, region = NULL, type = "cloglog", clamp =
     rasts <- terra::crop(rasts, region, mask = TRUE, snap = "out")
   }
 
-  n_mods <- length(mods)
-  preds <- vector("list", n_mods)
+  n_years <- length(mods)
+  preds <- vector("list", n_years)
   names(preds) <- names(mods)
 
-  for (m in 1:n_mods) {
-    year <- names(mods)[m]
+  for (y in 1:n_years) {
+    year <- names(mods)[y]
 
     if (verbosity > 0) {
-      message("predicting with model ", m, " of ", n_mods, ": ", year)
+      message("predicting for year ", y, " of ", n_years, ": ", year)
     }
 
     rasts_year <- rasts[[grep(year, names(rasts))]]
 
-    preds[[m]] <- terra::predict(rasts_year, mods[[m]], clamp = clamp, type = type, na.rm = TRUE)
-  }
+    if (inherits(mods[[y]], "maxnet"))  # no replicates
+      preds[[y]] <- terra::predict(rasts_year, mods[[y]], clamp = clamp, type = type, na.rm = TRUE)
 
-  preds <- terra::rast(preds)
+    else {  # with replicates, 'mods' is a list
+      preds[[y]] <- vector("list", length(mods[[y]]))
+      names(preds[[y]]) <- paste0("rep", 1:length(mods[[y]]))
+      for (r in 1:length(mods[[y]])) {
+        preds[[y]][[r]] <- terra::predict(rasts_year, mods[[y]][[r]], clamp = clamp, type = type, na.rm = TRUE)
+      }
+    }
+  }  # end for y
+
+  if (inherits(mods[[y]], "maxnet"))  # no replicates
+    preds <- terra::rast(preds)
+
+  else {  # with replicates
+    preds <- lapply(preds, terra::rast)
+  }
 
   if (!is.null(file)) {
     terra::writeRaster(preds, filename = paste0(file, ".tif"), gdal = c("COMPRESS=DEFLATE"))

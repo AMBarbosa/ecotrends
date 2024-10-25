@@ -17,7 +17,7 @@ getPredictions(
 \arguments{
 \item{rasts}{(multi-layer) SpatRaster containing the variables (with the same names) used in the models}
 
-\item{mods}{list of \link{maxnet} model objects, output of \code{\link[=getModels]{getModels()}}}
+\item{mods}{list of \link{maxnet} model objects, as in the 'models' output of \code{\link[=getModels]{getModels()}}}
 
 \item{region}{optional SpatExtent or SpatVector polygon delimiting the region of 'rasts' within which to compute the predictions. The default is NULL, to use the entire extent of 'rasts'. Note that predictions may be unreliable outside the 'region' used for \code{\link[=getModels]{getModels()}}, as they are extrapolating beyond the analysed conditions.}
 
@@ -30,7 +30,7 @@ getPredictions(
 \item{verbosity}{integer value indicating the amount of messages to display. The default is 2, for the maximum number of messages available.}
 }
 \value{
-multi-layer SpatRaster with the predicted values for each year
+This function returns a multi-layer SpatRaster with the predictions for each year; or (if the input 'mods' have replicates) a list of multi-layer SpatRasters, one per year, each with the predictions from each replicate for that year.
 }
 \description{
 Get predictions

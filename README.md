@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# ecotrends (version 0.14)
+# ecotrends (version 0.15)
 
 <!-- badges: start -->
 <!-- badges: end -->
@@ -124,6 +124,7 @@ file:
 mods <- ecotrends::getModels(occs = occ_coords, 
                              rasts = vars_agg, 
                              region = reg,
+                             nbg = 10000,
                              collin = TRUE, 
                              maxcor = 0.75,
                              maxvif = 5,
@@ -131,6 +132,11 @@ mods <- ecotrends::getModels(occs = occ_coords,
                              regmult = 1, 
                              file = "outputs/models")
 ```
+
+Note that (if you have `fuzzySim` \>= 4.25 installed) you can add a
+`bias` layer to drive the selection of background points, if your study
+area contains more pixels than `nbg`. See the `?getModels` help file for
+more details.
 
 Let’s now **compute the model predictions** for each year, optionally
 delimiting them to the modelled region (though you can predict on a
