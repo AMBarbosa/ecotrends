@@ -139,7 +139,7 @@ getModels <- function(occs, rasts, region = NULL, nbg = 10000, seed = NULL, bias
         pres_test <- sample(pres_inds, n_test_pres)
         name <- paste0("pres_rep", r)
         dat[ , name] <- dat$presence
-        dat[pres_test, name] <- 0  # or NA?
+        dat[pres_test, name] <- 0  # not NA, because that doesn't seem to be what Maxent normally does
         mods[[y]][[r]] <- maxnet::maxnet(p = dat[ , name], data = vars_mod,
                                          f = maxnet::maxnet.formula(dat[ , name],
                                                                     vars_mod,
