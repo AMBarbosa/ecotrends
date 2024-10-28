@@ -1,3 +1,15 @@
+# ecotrends 0.16
+
+
+-   getPerformance()
+
+    -   added pbg = TRUE to modEvA functions (requires modEvA >= 3.20)
+    -   'plot' default changed to FALSE, as it can be slow for large datasets
+    -   started implementing for models with replicates
+    -   name of first column of output changed to 'model' rather than 'year', to accomodate replicates
+
+
+
 # ecotrends 0.15
 
 -   getPredictions()

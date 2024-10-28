@@ -8,20 +8,23 @@ getPerformance(
   rasts,
   data,
   metrics = c("AUC", "TSS"),
-  plot = TRUE,
+  plot = FALSE,
   verbosity = 2
 )
 }
 \arguments{
-\item{rasts}{multi-layer SpatRaster with the output of \code{\link[=getPredictions]{getPredictions()}}}
+\item{rasts}{multi-layer SpatRaster(s), output of \code{\link[=getPredictions]{getPredictions()}}}
 
 \item{data}{data.frame \verb{$data} output of \code{\link[=getModels]{getModels()}}}
 
-\item{metrics}{character vector with the metrics to compute. Can be any subset of c("AUC", "TSS") -- the latter is computed at its optimal threshold. The default is both}
+\item{metrics}{character vector with the metrics to compute. Can be any subset of c("AUC", "TSS"), the latter to be computed at its optimal threshold. The default is both.}
 
-\item{plot}{logical value indicating whether plots should also be produced to illustrate the performance metrics}
+\item{plot}{logical value indicating whether plots should also be produced to illustrate the performance metrics for each model. The default is FALSE, otherwise the function is slower.}
 
-\item{verbosity}{integer value indicating the amount of messages to display. The default is 2, for the maximum number of messages available}
+\item{verbosity}{integer value indicating the amount of messages to display. The default is 2, for the maximum number of messages available.}
+}
+\value{
+This function returns a data frame of the performance results for each model.
 }
 \description{
 Get model performance
