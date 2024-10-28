@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# ecotrends (version 0.15)
+# ecotrends (version 0.16)
 
 <!-- badges: start -->
 <!-- badges: end -->
