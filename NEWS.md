@@ -1,3 +1,12 @@
+# ecotrends 0.17
+
+
+-   getPerformance()
+
+    -   implemented output for replicates (still test performance only)
+
+
+
 # ecotrends 0.16
 
 

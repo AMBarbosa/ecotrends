@@ -15,11 +15,11 @@ getPerformance(
 \arguments{
 \item{rasts}{multi-layer SpatRaster(s), output of \code{\link[=getPredictions]{getPredictions()}}}
 
-\item{data}{data.frame \verb{$data} output of \code{\link[=getModels]{getModels()}}}
+\item{data}{data.frame, \verb{$data} output of \code{\link[=getModels]{getModels()}}}
 
-\item{metrics}{character vector with the metrics to compute. Can be any subset of c("AUC", "TSS"), the latter to be computed at its optimal threshold. The default is both.}
+\item{metrics}{character vector with the metrics to compute. Can be any subset of c("AUC", "TSS"), the latter computed at its optimal threshold. The default is both. Performance metrics are computed with presence against all background (using 'modEvA' package functions with pbg=TRUE), so they evaluate the capacity of distinguishing presence from random, rather than presence from absence pixels (Phillips et al., 2006).}
 
-\item{plot}{logical value indicating whether plots should also be produced to illustrate the performance metrics for each model. The default is FALSE, otherwise the function is slower.}
+\item{plot}{logical value indicating whether plots should also be produced to illustrate the performance metrics for each model. The default is FALSE; TRUE can be slow for large datasets.}
 
 \item{verbosity}{integer value indicating the amount of messages to display. The default is 2, for the maximum number of messages available.}
 }
@@ -28,4 +28,7 @@ This function returns a data frame of the performance results for each model.
 }
 \description{
 Get model performance
+}
+\references{
+Phillips, S.J., Anderson, R.P., Schapire, R.E. (2006) Maximum entropy modeling of species geographic distributions. Ecological Modelling, 190: 231-259. https://doi.org/10.1016/j.ecolmodel.2005.03.026
 }

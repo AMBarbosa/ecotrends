@@ -33,7 +33,7 @@ getModels(
 
 \item{seed}{optional integer value to pass to \code{\link[=set.seed]{set.seed()}} specifying the random seed to use for sampling the background pixels (if 'nbg' is smaller than the number of pixels in 'rasts') and for extracting the test samples (if 'nreps' > 0).}
 
-\item{bias}{argument to pass to \code{\link[fuzzySim:selectAbsences]{fuzzySim::selectAbsences()}} (requiring fuzzySim >= 4.25) specifying if/how the selection of unoccupied background points should be biased to incorporate survey effort. Can be TRUE to make selection more likely towards the vicinity of occurrence points; or a SpatRaster of weights (bias layer), with the same coordinate reference system as 'occs' and 'rasts', with higher values where selection should be proportionally more likely, and zero or NA where points should not be placed. Default FALSE.}
+\item{bias}{argument to pass to \code{\link[fuzzySim:selectAbsences]{fuzzySim::selectAbsences()}} specifying if/how the selection of unoccupied background points should be biased to incorporate survey effort. Can be TRUE to make selection more likely towards the vicinity of occurrence points (which may indicate that those areas have been surveyed); or a SpatRaster of weights (bias layer), with the same coordinate reference system as 'occs' and 'rasts', with higher values where selection should be proportionally more likely, and zero or NA where points should not be placed. Default FALSE.}
 
 \item{collin}{logical value indicating whether multicollinearity among the variables should be reduced prior to computing each model. The default is TRUE, in which case the \code{\link[collinear:collinear]{collinear::collinear()}} function is used. Note that, if the collinearity structure varies among years, the set of included variables may also vary. If verbosity > 1, messages will report which variables were excluded from each year.}
 
@@ -47,7 +47,7 @@ getModels(
 
 \item{nreps}{integer value indicating the number of train-test data replicates for testing each model. The default is 0, for no train-test replicates, i.e. for modelling the entire dataset. If nreps > 0, presences are randomly assigned to the train and test sample in each replicate (in the proportion defined by the 'test' argument), while the background remains the same.}
 
-\item{test}{numeric value indicating the proportion of presences to set aside for testing each replicate model (if nreps > 0). The default is 0.2, i.e. 20\%.}
+\item{test}{(if nreps > 0) numeric value indicating the proportion of presences to set aside for testing each replicate model. The default is 0.2, i.e. 20\%.}
 
 \item{file}{optional file name (including path, not including extension) if you want the output list of model objects to be saved on disk. If 'file' already exists in the working directory (meaning that models were already computed), models are imported from there.}
 

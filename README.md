@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# ecotrends (version 0.16)
+# ecotrends (version 0.17)
 
 <!-- badges: start -->
 <!-- badges: end -->
@@ -133,7 +133,7 @@ mods <- ecotrends::getModels(occs = occ_coords,
                              file = "outputs/models")
 ```
 
-Note that (if you have `fuzzySim` \>= 4.25 installed) you can add a
+Note that (if you have `fuzzySim` \>= 4.26 installed) you can add a
 `bias` layer to drive the selection of background points, if your study
 area contains more pixels than `nbg`. See the `?getModels` help file for
 more details.
