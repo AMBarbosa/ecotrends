@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# ecotrends (version 0.17)
+# ecotrends (version 0.18)
 
 <!-- badges: start -->
 <!-- badges: end -->
@@ -125,6 +125,7 @@ mods <- ecotrends::getModels(occs = occ_coords,
                              rasts = vars_agg, 
                              region = reg,
                              nbg = 10000,
+                             nreps = 3,
                              collin = TRUE, 
                              maxcor = 0.75,
                              maxvif = 5,
@@ -134,37 +135,45 @@ mods <- ecotrends::getModels(occs = occ_coords,
 ```
 
 Note that (if you have `fuzzySim` \>= 4.26 installed) you can add a
-`bias` layer to drive the selection of background points, if your study
-area contains more pixels than `nbg`. See the `?getModels` help file for
-more details.
+`bias` layer to drive the selection of background points to incorporate
+survey effort, if your study area contains more pixels than `nbg`. See
+the `?getModels` help file for more details.
 
 Let’s now **compute the model predictions** for each year, optionally
 delimiting them to the modelled region (though you can predict on a
 larger or an entirely different region, assuming that the
 species-environment relationships are the same as in the modelled
-region), and optionally saving results to a file:
+region), and optionally exporting the results to a file:
 
 ``` r
 preds <- ecotrends::getPredictions(rasts = vars_agg, 
-                                   mods = mods$models, 
+                                   mods = mods, 
                                    region = reg,
                                    type = "cloglog",
                                    clamp = TRUE,
                                    file = "outputs/predictions")
 
-plot(preds, range = c(0, 1))
+names(preds)
+plot(preds[[1]], range = c(0, 1))
 ```
 
 You can **evaluate the fit** of these predictions to the model training
 data:
 
 ``` r
+par(mfrow = c(2, 2))
+
 perf <- ecotrends::getPerformance(rasts = preds,
-                                  data = mods$data,
+                                  mods = mods,
                                   plot = TRUE)
 
-perf
+head(perf)
 ```
+
+Note that `rasts` here can be either the output of `getPredictions()`,
+or a `file` argument previously provided to `getPredictions()`, in case
+you exported predictions in a previous R session and don’t want to
+compute them again.
 
 Finally, you can use the `getTrend` function to **check for a linear
 (monotonic) temporal trend in suitability** in each pixel (as long as
