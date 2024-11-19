@@ -14,7 +14,7 @@ getTrend(
 )
 }
 \arguments{
-\item{rasts}{multi-layer SpatRaster with the output of \code{\link[=getPredictions]{getPredictions()}}, or another time series of values for which to detect a trend. Note more than 3 non-NA values are required for a trend to be computed.}
+\item{rasts}{multi-layer SpatRaster with the output of \code{\link[=getPredictions]{getPredictions()}}, or another time series of values for which to detect a trend. Note that >3 non-NA values (i.e. more than 3 years) are required for a trend to be computed. If there are >1 replicates per year, their pixel-wise mean is computed prior to analysing the trend.}
 
 \item{occs}{SpatVector of species occurrence points, or their spatial coordinates (2 columns in this order: x, y or LONGitude, LATitude) in an object coercible to a data.frame (e.g. a data.frame, matrix, tibble, sf object), and in the same coordinate reference system as 'rasts'. If provided, output pixels that do not overlap these points will be NA}
 

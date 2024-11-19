@@ -3,7 +3,7 @@
 #' @description
 #' This function uses [terra::app()] to apply the [Kendall::MannKendall()] function to each pixel of a multi-layer time series SpatRaster, testing for a monotonic (either increasing or decreasing) trend in the raster values.
 
-#' @param rasts multi-layer SpatRaster with the output of [getPredictions()], or another time series of values for which to detect a trend. Note more than 3 non-NA values are required for a trend to be computed.
+#' @param rasts multi-layer SpatRaster with the output of [getPredictions()], or another time series of values for which to detect a trend. Note that >3 non-NA values (i.e. more than 3 years) are required for a trend to be computed. If there are >1 replicates per year, their pixel-wise mean is computed prior to analysing the trend.
 #' @param occs SpatVector of species occurrence points, or their spatial coordinates (2 columns in this order: x, y or LONGitude, LATitude) in an object coercible to a data.frame (e.g. a data.frame, matrix, tibble, sf object), and in the same coordinate reference system as 'rasts'. If provided, output pixels that do not overlap these points will be NA
 #' @param alpha numeric value indicating the threshold significance level for Kendall's tau statistic. Default 0.05. Pixels with p-value above this will be NA in the output.
 #' @param full logical value indicating whether to output a multi-layer raster with the full results of the Mann-Kendall test, namely the Tau value, p-value (significance), S and variance of S. If set to FALSE, a single-layer raster will be returned with the (significant) Tau values.
@@ -15,7 +15,7 @@
 #' @author A. Marcia Barbosa
 #' @seealso [Kendall::MannKendall()], spatialEco::raster.kendall()
 #' @export
-#' @importFrom terra app crs ifel mask project rast vect writeRaster
+#' @importFrom terra app crs ifel mask nlyr project rast vect writeRaster
 #' @importFrom Kendall MannKendall
 #'
 #' @examples
@@ -42,6 +42,12 @@ getTrend <- function(rasts, occs = NULL, alpha = 0.05, file = NULL, full = TRUE,
       return(c(tau = NA, sl = NA, S = NA, D = NA, varS = NA))
     } # and see warning below
   }
+
+  if (terra::nlyr(rasts[[1]]) > 1)  # with >1 replicates
+    # rasts <- lapply(rasts, function(x) getElement(x, "mean"))
+    rasts <- lapply(rasts, terra::app, "mean")
+
+  rasts <- terra::rast(rasts)  # from list or from SpatRasterDataset
 
   out <- terra::app(rasts, mannkend)
 

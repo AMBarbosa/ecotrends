@@ -6,16 +6,16 @@
 \usage{
 getPerformance(
   rasts,
-  data,
+  mods,
   metrics = c("AUC", "TSS"),
   plot = FALSE,
   verbosity = 2
 )
 }
 \arguments{
-\item{rasts}{multi-layer SpatRaster(s), output of \code{\link[=getPredictions]{getPredictions()}}}
+\item{rasts}{SpatRasterDataset output of \code{\link[=getPredictions]{getPredictions()}}, or 'file' argument previously provided to \code{\link[=getPredictions]{getPredictions()}}}
 
-\item{data}{data.frame, \verb{$data} output of \code{\link[=getModels]{getModels()}}}
+\item{mods}{output of \code{\link[=getModels]{getModels()}}}
 
 \item{metrics}{character vector with the metrics to compute. Can be any subset of c("AUC", "TSS"), the latter computed at its optimal threshold. The default is both. Performance metrics are computed with presence against all background (using 'modEvA' package functions with pbg=TRUE), so they evaluate the capacity of distinguishing presence from random, rather than presence from absence pixels (Phillips et al., 2006).}
 
@@ -24,7 +24,7 @@ getPerformance(
 \item{verbosity}{integer value indicating the amount of messages to display. The default is 2, for the maximum number of messages available.}
 }
 \value{
-This function returns a data frame of the performance results for each model.
+This function returns a data frame of the performance evaluation results for each model.
 }
 \description{
 Get model performance

@@ -1,19 +1,26 @@
 Package: ecotrends
 Type: Package
 Title: Temporal trends in ecological niche models 
-Version: 0.17
+Version: 0.18
 Authors@R: 
   c(
     person(given = c("A.", "Marcia"), family = "Barbosa", 
     email = "ana.marcia.barbosa@gmail.com", role = c("aut", "cre")),
-    person(given = "Neftali", family = "Sillero", role = "aut")
+    person(given = "João", family = "Alírio", role = "aut"),
+    person(given = "Nuno", family = "Garcia", role = "aut"),
+    person(given = "João", family = "Campos", role = "aut"),
+    person(given = c("Ana", "Cláudia"), family = "Teodoro", role = "aut"),
+    person(given = "Lia", family = "Barbosa", role = "aut"),
+    person(given = "Isabel", family = "Pôças", role = "aut"),
+    person(given = "Salvador", family = "Arenas-Castro", role = "aut"),
+    person(given = "Neftalí", family = "Sillero", role = "aut")
   )
 Maintainer: A. Marcia Barbosa <ana.marcia.barbosa@gmail.com>
 Description: This package computes temporal trends in environmental suitability obtained from ecological niche models, based on a set of species presence point coordinates and predictor variables.
 License: GPL (>=3) | file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 URL: https://github.com/AMBarbosa/ecotrends
 BugReports: https://github.com/AMBarbosa/ecotrends/issues
 Depends: 
@@ -22,10 +29,9 @@ LazyData: true
 Suggests: 
 Config/testthat/edition: 3
 Imports: 
-    methods,
-    collinear,
+    collinear (>= 2.0.0),
     fuzzySim (>= 4.26),
     Kendall,
     maxnet,
-    modEvA (>= 3.20),
+    modEvA (>= 3.21),
     terra (>= 1.4-19)

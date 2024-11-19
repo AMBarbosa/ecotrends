@@ -16,7 +16,7 @@ getModels(
   maxvif = 5,
   classes = "default",
   regmult = 1,
-  nreps = 0,
+  nreps = 10,
   test = 0.2,
   file = NULL,
   verbosity = 2
@@ -25,13 +25,13 @@ getModels(
 \arguments{
 \item{occs}{species occurrence coordinates (2 columns in this order: x, y or LONGitude, LATitude) in an object coercible to a data.frame (e.g. a data.frame, matrix, tibble, sf object or SpatVector of points), and in the same coordinate reference system as 'rasts'}
 
-\item{rasts}{(multi-layer) SpatRaster with the variables to use in the models. The layer names should be in the form 'varname_year', e.g. 'tmin_1981', as in the output of \code{\link[=getVariables]{getVariables()}}. Note that, if a variable has no spatial variation in a given year, it is excluded (and indeed could have no effect) in that year's model, so in practice not all models will include the exact same set of variables. If verbosity > 1, messages will report which variables were excluded from each year.}
+\item{rasts}{(multi-layer) SpatRaster with the variables to use in the models. The layer names should be in the form 'varname_year', e.g. 'tmin_1981', as in the output of \code{\link[=getVariables]{getVariables()}}. Note that, if a variable has no spatial variation in a given year, it is excluded (as it cannot have an effect) in that year's model, so in practice not all models will include the exact same set of variables. If verbosity > 1, messages will report which variables were excluded from each year.}
 
-\item{region}{optional SpatExtent or SpatVector polygon delimiting the region of 'rasts' within which to compute the models. The default is NULL, to use the entire extent of 'rasts' with pixel values. Note that 'region' should ideally include only reasonably surveyed areas accessible to the species, as pixels that don't overlap presence points are taken by Maxent as available and unoccupied.}
+\item{region}{optional SpatExtent or SpatVector polygon delimiting the region of 'rasts' within which to compute the models. The default is NULL, to use the entire extent of 'rasts' with pixel values. Note that 'region' should ideally include only reasonably surveyed areas that are accessible to the species, as pixels that don't overlap presence points are taken by Maxent as available and unoccupied.}
 
 \item{nbg}{integer value indicating the maximum number of background pixels to select randomly for use in the models. The default is 10,000, or the total number of non-NA pixels in 'rasts' if that's less.}
 
-\item{seed}{optional integer value to pass to \code{\link[=set.seed]{set.seed()}} specifying the random seed to use for sampling the background pixels (if 'nbg' is smaller than the number of pixels in 'rasts') and for extracting the test samples (if 'nreps' > 0).}
+\item{seed}{optional integer value to pass to \code{\link[=set.seed]{set.seed()}} specifying the random seed to use for sampling the background pixels (if 'nbg' is smaller than the number of pixels in 'rasts') and for extracting the test samples (if nreps > 0).}
 
 \item{bias}{argument to pass to \code{\link[fuzzySim:selectAbsences]{fuzzySim::selectAbsences()}} specifying if/how the selection of unoccupied background points should be biased to incorporate survey effort. Can be TRUE to make selection more likely towards the vicinity of occurrence points (which may indicate that those areas have been surveyed); or a SpatRaster of weights (bias layer), with the same coordinate reference system as 'occs' and 'rasts', with higher values where selection should be proportionally more likely, and zero or NA where points should not be placed. Default FALSE.}
 
@@ -45,9 +45,9 @@ getModels(
 
 \item{regmult}{numeric value to pass to \code{\link[maxnet:maxnet]{maxnet::maxnet()}} indicating the constant to adjust regularization. The default is 1. See References for guidance.}
 
-\item{nreps}{integer value indicating the number of train-test data replicates for testing each model. The default is 0, for no train-test replicates, i.e. for modelling the entire dataset. If nreps > 0, presences are randomly assigned to the train and test sample in each replicate (in the proportion defined by the 'test' argument), while the background remains the same.}
+\item{nreps}{integer value indicating the number of train-test datasets for testing the models. The default is 10. With nreps = 0, there is no division of the dataset into train and test samples, so models are trained on the entire dataset for each year. If nreps > 0, presences are randomly assigned to the train and test sample in each replicate (in the proportion defined by the 'test' argument), while the background remains the same.}
 
-\item{test}{(if nreps > 0) numeric value indicating the proportion of presences to set aside for testing each replicate model. The default is 0.2, i.e. 20\%.}
+\item{test}{(if nreps > 0) numeric value indicating the proportion of presences to set aside for testing each model. The default is 0.2, i.e. 20\%.}
 
 \item{file}{optional file name (including path, not including extension) if you want the output list of model objects to be saved on disk. If 'file' already exists in the working directory (meaning that models were already computed), models are imported from there.}
 
@@ -56,14 +56,12 @@ getModels(
 \value{
 A list of three elements:
 
-$models: a list of model objects of class \link{maxnet} computed on the entire dataset
+$models: a list of lists of model objects of class \link{maxnet}. Each element of the list corresponds to a year, and each sub-element a replicate.
 
-$replicates: a list of lists of model objects of class \link{maxnet}, each computed on a different train-test data sample. NULL if nreps = 0
-
-$data: a data frame with the presences, remaining background points and their environmental values used in the models
+$data: a data frame with the presences, remaining background points and their environmental values used in the model(s).
 }
 \description{
-This function computes a \code{\link[maxnet:maxnet]{maxnet::maxnet()}} ecological niche model per year, given a set of presence point coordinates and yearly environmental layers.
+This function computes yearly \code{\link[maxnet:maxnet]{maxnet::maxnet()}} ecological niche models, given a set of presence point coordinates and yearly environmental layers.
 }
 \references{
 Elith J., Phillips S.J., Hastie T., Dudik M., Chee Y.E., Yates, C.J. (2011) A Statistical Explanation of MaxEnt for Ecologists. Diversity and Distributions 17:43-57. http://dx.doi.org/10.1111/j.1472-4642.2010.00725.x

@@ -1,3 +1,40 @@
+# ecotrends 0.18
+
+-   getModels()
+
+    -   new default 10 (not 0) for 'nreps'
+    -   added collinear() new argument 'quiet=TRUE' after 'collinear' update
+    -   output has the same structure (list of lists) with or without replicates, for code consistency
+
+
+-   getPredictions()
+
+    -   output is now SpatRasterDataset (not single SpatRaster if no replicates, or list of SpatRasters if replicates), for code consistency
+    -   fixed error when producing output file if replicates
+    -   argument 'mods' can be directly the output of getModels (not mods$models)
+
+
+-   getPerformance()
+
+    -   output now includes both train and test performance, number of train and test presences, and TSS train and test thresholds
+    -   fixed code for plot=TRUE when replicates
+    -   argument 'data' replaced with 'mods' for safer use
+    -   aded 'sep.plots' and 'reset.par' arguments to modEvA::optiThresh()
+
+
+-   getTrend()
+
+    -   implemented for replicates, converting SpatRasterDataset to SpatRaster and using mean prediction
+
+
+-   DESCRIPTION
+
+    -   included additional authors
+    -   increased version dependence for collinear, to use non-default value for new argument 'quiet'
+    -   increased version dependence for modEvA, to use 'sep.plots' and 'reset.par' (new) argument values
+
+
+
 # ecotrends 0.17
 
 
