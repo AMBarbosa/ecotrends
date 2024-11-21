@@ -136,8 +136,8 @@ plot(preds[[1]], range = c(0, 1))
 You can also map the mean prediction across replicates per year:
 
 ```{r}
-mean_preds <- terra::rast(lapply(preds, terra::app, "mean"))
-plot(mean_preds)
+preds_mean <- terra::rast(lapply(preds, terra::app, "mean"))
+plot(preds_mean)
 ```
 
 You can **evaluate the fit** of these predictions to the model training data:
