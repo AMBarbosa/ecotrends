@@ -1,17 +1,17 @@
 #' Get trend
 #'
 #' @description
-#' This function uses [terra::app()] to apply the [Kendall::MannKendall()] function to each pixel of a multi-layer time series SpatRaster, testing for a monotonic (either increasing or decreasing) trend in the raster values.
+#' This function uses [terra::app()] to apply the [Kendall::MannKendall()]  and the [trend::sens.slope()] functions to each pixel of a multi-layer time series SpatRaster, testing for a monotonic (either increasing or decreasing) linear trend in the raster values, as well as the confidence interval of the slope.
 
 #' @param rasts multi-layer SpatRaster with the output of [getPredictions()], or another time series of values for which to detect a trend. Note that >3 non-NA values (i.e. more than 3 years) are required for a trend to be computed. If there are >1 replicates per year, their pixel-wise mean is computed prior to analysing the trend.
 #' @param occs SpatVector of species occurrence points, or their spatial coordinates (2 columns in this order: x, y or LONGitude, LATitude) in an object coercible to a data.frame (e.g. a data.frame, matrix, tibble, sf object), and in the same coordinate reference system as 'rasts'. If provided, output pixels that do not overlap these points will be NA
-#' @param alpha numeric value indicating the threshold significance level for Kendall's tau statistic or for Sen's slope. Default 0.05. Pixels with p-value above this will have NA value in the output.
+#' @param alpha numeric value indicating the threshold significance level for Sen's slope. Default 0.05. Pixels with p-value above this will have NA value in the output.
 #' @param conf.level numeric value to pass to [trend::sens.slope()] indicating the confidence level for the slope of the trend. Default 0.95.
 #' @param full logical value indicating whether to output a multi-layer raster with the full results of the Mann-Kendall test (namely the Tau value, p-value, S, and variance of S) and the results of Sen's slope calculation (slope estimate, p-value, upper and lower confidence limit). If set to FALSE, a single-layer raster will be returned with the (significant) Sen's slope values.
 #' @param file optional file name (including path, not including extension) if you want the outputs raster(s) to be saved on disk. If 'file' already exists in the working directory, the rasters are imported from there.
 #' @param verbosity integer value indicating the amount of messages to display. The default is 2, for the maximum number of messages available.
 #'
-#' @return If full=FALSE, a single-layer SpatRaster where each pixel (or each pixel with occurrence points, if 'occs' is not NULL) has the value of Sen's slope (positive if increasing, negative if decreasing), or NA if the trend is non-significant (i.e., if the 2-sided p-value is larger than the specified 'alpha'). If full=TRUE (the default), additional layers are produced with associated statistics, including the lower and upper bounds of Sen's slope (given the input 'conf.level').
+#' @return If full=FALSE, a single-layer SpatRaster where each pixel (or each pixel with occurrence points, if 'occs' is not NULL) has the value of Sen's slope (positive if increasing, negative if decreasing), or NA if the trend is non-significant (i.e., if the p-value is larger than the specified 'alpha'). If full=TRUE (the default), additional layers are produced with associated statistics, including the lower and upper bounds of Sen's slope (given the input 'conf.level').
 #'
 #' @author A. Marcia Barbosa
 #' @seealso [Kendall::MannKendall()], [trend::sens.slope()], spatialEco::raster.kendall()
