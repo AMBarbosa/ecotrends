@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# ecotrends (version 0.18)
+# ecotrends (version 0.19)
 
 <!-- badges: start -->
 <!-- badges: end -->
@@ -191,7 +191,6 @@ restricted to the pixels that overlap them:
 ``` r
 trend <- ecotrends::getTrend(rasts = preds,
                              occs = occ_coords,
-                             alpha = 0.05,
                              full = TRUE,
                              file = "outputs/trend")
 
@@ -199,18 +198,21 @@ plot(trend,
      col = hcl.colors(100, "spectral"))
 ```
 
-See `?Kendall::MannKendall` (including the *Value* section) to know more
-about these statistics. If you want to compute only the first raster
-layer (with the significant Tau values), set `full = FALSE` above. Or
-you can compute the full result as above, but plot just a layer you’re
-interested in, and optionally add the region polygon:
+See `?Kendall::MannKendall` and `?trend::sens.slope` (including their
+*Value* sections) to know more about these statistics. If you want to
+compute only the slope layer (with the significant values), set
+`full = FALSE` above. Or you can compute the full result as above, but
+plot just a layer you’re interested in, and optionally add the region
+polygon:
 
 ``` r
-plot(trend[["tau"]])
+plot(trend[["slope"]], 
+     col = hcl.colors(100, "spectral"))
+
 plot(reg, lwd = 0.5, add = TRUE)
 ```
 
-Positive Tau values indicate increasing suitability, and negative values
-indicate decreasing suitability over time. Pixels with no value have no
-significant linear trend (or no occurrence points, if `occs` are
+Positive slope values indicate increasing suitability, while negative
+values indicate decreasing suitability over time. Pixels with no value
+have no significant linear trend (or no occurrence points, if `occs` are
 provided).

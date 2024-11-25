@@ -8,6 +8,7 @@ getTrend(
   rasts,
   occs = NULL,
   alpha = 0.05,
+  conf.level = 0.95,
   file = NULL,
   full = TRUE,
   verbosity = 2
@@ -18,22 +19,24 @@ getTrend(
 
 \item{occs}{SpatVector of species occurrence points, or their spatial coordinates (2 columns in this order: x, y or LONGitude, LATitude) in an object coercible to a data.frame (e.g. a data.frame, matrix, tibble, sf object), and in the same coordinate reference system as 'rasts'. If provided, output pixels that do not overlap these points will be NA}
 
-\item{alpha}{numeric value indicating the threshold significance level for Kendall's tau statistic. Default 0.05. Pixels with p-value above this will be NA in the output.}
+\item{alpha}{numeric value indicating the threshold significance level for Kendall's tau statistic or for Sen's slope. Default 0.05. Pixels with p-value above this will have NA value in the output.}
+
+\item{conf.level}{numeric value to pass to \code{\link[trend:sens.slope]{trend::sens.slope()}} indicating the confidence level for the slope of the trend. Default 0.95.}
 
 \item{file}{optional file name (including path, not including extension) if you want the outputs raster(s) to be saved on disk. If 'file' already exists in the working directory, the rasters are imported from there.}
 
-\item{full}{logical value indicating whether to output a multi-layer raster with the full results of the Mann-Kendall test, namely the Tau value, p-value (significance), S and variance of S. If set to FALSE, a single-layer raster will be returned with the (significant) Tau values.}
+\item{full}{logical value indicating whether to output a multi-layer raster with the full results of the Mann-Kendall test (namely the Tau value, p-value, S, and variance of S) and the results of Sen's slope calculation (slope estimate, p-value, upper and lower confidence limit). If set to FALSE, a single-layer raster will be returned with the (significant) Sen's slope values.}
 
 \item{verbosity}{integer value indicating the amount of messages to display. The default is 2, for the maximum number of messages available.}
 }
 \value{
-SpatRaster where each pixel (or each pixel with points, if 'occs' is not NULL) has Kendall's tau statistic (positive if increasing, negative if decreasing), or NA if the trend is non-significant (i.e., if the 2-sided p-value is larger than the specified 'alpha'). If full=TRUE (the default), additional layers are produced with the p value, S, and variance of S.
+If full=FALSE, a single-layer SpatRaster where each pixel (or each pixel with occurrence points, if 'occs' is not NULL) has the value of Sen's slope (positive if increasing, negative if decreasing), or NA if the trend is non-significant (i.e., if the 2-sided p-value is larger than the specified 'alpha'). If full=TRUE (the default), additional layers are produced with associated statistics, including the lower and upper bounds of Sen's slope (given the input 'conf.level').
 }
 \description{
 This function uses \code{\link[terra:app]{terra::app()}} to apply the \code{\link[Kendall:MannKendall]{Kendall::MannKendall()}} function to each pixel of a multi-layer time series SpatRaster, testing for a monotonic (either increasing or decreasing) trend in the raster values.
 }
 \seealso{
-\code{\link[Kendall:MannKendall]{Kendall::MannKendall()}}, spatialEco::raster.kendall()
+\code{\link[Kendall:MannKendall]{Kendall::MannKendall()}}, \code{\link[trend:sens.slope]{trend::sens.slope()}}, spatialEco::raster.kendall()
 }
 \author{
 A. Marcia Barbosa
