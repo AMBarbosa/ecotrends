@@ -1,7 +1,7 @@
 Package: ecotrends
 Type: Package
 Title: Temporal trends in ecological niche models 
-Version: 0.19
+Version: 0.20
 Authors@R: 
   c(
     person(given = c("A.", "Marcia"), family = "Barbosa", 
@@ -31,7 +31,6 @@ Config/testthat/edition: 3
 Imports: 
     collinear (>= 2.0.0),
     fuzzySim (>= 4.26),
-    Kendall,
     maxnet,
     modEvA (>= 3.21),
     terra (>= 1.4-19),

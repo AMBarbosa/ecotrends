@@ -23,7 +23,7 @@ getTrend(
 
 \item{conf.level}{numeric value to pass to \code{\link[trend:sens.slope]{trend::sens.slope()}} indicating the confidence level for the slope of the trend. Default 0.95.}
 
-\item{file}{optional file name (including path, not including extension) if you want the outputs raster(s) to be saved on disk. If 'file' already exists in the working directory, the rasters are imported from there.}
+\item{file}{optional file name (including path, not including extension) if you want the outputs raster(s) to be imported form or saved to disk.}
 
 \item{full}{logical value indicating whether to output a multi-layer raster with the full results of the Mann-Kendall test (namely the Tau value, p-value, S, and variance of S) and the results of Sen's slope calculation (slope estimate, p-value, upper and lower confidence limit). If set to FALSE, a single-layer raster will be returned with the (significant) Sen's slope values.}
 
@@ -33,10 +33,10 @@ getTrend(
 If full=FALSE, a single-layer SpatRaster where each pixel (or each pixel with occurrence points, if 'occs' is not NULL) has the value of Sen's slope (positive if increasing, negative if decreasing), or NA if the trend is non-significant (i.e., if the p-value is larger than the specified 'alpha'). If full=TRUE (the default), additional layers are produced with associated statistics, including the lower and upper bounds of Sen's slope (given the input 'conf.level').
 }
 \description{
-This function uses \code{\link[terra:app]{terra::app()}} to apply the \code{\link[Kendall:MannKendall]{Kendall::MannKendall()}}  and the \code{\link[trend:sens.slope]{trend::sens.slope()}} functions to each pixel of a multi-layer time series SpatRaster, testing for a monotonic (either increasing or decreasing) linear trend in the raster values, as well as the confidence interval of the slope.
+This function uses \code{\link[terra:app]{terra::app()}} to apply the \code{\link[trend:sens.slope]{trend::sens.slope()}} function to each pixel of a multi-layer time series SpatRaster, testing for a monotonic (either increasing or decreasing) linear trend in the raster values, as well as the confidence interval of the slope.
 }
 \seealso{
-\code{\link[Kendall:MannKendall]{Kendall::MannKendall()}}, \code{\link[trend:sens.slope]{trend::sens.slope()}}, spatialEco::raster.kendall()
+\code{\link[trend:sens.slope]{trend::sens.slope()}}, \code{\link[trend:mk.test]{trend::mk.test()}}, Kendall::MannKendall(), spatialEco::raster.kendall()
 }
 \author{
 A. Marcia Barbosa

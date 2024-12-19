@@ -1,3 +1,20 @@
+# ecotrends 0.20
+
+-   getTrend(), DESCRIPTION
+
+    -   replaced Kendall::MannKendall() with trend::mk.test() to reduce package dependencies; and eventually removed also mk.test, as slope and significance are sufficient and both are provided by trend::sens.slope()
+    -   full ouput includes just slope, upper and lower confidence limits, and p-value
+
+
+
+# ecotrends 0.19
+
+-   getTrend()
+
+    -   added Sen's slope and associated statistics from trend::sens.slope()
+    
+
+
 # ecotrends 0.18
 
 -   getModels()

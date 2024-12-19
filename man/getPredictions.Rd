@@ -25,7 +25,7 @@ getPredictions(
 
 \item{clamp}{logical value to pass to \code{\link[=predict]{predict()}} indicating whether predictors and features should be restricted to the range seen during model training. Default TRUE.}
 
-\item{file}{optional folder name (including path, within the working directory) if you want the prediction rasters to be saved to disk.}
+\item{file}{optional folder name (including path within the working directory) if you want the prediction rasters to be saved to disk. If 'file' already exists in the working directory (meaning that predictions were already computed), predictions are imported from there.}
 
 \item{verbosity}{integer value indicating the amount of messages to display. The default is 2, for the maximum number of messages available.}
 }

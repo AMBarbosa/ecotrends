@@ -5,7 +5,7 @@
 #' @param region optional SpatExtent or SpatVector polygon delimiting the region of 'rasts' within which to compute the predictions. The default is NULL, to use the entire extent of 'rasts'. Note that predictions may be unreliable outside the 'region' used for [getModels()], as they are extrapolating beyond the analysed conditions.
 #' @param type character value to pass to [predict()] indicating the type of response to compute. Can be "cloglog" (the default and currently recommended), "logistic" (previously but no longer recommended) (Phillips et al., 2017), "exponential", or "link".
 #' @param clamp logical value to pass to [predict()] indicating whether predictors and features should be restricted to the range seen during model training. Default TRUE.
-#' @param file optional folder name (including path, within the working directory) if you want the prediction rasters to be saved to disk.
+#' @param file optional folder name (including path within the working directory) if you want the prediction rasters to be saved to disk. If 'file' already exists in the working directory (meaning that predictions were already computed), predictions are imported from there.
 #' @param verbosity integer value indicating the amount of messages to display. The default is 2, for the maximum number of messages available.
 #'
 #' @return This function returns a SpatRasterDataset with one sub-dataset per year, each of which is a (multilayer) SpatRaster with the predictions of each replicate (if there are replicates) for that year.
@@ -20,28 +20,28 @@
 
 getPredictions <- function(rasts, mods, region = NULL, type = "cloglog", clamp = TRUE, file = NULL, verbosity = 2) {
 
-  if (isTRUE(all.equal(names(mods), c("models", "data")))) {
-    models <- mods$models
-  }
-
   if (!is.null(file)) {
 
-    # warning("Sorry, argument 'file' is under maintenance and is automatically set to NULL at the moment.")
-    # file <- NULL
-
-    # if (paste0(file, ".tif") %in% list.files(getwd(), recursive = TRUE)) {
-    # if (verbosity > 0) message("Predictions imported from the specified 'file', which already exists in the current working directory. Please provide a different 'file' path/name if this is not what you want.")
-    # return(terra::rast(paste0(file, ".tif")))
-
-      if (paste(getwd(), file, sep = "/") %in% list.dirs(getwd(), recursive = TRUE)) {
-        stop("Output 'file' exists in the working directory. Please rename or (re)move it, or use a different 'file' name or path.")
+    if (file %in% list.dirs(getwd(), full.names = FALSE)) {
+      if (verbosity > 0) message("Predictions imported from the specified 'file', which already exists in the current working directory. Please provide a different 'file' path/name if this is not what you want.")
+      files <- list.files(file, recursive = TRUE)
+      return(terra::sds(paste(file, files, sep = "/")))
     }
+
+    #   if (paste(getwd(), file, sep = "/") %in% list.dirs(getwd(), recursive = TRUE)) {
+    #     stop("Output 'file' exists in the working directory. Please rename or (re)move it, or use a different 'file' name or path.")
+    # }
 
     if (!(dirname(file) %in% list.dirs(getwd()))) {
       # dir.create(dirname(file), recursive = TRUE)
       dir.create(file, recursive = TRUE, showWarnings = FALSE)
     }
   }  # end if file
+
+
+  if (isTRUE(all.equal(names(mods), c("models", "data")))) {
+    models <- mods$models
+  }
 
   if (!inherits(rasts, "SpatRaster"))
     stop ("'rasts' must be a 'SpatRaster' object")

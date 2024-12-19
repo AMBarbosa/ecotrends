@@ -25,12 +25,12 @@
 getVariables <- function(source = "TerraClimate", vars = varsAvailable(source)$vars, years = varsAvailable(source)$years, region = c(-180, 180, -90, 90), file = NULL, verbosity = 2) {
 
   if (!is.null(file)) {
-    if (paste0(file, ".tif") %in% list.files(getwd(), recursive = TRUE)) {
-      if (verbosity > 0) message("Varibales imported from the specified 'file', which already exists in the current working directory. Please provide a different 'file' path/name if this is not what you want.")
+    if (paste0(file, ".tif") %in% list.files(getwd(), recursive = TRUE, include.dirs = TRUE)) {
+      if (verbosity > 0) message("Variables imported from the specified 'file', which already exists in the current working directory. Please provide a different 'file' path/name if this is not what you want.")
       return(terra::rast(paste0(file, ".tif")))
     }
 
-    if (!(dirname(file) %in% list.files(getwd()))) {
+    if (!(dirname(file) %in% list.files(getwd(), include.dirs = TRUE))) {
       dir.create(dirname(file), recursive = TRUE)
     }
   }
@@ -63,7 +63,7 @@ getVariables <- function(source = "TerraClimate", vars = varsAvailable(source)$v
   rasts <- terra::rast(rasts)  # converts list to multilayer raster
 
   if (!is.null(file)) {
-    terra::writeRaster(rasts, filename = paste0(file, ".tif"), gdal = c("COMPRESS=DEFLATE"))
+    terra::writeRaster(rasts, paste0(file, ".tif"), gdal = c("COMPRESS=DEFLATE"))
   }
 
   return(rasts[[sort(names(rasts))]])  # reordered by year

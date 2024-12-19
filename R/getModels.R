@@ -154,10 +154,11 @@ getModels <- function(occs, rasts, region = NULL, nbg = 10000, seed = NULL, bias
 
   if (verbosity > 0) message()  # introduces one blank line between messages and possible warning
 
+  out <- list(models = mods, data = dat)
+
   if (!is.null(file)) {
-    saveRDS(mods, paste0(file, ".rds"))
+    saveRDS(out, paste0(file, ".rds"))
   }
 
-  # reps = NULL  # placeholder
-  return(list(models = mods, data = dat))
+  return(out)
 }
