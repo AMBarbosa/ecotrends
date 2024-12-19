@@ -4,13 +4,15 @@ output: github_document
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-```{r, include = FALSE}
+```{r settings, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
   out.width = "100%",
-  eval = FALSE
+  eval = TRUE,
+  echo = TRUE,
+  include = TRUE
 )
 ```
 
@@ -26,32 +28,31 @@ This package is part of the [MontObEO project](https://montobeo.wordpress.com/).
 
 ## Installation
 
-You can install `ecotrends` from GitHub with:
+You can (re)install `ecotrends` from GitHub and then load it:
 
-```{r}
-devtools::install_github("AMBarbosa/ecotrends")
+```{r install}
+# devtools::install_github("AMBarbosa/ecotrends")  # run if you don't have the latest version!
+
+library(ecotrends)
 ```
 
 ## Usage
 
-You'll need some **species presence coordinates**. The code below downloads some example occurrence data from GBIF, and then performs just a **basic automatic cleaning**:
+You'll need some **species presence coordinates**. The code below downloads some example occurrence data from GBIF (just from a couple of years, to avoid the example taking a long time to download), and then performs just a **basic automatic cleaning**:
 
 ```{r occurrences}
 library(geodata)
-# installl fuzzySim development version:
-# install.packages("fuzzySim", repos="http://R-Forge.R-project.org")
 library(fuzzySim)
 
 occ_raw <- geodata::sp_occurrence(genus = "Chioglossa", 
-                                  species = "lusitanica", 
+                                  species = "lusitanica",
+                                  args = c("year=2022,2024"), 
                                   fixnames = FALSE)
 
 occ_clean <- fuzzySim::cleanCoords(data = occ_raw, 
                                    coord.cols = c("decimalLongitude", "decimalLatitude"), 
                                    uncert.col = "coordinateUncertaintyInMeters",
                                    uncert.limit = 10000, 
-                                   year.col = "year", 
-                                   year.min = 1970, 
                                    abs.col = "occurrenceStatus", 
                                    plot = FALSE)
 
@@ -66,13 +67,15 @@ reg <- fuzzySim::getRegion(pres.coords = occ_coords,
                            type = "width",
                            width_mult = 0.5,
                            dist_mult = 1)
+
+countries <- geodata::world(path = "outputs/countries")
+
+plot(countries, add = TRUE)
 ```
 
 Now let's **download some variables** with which to build a **yearly time series** of ecological niche models for this species in this region. You can first use the `varsAvailable` function to check which variables and years are available through the `ecotrends` package, and then the `getVariables` function to download the ones you choose (unless you want to use your own variables from elsewhere). Mind that the download may take a long time:
 
 ```{r variables}
-library(ecotrends)
-
 ecotrends::varsAvailable()
 
 vars <- ecotrends::getVariables(vars = c("tmin", "tmax", "ppt", "pet", "ws"), 
@@ -147,14 +150,14 @@ par(mfrow = c(2, 2))
 
 perf <- ecotrends::getPerformance(rasts = preds,
                                   mods = mods,
-                                  plot = TRUE)
+                                  plot = FALSE)
 
 head(perf)
 ```
 
 Note that `rasts` here can be either the output of `getPredictions()`, or a `file` argument previously provided to `getPredictions()`, in case you exported predictions in a previous R session and don't want to compute them again.
 
-Finally, you can use the `getTrend` function to **check for a linear (monotonic) temporal trend in suitability** in each pixel (as long as there are more than 3 time steps with suitability values), optionally providing your occurrence coordinates if you want the results to be restricted to the pixels that overlap them:
+Finally, you can use the `getTrend` function to **get the slope and significance of a linear (monotonic) temporal trend in suitability** in each pixel (as long as there are enough time steps with suitability values), optionally providing your occurrence coordinates if you want the results to be restricted to the pixels that overlap them:
 
 ```{r trend}
 trend <- ecotrends::getTrend(rasts = preds,
@@ -163,15 +166,17 @@ trend <- ecotrends::getTrend(rasts = preds,
                              file = "outputs/trend")
 
 plot(trend, 
-     col = hcl.colors(100, "spectral"))
+     col = hcl.colors(100, "spectral"),
+     type = "continuous")
 ```
-See `?Kendall::MannKendall` and `?trend::sens.slope` (including their *Value* sections) to know more about these statistics. If you want to compute only the slope layer (with the significant values), set `full = FALSE` above. Or you can compute the full result as above, but plot just a layer you're interested in, and optionally add the region polygon:
+See `?trend::sens.slope` to know more about these statistics. If you want to compute only the slope layer (with only the significant values under 'alpha'), set `full = FALSE` above. Or you can compute the full result as above, but plot just a layer you're interested in, and optionally add the region polygon:
 
 ```{r trend2}
 plot(trend[["slope"]], 
      col = hcl.colors(100, "spectral"))
 
 plot(reg, lwd = 0.5, add = TRUE)
+plot(countries, lwd = 0.8, add = TRUE)
 ```
 
-Positive slope values indicate increasing suitability, while negative values indicate decreasing suitability over time. Pixels with no value have no significant linear trend (or no occurrence points, if `occs` are provided).
+Positive slope values indicate increasing suitability, while negative values indicate decreasing suitability over time. Pixels with no value have no significant linear trend (or no occurrence points, if `occs` are provided). 
