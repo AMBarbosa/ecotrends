@@ -16,7 +16,7 @@ Authors@R:
     person(given = "Neftalí", family = "Sillero", role = "aut")
   )
 Maintainer: A. Marcia Barbosa <ana.marcia.barbosa@gmail.com>
-Description: This package computes temporal trends in environmental suitability obtained from ecological niche models, based on a set of species presence point coordinates and predictor variables.
+Description: Computes temporal trends in environmental suitability obtained from ecological niche models, based on a set of species presence point coordinates and predictor variables.
 License: GPL (>=3) | file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
