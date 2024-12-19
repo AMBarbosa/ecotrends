@@ -4,7 +4,7 @@
 \name{ecotrends-package}
 \alias{ecotrends}
 \alias{ecotrends-package}
-\title{ecotrends: Temporal trends in ecological niche models}
+\title{ecotrends: Temporal Trends in Ecological Niche Models}
 \description{
 This package computes temporal trends in environmental suitability obtained from ecological niche models, based on a set of species presence point coordinates and predictor variables.
 }

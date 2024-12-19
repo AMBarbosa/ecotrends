@@ -56,7 +56,7 @@ getModels(
 \value{
 A list of three elements:
 
-$models: a list of lists of model objects of class \link{maxnet}. Each element of the list corresponds to a year, and each sub-element a replicate.
+$models: a list of lists of model objects of class \link[maxnet:maxnet]{maxnet::maxnet}. Each element of the list corresponds to a year, and each sub-element a replicate.
 
 $data: a data frame with the presences, remaining background points and their environmental values used in the model(s).
 }

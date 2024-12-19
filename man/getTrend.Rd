@@ -23,7 +23,7 @@ getTrend(
 
 \item{conf.level}{numeric value to pass to \code{\link[trend:sens.slope]{trend::sens.slope()}} indicating the confidence level for the slope of the trend. Default 0.95.}
 
-\item{file}{optional file name (including path, not including extension) if you want the outputs raster(s) to be imported form or saved to disk.}
+\item{file}{optional file name (including path, not including extension) if you want the outputs raster(s) to be imported from or saved to disk.}
 
 \item{full}{logical value indicating whether to output a multi-layer raster with the full results of the Mann-Kendall test (namely the Tau value, p-value, S, and variance of S) and the results of Sen's slope calculation (slope estimate, p-value, upper and lower confidence limit). If set to FALSE, a single-layer raster will be returned with the (significant) Sen's slope values.}
 

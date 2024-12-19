@@ -1,6 +1,6 @@
 Package: ecotrends
 Type: Package
-Title: Temporal trends in ecological niche models 
+Title: Temporal Trends in Ecological Niche Models 
 Version: 0.20
 Authors@R: 
   c(
