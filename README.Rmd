@@ -166,14 +166,14 @@ trend <- ecotrends::getTrend(rasts = preds,
                              file = "outputs/trend")
 
 plot(trend, 
-     col = hcl.colors(100, "spectral"),
+     col = hcl.colors(100, "spectral", rev = TRUE),
      type = "continuous")
 ```
 See `?trend::sens.slope` to know more about these statistics. If you want to compute only the slope layer (with only the significant values under 'alpha'), set `full = FALSE` above. Or you can compute the full result as above, but plot just a layer you're interested in, and optionally add the region polygon:
 
 ```{r trend2}
 plot(trend[["slope"]], 
-     col = hcl.colors(100, "spectral"))
+     col = hcl.colors(100, "spectral", rev = TRUE))
 
 plot(reg, lwd = 0.5, add = TRUE)
 plot(countries, lwd = 0.8, add = TRUE)

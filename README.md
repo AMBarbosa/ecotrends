@@ -283,7 +283,7 @@ trend <- ecotrends::getTrend(rasts = preds,
 #> Trend raster(s) imported from the specified 'file', which already exists in the current working directory. Please provide a different 'file' path/name if this is not what you want.
 
 plot(trend, 
-     col = hcl.colors(100, "spectral"),
+     col = hcl.colors(100, "spectral", rev = TRUE),
      type = "continuous")
 ```
 
@@ -296,7 +296,7 @@ the region polygon:
 
 ``` r
 plot(trend[["slope"]], 
-     col = hcl.colors(100, "spectral"))
+     col = hcl.colors(100, "spectral", rev = TRUE))
 
 plot(reg, lwd = 0.5, add = TRUE)
 plot(countries, lwd = 0.8, add = TRUE)
