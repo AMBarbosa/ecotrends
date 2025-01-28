@@ -6,7 +6,7 @@
 \alias{ecotrends-package}
 \title{ecotrends: Temporal Trends in Ecological Niche Models}
 \description{
-This package computes temporal trends in environmental suitability obtained from ecological niche models, based on a set of species presence point coordinates and predictor variables.
+Computes temporal trends in environmental suitability obtained from ecological niche models, based on a set of species presence point coordinates and predictor variables.
 }
 \seealso{
 Useful links:

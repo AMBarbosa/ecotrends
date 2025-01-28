@@ -1,3 +1,11 @@
+# ecotrends 0.21
+
+-   getImportance()
+    
+    -   new function
+
+
+
 # ecotrends 0.20
 
 -   getTrend(), DESCRIPTION

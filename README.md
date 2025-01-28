@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# ecotrends (version 0.20)
+# ecotrends (version 0.21)
 
 <!-- badges: start -->
 <!-- badges: end -->
@@ -35,7 +35,7 @@ performs just a **basic automatic cleaning**:
 ``` r
 library(geodata)
 #> Loading required package: terra
-#> terra 1.8.5
+#> terra 1.8.10
 library(fuzzySim)
 
 occ_raw <- geodata::sp_occurrence(genus = "Chioglossa", 
@@ -43,9 +43,9 @@ occ_raw <- geodata::sp_occurrence(genus = "Chioglossa",
                                   args = c("year=2022,2024"), 
                                   fixnames = FALSE)
 #> Loading required namespace: jsonlite
-#> 487 records found
-#> 0-300-487
-#> 487 records downloaded
+#> 494 records found
+#> 0-300-494
+#> 494 records downloaded
 
 occ_clean <- fuzzySim::cleanCoords(data = occ_raw, 
                                    coord.cols = c("decimalLongitude", "decimalLatitude"), 
@@ -53,15 +53,15 @@ occ_clean <- fuzzySim::cleanCoords(data = occ_raw,
                                    uncert.limit = 10000, 
                                    abs.col = "occurrenceStatus", 
                                    plot = FALSE)
-#> 487 rows in input data
-#> 439 rows after 'rm.dup'
-#> 439 rows after 'rm.equal'
-#> 439 rows after 'rm.imposs'
-#> 439 rows after 'rm.missing.any'
-#> 439 rows after 'rm.zero.any'
-#> 438 rows after 'rm.imprec.any'
-#> 377 rows after 'rm.uncert' (with uncert.limit=10000 and uncert.na.pass=TRUE)
-#> 377 rows after 'rm.abs'
+#> 494 rows in input data
+#> 446 rows after 'rm.dup'
+#> 446 rows after 'rm.equal'
+#> 446 rows after 'rm.imposs'
+#> 446 rows after 'rm.missing.any'
+#> 446 rows after 'rm.zero.any'
+#> 445 rows after 'rm.imprec.any'
+#> 378 rows after 'rm.uncert' (with uncert.limit=10000 and uncert.na.pass=TRUE)
+#> 378 rows after 'rm.abs'
 
 occ_coords <- occ_clean[ , c("decimalLongitude", "decimalLatitude")]
 ```
@@ -152,7 +152,7 @@ sqrt(ecotrends::pixelArea(vars))
 
     summary(occ_clean$coordinateUncertaintyInMeters, na.rm = TRUE)
     #>    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
-    #>     1.0     4.0    24.0   318.1   189.0  7601.0      58
+    #>     1.0     4.0    23.5   314.2   189.0  7601.0      58
 
 You can see there are several occurrence points with spatial uncertainty
 larger than our pixel size, so it might be a good idea to **coarsen the
@@ -196,6 +196,33 @@ Note that (if you have `fuzzySim` \>= 4.26 installed) you can add a
 survey effort, if your study area contains more pixels than `nbg`. See
 the `?getModels` help file for more details.
 
+You can compute the **permutation importance** of each variable in each
+of the output models, as well as the mean and standard deviation across
+replicates:
+
+``` r
+varimps <- getImportance(mods, nper = 10)
+#> computing year 1 of 10 (with replicates): 1981
+#> computing year 2 of 10 (with replicates): 1982
+#> computing year 3 of 10 (with replicates): 1983
+#> computing year 4 of 10 (with replicates): 1984
+#> computing year 5 of 10 (with replicates): 1985
+#> computing year 6 of 10 (with replicates): 1986
+#> computing year 7 of 10 (with replicates): 1987
+#> computing year 8 of 10 (with replicates): 1988
+#> computing year 9 of 10 (with replicates): 1989
+#> computing year 10 of 10 (with replicates): 1990
+
+head(varimps)
+#>   year  variable      rep1      rep2      rep3      mean       sd
+#> 1 1981 tmin_1981 36.596937 50.308749 47.205554 44.703747 5.870703
+#> 2 1981 tmax_1981  0.000000  0.000000  0.000000  0.000000 0.000000
+#> 3 1981  ppt_1981 26.990349  9.713286 17.904119 18.202585 7.056488
+#> 4 1981  pet_1981 32.039579 37.308126 28.731360 32.693022 3.531805
+#> 5 1981   ws_1981  4.373135  2.669838  6.158967  4.400647 1.424564
+#> 6 1982 tmin_1982 34.883164 38.737151 40.026623 37.882313 2.185079
+```
+
 Let’s now **compute the model predictions** for each year, optionally
 delimiting them to the modelled region (though you can predict on a
 larger or an entirely different region, assuming that the
@@ -213,7 +240,7 @@ preds <- ecotrends::getPredictions(rasts = vars_agg,
 
 names(preds)
 #>  [1] "1981" "1982" "1983" "1984" "1985" "1986" "1987" "1988" "1989" "1990"
-plot(preds[[1]], range = c(0, 1))
+plot(preds[[1]], range = c(0, 1), nr = 1)
 ```
 
 <img src="man/figures/README-predictions-1.png" width="100%" />
@@ -222,7 +249,7 @@ You can also map the mean prediction across replicates per year:
 
 ``` r
 preds_mean <- terra::rast(lapply(preds, terra::app, "mean"))
-plot(preds_mean)
+plot(preds_mean, nr = 2)
 ```
 
 <img src="man/figures/README-unnamed-chunk-1-1.png" width="100%" />
@@ -287,12 +314,13 @@ plot(trend,
      type = "continuous")
 ```
 
-<img src="man/figures/README-trend-1.png" width="100%" /> See
-`?trend::sens.slope` to know more about these statistics. If you want to
-compute only the slope layer (with only the significant values under
-‘alpha’), set `full = FALSE` above. Or you can compute the full result
-as above, but plot just a layer you’re interested in, and optionally add
-the region polygon:
+<img src="man/figures/README-trend-1.png" width="100%" />
+
+See `?trend::sens.slope` to know more about these statistics. If you
+want to compute only the slope layer (with only the significant values
+under ‘alpha’), set `full = FALSE` above. Or you can compute the full
+result as above, but plot just a layer you’re interested in, and
+optionally add the region polygon:
 
 ``` r
 plot(trend[["slope"]], 
