@@ -8,7 +8,7 @@
 #'
 #' @return A data frame with the permutation importance of each variable in each replicate for each year, along with the cross-replicate mean and standard deviation within each year.
 #'
-#' @seealso code{varImportance} in package \pkg{predicts}; \code{bm_VariablesImportance} in package \pkg{biomod2}
+#' @seealso \code{varImportance} in package \pkg{predicts}; \code{bm_VariablesImportance} in package \pkg{biomod2}
 #'
 #' @author A. Marcia Barbosa
 #' @export

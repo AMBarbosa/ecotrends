@@ -20,7 +20,7 @@ A data frame with the permutation importance of each variable in each replicate 
 This function computes the permutation importance of each variable in each model, by shuffling each variable in turn (a given number of times) and computing the mean squared difference between the actual model predictions and those obtained with the shuffled variable.
 }
 \seealso{
-code{varImportance} in package \pkg{predicts}; \code{bm_VariablesImportance} in package \pkg{biomod2}
+\code{varImportance} in package \pkg{predicts}; \code{bm_VariablesImportance} in package \pkg{biomod2}
 }
 \author{
 A. Marcia Barbosa
