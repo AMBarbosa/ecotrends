@@ -65,7 +65,8 @@ getImportance <- function(mods, nper = 10, verbosity = 2, plot = TRUE) {
     importance_scores$year <- as.numeric(importance_scores$year)
     plot(x = range(importance_scores$year),
          y = range(importance_scores[ , c("mean", "sd")]),
-         type = "n", xlab = "Year", ylab = "Importance", las = 2, bty = "n")
+         type = "n", xlab = "Year", ylab = "", las = 2,
+         bty = "n", main = "Mean variable importance")
     vars <- substr(importance_scores$variable, 1, nchar(importance_scores$variable) - 5)  # remove year from variable names
     cols <- hcl.colors(length(unique(vars)), "Set2")
     for (v in unique(vars)) {
