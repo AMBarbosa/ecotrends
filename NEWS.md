@@ -1,3 +1,11 @@
+# ecotrends 0.22
+
+-   getImportance()
+    
+    -   added 'plot' argument
+
+
+
 # ecotrends 0.21
 
 -   getImportance()

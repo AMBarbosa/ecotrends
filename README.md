@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# ecotrends (version 0.21)
+# ecotrends (version 0.22)
 
 <!-- badges: start -->
 <!-- badges: end -->
@@ -198,10 +198,14 @@ the `?getModels` help file for more details.
 
 You can compute the **permutation importance** of each variable in each
 of the output models, as well as the mean and standard deviation across
-replicates:
+replicates for each year:
 
 ``` r
-varimps <- getImportance(mods, nper = 10)
+set.seed(1)  # to make next output reproducible
+
+par(mfrow = c(1, 1), mar = c(4, 3, 2, 5))
+
+varimps <- getImportance(mods, nper = 10, plot = TRUE)  # increase 'nper' for more robust (albeit slower) results
 #> computing year 1 of 10 (with replicates): 1981
 #> computing year 2 of 10 (with replicates): 1982
 #> computing year 3 of 10 (with replicates): 1983
@@ -212,16 +216,28 @@ varimps <- getImportance(mods, nper = 10)
 #> computing year 8 of 10 (with replicates): 1988
 #> computing year 9 of 10 (with replicates): 1989
 #> computing year 10 of 10 (with replicates): 1990
+```
+
+<img src="man/figures/README-varimp-1.png" width="100%" />
+
+``` r
 
 head(varimps)
-#>   year  variable      rep1      rep2      rep3      mean       sd
-#> 1 1981 tmin_1981 36.596937 50.308749 47.205554 44.703747 5.870703
-#> 2 1981 tmax_1981  0.000000  0.000000  0.000000  0.000000 0.000000
-#> 3 1981  ppt_1981 26.990349  9.713286 17.904119 18.202585 7.056488
-#> 4 1981  pet_1981 32.039579 37.308126 28.731360 32.693022 3.531805
-#> 5 1981   ws_1981  4.373135  2.669838  6.158967  4.400647 1.424564
-#> 6 1982 tmin_1982 34.883164 38.737151 40.026623 37.882313 2.185079
+#>   year  variable     rep1     rep2     rep3     mean        sd
+#> 1 1981 tmin_1981 34.08416 37.20650 33.44227 34.91098 1.6441948
+#> 2 1981 tmax_1981  0.00000  0.00000  0.00000  0.00000 0.0000000
+#> 3 1981  ppt_1981 26.97670 20.82831 26.52798 24.77766 2.7986177
+#> 4 1981  pet_1981 24.07393 26.34771 21.92923 24.11695 1.8040937
+#> 5 1981   ws_1981 14.86521 15.61749 18.10053 16.19441 1.3823769
+#> 6 1982 tmin_1982 34.25688 33.98315 35.31589 34.51864 0.5747116
 ```
+
+Note that the output plot currently does not reflect the deviations
+around the mean importance of each variable each year (see this value in
+the output table); and that the plot may become too crowded if there are
+many variables or if their importances overlap. Note also that
+**“variable importance” is a vague concept** which can be measured in
+several different ways, with potentially varying results!
 
 Let’s now **compute the model predictions** for each year, optionally
 delimiting them to the modelled region (though you can predict on a

@@ -4,7 +4,7 @@
 \alias{getImportance}
 \title{Get variable importance}
 \usage{
-getImportance(mods, nper = 10, verbosity = 2)
+getImportance(mods, nper = 10, verbosity = 2, plot = TRUE)
 }
 \arguments{
 \item{mods}{output of \code{\link[=getModels]{getModels()}}.}
@@ -12,12 +12,14 @@ getImportance(mods, nper = 10, verbosity = 2)
 \item{nper}{integer value (default 10; increase for more accurate but computationally intensive results) indicating the number of permutations for shuffling each variable.}
 
 \item{verbosity}{integer value indicating the amount of messages to display. The default is 2, for the maximum number of messages available.}
+
+\item{plot}{logical value specifying whether to produce a line (spaghetti) plot of the mean importance of each variable along the years. Note that this plot currently does not reflect the deviations around this mean; and that it may become hard to read if there are many variables or if their importances overlap.}
 }
 \value{
-A data frame with the permutation importance of each variable in each model replicate for each year, along with the cross-replicate mean and standard deviation.
+A data frame with the permutation importance (expressed as percentage) of each variable in each model replicate for each year, along with the cross-replicate mean and standard deviation.
 }
 \description{
-This function computes the permutation importance of each variable in each model, by shuffling each variable in turn (a given number of times) and computing the root mean squared difference between the actual model predictions and those obtained with the shuffled variable. Note that "importance" is a vague concept which can be measured in many other different ways.
+This function computes the permutation importance of each variable in each model, by shuffling each variable in turn (a given number of times) and computing the root mean squared difference between the actual model predictions and those obtained with the shuffled variable. Values are then normalized to a percentage by dividing each by the sum of all values and multiplying by 100. Note that "importance" is a vague concept which can be measured in many other different ways.
 }
 \seealso{
 \code{varImportance} in package \pkg{predicts}; \code{bm_VariablesImportance} in package \pkg{biomod2}

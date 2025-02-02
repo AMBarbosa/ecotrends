@@ -122,13 +122,19 @@ mods <- ecotrends::getModels(occs = occ_coords,
 
 Note that (if you have `fuzzySim` \>= 4.26 installed) you can add a `bias` layer to drive the selection of background points to incorporate survey effort, if your study area contains more pixels than `nbg`. See the `?getModels` help file for more details.
 
-You can compute the **permutation importance** of each variable in each of the output models, as well as the mean and standard deviation across replicates:
+You can compute the **permutation importance** of each variable in each of the output models, as well as the mean and standard deviation across replicates for each year:
 
 ```{r varimp}
-varimps <- getImportance(mods, nper = 10)
+set.seed(1)  # to make next output reproducible
+
+par(mfrow = c(1, 1), mar = c(4, 3, 2, 5))
+
+varimps <- getImportance(mods, nper = 10, plot = TRUE)  # increase 'nper' for more robust (albeit slower) results
 
 head(varimps)
 ```
+
+Note that the output plot currently does not reflect the deviations around the mean importance of each variable each year (see this value in the output table); and that the plot may become too crowded if there are many variables or if their importances overlap. Note also that **"variable importance" is a vague concept** which can be measured in several different ways, with potentially varying results!
 
 Let's now **compute the model predictions** for each year, optionally delimiting them to the modelled region (though you can predict on a larger or an entirely different region, assuming that the species-environment relationships are the same as in the modelled region), and optionally exporting the results to a file:
 
