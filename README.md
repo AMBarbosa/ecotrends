@@ -15,6 +15,10 @@ trends in environmental suitability**, as in [Arenas-Castro & Sillero
 This package is part of the [MontObEO
 project](https://montobeo.wordpress.com/).
 
+Here is a very basic flow chart of the package:
+
+![](images/ecotrends.drawio.png)
+
 ## Installation
 
 You can (re)install `ecotrends` from GitHub and then load it:
@@ -205,7 +209,8 @@ set.seed(1)  # to make next output reproducible
 
 par(mfrow = c(1, 1), mar = c(4, 3, 2, 5))
 
-varimps <- getImportance(mods, nper = 10, plot = TRUE)  # increase 'nper' for more robust (albeit slower) results
+varimps <- getImportance(mods, nper = 10, # increase 'nper' for more robust (albeit slower) results
+                         plot = TRUE, main = "Mean variable importance", las = 2)
 #> computing year 1 of 10 (with replicates): 1981
 #> computing year 2 of 10 (with replicates): 1982
 #> computing year 3 of 10 (with replicates): 1983
@@ -268,7 +273,7 @@ preds_mean <- terra::rast(lapply(preds, terra::app, "mean"))
 plot(preds_mean, nr = 2)
 ```
 
-<img src="man/figures/README-unnamed-chunk-1-1.png" width="100%" />
+<img src="man/figures/README-mean_pred-1.png" width="100%" />
 
 You can **evaluate the fit** of these predictions to the model training
 data:
