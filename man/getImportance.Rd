@@ -15,7 +15,7 @@ getImportance(mods, nper = 10, verbosity = 2, plot = TRUE, ...)
 
 \item{plot}{logical value specifying whether to produce a line (spaghetti) plot of the mean importance of each variable along the years. Note that this plot does not reflect the deviations around this mean, and that it may become hard to read if there are many variables or if their importances overlap.}
 
-\item{\dots}{additional arguments that can be passed to \code{\link[base:plot]{base::plot()}}, e.g. 'main' or 'las'.}
+\item{\dots}{additional arguments that can be passed to \code{\link[base:plot]{base::plot()}}, e.g. 'main', 'xlab', 'ylab' or 'las'.}
 }
 \value{
 A data frame with the permutation importance (expressed as percentage) of each variable in each model replicate for each year, along with the cross-replicate mean and standard deviation. If plot=TRUE (the default), also a spaghetti plot of mean variable importance per year.

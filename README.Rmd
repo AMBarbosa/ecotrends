@@ -132,7 +132,8 @@ You can compute the **permutation importance** of each variable in each of the o
 set.seed(1)  # to make next output reproducible
 
 varimps <- getImportance(mods, nper = 10, # increase 'nper' for more robust (albeit slower) results
-                         plot = TRUE, main = "Mean variable importance", las = 2)
+                         plot = TRUE, main = "Mean variable importance", 
+                         ylab = "", las = 2)
 
 head(varimps, 8)
 ```

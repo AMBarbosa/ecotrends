@@ -208,7 +208,8 @@ replicates for each year:
 set.seed(1)  # to make next output reproducible
 
 varimps <- getImportance(mods, nper = 10, # increase 'nper' for more robust (albeit slower) results
-                         plot = TRUE, main = "Mean variable importance", las = 2)
+                         plot = TRUE, main = "Mean variable importance", 
+                         ylab = "", las = 2)
 #> computing year 1 of 10 (with replicates): 1981
 #> computing year 2 of 10 (with replicates): 1982
 #> computing year 3 of 10 (with replicates): 1983
