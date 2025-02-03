@@ -31,6 +31,8 @@ library(ecotrends)
 
 ## Usage
 
+#### Species occurrences
+
 You’ll need some **species presence coordinates**. The code below
 downloads some example occurrence data from GBIF (just from a couple of
 years, to avoid the example taking a long time to download), and then
@@ -70,6 +72,8 @@ occ_clean <- fuzzySim::cleanCoords(data = occ_raw,
 occ_coords <- occ_clean[ , c("decimalLongitude", "decimalLatitude")]
 ```
 
+#### Spatial extent for modelling
+
 You should also **delimit a region for modelling**. You can provide your
 own spatial extent or polygon – e.g., a biogeographical region that is
 **within your species’ reach**, and within which that species was
@@ -93,6 +97,8 @@ plot(countries, add = TRUE)
 ```
 
 <img src="man/figures/README-region-1.png" width="100%" />
+
+#### Predictor variables
 
 Now let’s **download some variables** with which to build a **yearly
 time series** of ecological niche models for this species in this
@@ -137,6 +143,8 @@ plot(vars[[1:6]])
 
 <img src="man/figures/README-variables-1.png" width="100%" />
 
+#### Spatial resolution for modelling
+
 These variable raster layers have a given pixel size in geographic
 degrees, with a nominal pixel size *at the Equator*, but (as the
 longitude meridians all converge towards the poles) actual pixel sizes
@@ -176,16 +184,19 @@ sqrt(ecotrends::pixelArea(vars_agg))
     #> [1] 8080.258
 
 This is much closer to the spatial resolution of many of the species
-occurrences. We can now **compute yearly ecological niche models** with
-these occurrences and variables, optionally saving the results to a
-file:
+occurrences.
+
+#### Model building
+
+We can now **compute yearly ecological niche models** with these
+occurrences and variables, optionally saving the results to a file:
 
 ``` r
 mods <- ecotrends::getModels(occs = occ_coords, 
                              rasts = vars_agg, 
                              region = reg,
                              nbg = 10000,
-                             nreps = 3,
+                             nreps = 3, # increase 'nreps' for more robust (albeit slower) results
                              collin = TRUE, 
                              maxcor = 0.75,
                              maxvif = 5,
@@ -200,6 +211,8 @@ Note that (if you have `fuzzySim` \>= 4.26 installed) you can add a
 survey effort, if your study area contains more pixels than `nbg`. See
 the `?getModels` help file for more details.
 
+#### Variable importance
+
 You can compute the **permutation importance** of each variable in each
 of the output models, as well as the mean and standard deviation across
 replicates for each year:
@@ -207,9 +220,12 @@ replicates for each year:
 ``` r
 set.seed(1)  # to make next output reproducible
 
-varimps <- getImportance(mods, nper = 10, # increase 'nper' for more robust (albeit slower) results
-                         plot = TRUE, main = "Mean variable importance", 
-                         ylab = "", las = 2)
+varimps <- getImportance(mods, 
+                         nper = 10, # increase 'nper' for more robust (albeit slower) results
+                         plot = TRUE, 
+                         main = "Mean variable importance", 
+                         ylab = "", 
+                         las = 2)
 #> computing year 1 of 10 (with replicates): 1981
 #> computing year 2 of 10 (with replicates): 1982
 #> computing year 3 of 10 (with replicates): 1983
@@ -245,6 +261,8 @@ variables or if their importances overlap. Note also that **“variable
 importance” is a vague concept** which can be measured in several
 different ways, with potentially varying results!
 
+#### Model predictions
+
 Let’s now **compute the model predictions** for each year, optionally
 delimiting them to the modelled region (though you can predict on a
 larger or an entirely different region, assuming that the
@@ -275,6 +293,8 @@ plot(preds_mean, nr = 2)
 ```
 
 <img src="man/figures/README-mean_pred-1.png" width="100%" />
+
+#### Model evaluation
 
 You can **evaluate the fit** of these predictions to the model training
 data:
@@ -317,6 +337,8 @@ Note that `rasts` here can be either the output of `getPredictions()`,
 or a `file` argument previously provided to `getPredictions()`, in case
 you exported predictions in a previous R session and don’t want to
 compute them again.
+
+#### Suitability trend
 
 Finally, you can use the `getTrend` function to **get the slope and
 significance of a linear (monotonic) temporal trend in suitability** in

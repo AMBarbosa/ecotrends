@@ -42,6 +42,8 @@ library(ecotrends)
 
 ## Usage
 
+#### Species occurrences
+
 You'll need some **species presence coordinates**. The code below downloads some example occurrence data from GBIF (just from a couple of years, to avoid the example taking a long time to download), and then performs just a **basic automatic cleaning**:
 
 ```{r occurrences}
@@ -63,6 +65,8 @@ occ_clean <- fuzzySim::cleanCoords(data = occ_raw,
 occ_coords <- occ_clean[ , c("decimalLongitude", "decimalLatitude")]
 ```
 
+#### Spatial extent for modelling
+
 You should also **delimit a region for modelling**. You can provide your own spatial extent or polygon -- e.g., a biogeographical region that is **within your species' reach**, and within which that species was **reasonably surveyed** (mind that pixels within your region that don't overlap species presences are taken by Maxent as available and unoccupied). Alternatively or additionally, you can use e.g. the code below to compute a *reasonably sized* area around your species occurrences (see help file and try out different options, some of which may be much more adequate for your particular case!):
 
 ```{r region}
@@ -77,6 +81,8 @@ countries <- geodata::world(path = "outputs/countries")
 plot(countries, add = TRUE)
 ```
 
+#### Predictor variables
+
 Now let's **download some variables** with which to build a **yearly time series** of ecological niche models for this species in this region. You can first use the `varsAvailable` function to check which variables and years are available through the `ecotrends` package, and then the `getVariables` function to download the ones you choose (unless you want to use your own variables from elsewhere). Mind that the download may take a long time:
 
 ```{r variables}
@@ -90,6 +96,8 @@ vars <- ecotrends::getVariables(vars = c("tmin", "tmax", "ppt", "pet", "ws"),
 names(vars)
 plot(vars[[1:6]])
 ```
+
+#### Spatial resolution for modelling
 
 These variable raster layers have a given pixel size in geographic degrees, with a nominal pixel size *at the Equator*, but (as the longitude meridians all converge towards the poles) actual pixel sizes can vary widely across latitudes. So, let's **check the average pixel size in our study region**, as well as the spatial uncertainty values of our occurrence coordinates:
 
@@ -108,14 +116,19 @@ vars_agg <- terra::aggregate(vars,
 sqrt(ecotrends::pixelArea(vars_agg))
 ```
 
-This is much closer to the spatial resolution of many of the species occurrences. We can now **compute yearly ecological niche models** with these occurrences and variables, optionally saving the results to a file:
+This is much closer to the spatial resolution of many of the species occurrences.
+
+
+#### Model building
+
+We can now **compute yearly ecological niche models** with these occurrences and variables, optionally saving the results to a file:
 
 ```{r models}
 mods <- ecotrends::getModels(occs = occ_coords, 
                              rasts = vars_agg, 
                              region = reg,
                              nbg = 10000,
-                             nreps = 3,
+                             nreps = 3, # increase 'nreps' for more robust (albeit slower) results
                              collin = TRUE, 
                              maxcor = 0.75,
                              maxvif = 5,
@@ -126,19 +139,26 @@ mods <- ecotrends::getModels(occs = occ_coords,
 
 Note that (if you have `fuzzySim` \>= 4.26 installed) you can add a `bias` layer to drive the selection of background points to incorporate survey effort, if your study area contains more pixels than `nbg`. See the `?getModels` help file for more details.
 
+#### Variable importance
+
 You can compute the **permutation importance** of each variable in each of the output models, as well as the mean and standard deviation across replicates for each year:
 
 ```{r varimp}
 set.seed(1)  # to make next output reproducible
 
-varimps <- getImportance(mods, nper = 10, # increase 'nper' for more robust (albeit slower) results
-                         plot = TRUE, main = "Mean variable importance", 
-                         ylab = "", las = 2)
+varimps <- getImportance(mods, 
+                         nper = 10, # increase 'nper' for more robust (albeit slower) results
+                         plot = TRUE, 
+                         main = "Mean variable importance", 
+                         ylab = "", 
+                         las = 2)
 
 head(varimps, 8)
 ```
 
 Note that the output plot does not reflect the deviations around the mean importance of each variable each year (see this value in the output table); and that the plot may become too crowded if there are many variables or if their importances overlap. Note also that **"variable importance" is a vague concept** which can be measured in several different ways, with potentially varying results!
+
+#### Model predictions
 
 Let's now **compute the model predictions** for each year, optionally delimiting them to the modelled region (though you can predict on a larger or an entirely different region, assuming that the species-environment relationships are the same as in the modelled region), and optionally exporting the results to a file:
 
@@ -161,6 +181,8 @@ preds_mean <- terra::rast(lapply(preds, terra::app, "mean"))
 plot(preds_mean, nr = 2)
 ```
 
+#### Model evaluation
+
 You can **evaluate the fit** of these predictions to the model training data:
 
 ```{r performance}
@@ -174,6 +196,9 @@ head(perf)
 ```
 
 Note that `rasts` here can be either the output of `getPredictions()`, or a `file` argument previously provided to `getPredictions()`, in case you exported predictions in a previous R session and don't want to compute them again.
+
+
+#### Suitability trend
 
 Finally, you can use the `getTrend` function to **get the slope and significance of a linear (monotonic) temporal trend in suitability** in each pixel (as long as there are enough time steps with suitability values), optionally providing your occurrence coordinates if you want the results to be restricted to the pixels that overlap them:
 
