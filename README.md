@@ -207,8 +207,6 @@ replicates for each year:
 ``` r
 set.seed(1)  # to make next output reproducible
 
-par(mfrow = c(1, 1), mar = c(4, 3, 2, 5))
-
 varimps <- getImportance(mods, nper = 10, # increase 'nper' for more robust (albeit slower) results
                          plot = TRUE, main = "Mean variable importance", las = 2)
 #> computing year 1 of 10 (with replicates): 1981
@@ -227,7 +225,7 @@ varimps <- getImportance(mods, nper = 10, # increase 'nper' for more robust (alb
 
 ``` r
 
-head(varimps)
+head(varimps, 8)
 #>   year  variable     rep1     rep2     rep3     mean        sd
 #> 1 1981 tmin_1981 34.08416 37.20650 33.44227 34.91098 1.6441948
 #> 2 1981 tmax_1981  0.00000  0.00000  0.00000  0.00000 0.0000000
@@ -235,14 +233,16 @@ head(varimps)
 #> 4 1981  pet_1981 24.07393 26.34771 21.92923 24.11695 1.8040937
 #> 5 1981   ws_1981 14.86521 15.61749 18.10053 16.19441 1.3823769
 #> 6 1982 tmin_1982 34.25688 33.98315 35.31589 34.51864 0.5747116
+#> 7 1982 tmax_1982  0.00000  0.00000  0.00000  0.00000 0.0000000
+#> 8 1982  ppt_1982 27.68860 30.90411 28.70352 29.09874 1.3421438
 ```
 
-Note that the output plot currently does not reflect the deviations
-around the mean importance of each variable each year (see this value in
-the output table); and that the plot may become too crowded if there are
-many variables or if their importances overlap. Note also that
-**“variable importance” is a vague concept** which can be measured in
-several different ways, with potentially varying results!
+Note that the output plot does not reflect the deviations around the
+mean importance of each variable each year (see this value in the output
+table); and that the plot may become too crowded if there are many
+variables or if their importances overlap. Note also that **“variable
+importance” is a vague concept** which can be measured in several
+different ways, with potentially varying results!
 
 Let’s now **compute the model predictions** for each year, optionally
 delimiting them to the modelled region (though you can predict on a
