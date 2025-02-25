@@ -1,6 +1,8 @@
 # ecotrends 1.0
 
--   finished CRAN-like checks and required fixes
+    -   replaced 'year' with 'period' in messages and outputs
+
+    -   finished CRAN-like checks and required fixes
 
 
 
