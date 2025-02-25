@@ -25,7 +25,7 @@ getModels(
 \arguments{
 \item{occs}{species occurrence coordinates (2 columns in this order: x, y or LONGitude, LATitude) in an object coercible to a data.frame (e.g. a data.frame, matrix, tibble, sf object or SpatVector of points), and in the same coordinate reference system as 'rasts'}
 
-\item{rasts}{(multi-layer) SpatRaster with the variables to use in the models. The layer names should be in the form "varname [underscore] time", e.g. "tmin_1981" or "tmin_1" (with no more underscores than this), as in the output of \code{\link[=getVariables]{getVariables()}}. Note that, if a variable has no spatial variation in a given time, it is excluded (as it cannot have an effect) in that year's model, so in practice not all models will include the exact same set of variables. If verbosity > 1, messages will report which variables were excluded from each year.}
+\item{rasts}{(multi-layer) SpatRaster with the variables to use in the models. The layer names should be in the form "varname [underscore] time", e.g. "tmin_1981" or "tmin_1" (with no more underscores than this), as in the output of \code{\link[=getVariables]{getVariables()}}. Note that, if a variable has no spatial variation in a given time step or period, it is excluded (as it cannot have an effect) from that model, so in practice not all models will include the exact same set of variables. If verbosity > 1, messages will report which variables were excluded from each period.}
 
 \item{region}{optional SpatExtent or SpatVector polygon delimiting the region of 'rasts' within which to compute the models. The default is NULL, to use the entire extent of 'rasts' with pixel values. Note that 'region' should ideally include only reasonably surveyed areas that are accessible to the species, as pixels that don't overlap presence points are taken by Maxent as available and unoccupied.}
 
@@ -35,7 +35,7 @@ getModels(
 
 \item{bias}{argument to pass to \code{\link[fuzzySim:selectAbsences]{fuzzySim::selectAbsences()}} specifying if/how the selection of unoccupied background points should be biased to incorporate survey effort. Can be TRUE to make selection more likely towards the vicinity of occurrence points (which may indicate that those areas have been surveyed); or a SpatRaster of weights (bias layer), with the same coordinate reference system as 'occs' and 'rasts', with higher values where selection should be proportionally more likely, and zero or NA where points should not be placed. Default FALSE.}
 
-\item{collin}{logical value indicating whether multicollinearity among the variables should be reduced prior to computing each model. The default is TRUE, in which case the \code{\link[collinear:collinear]{collinear::collinear()}} function is used. Note that, if the collinearity structure varies among years, the set of included variables may also vary. If verbosity > 1, messages will report which variables were excluded from each year.}
+\item{collin}{logical value indicating whether multicollinearity among the variables should be reduced prior to computing each model. The default is TRUE, in which case the \code{\link[collinear:collinear]{collinear::collinear()}} function is used. Note that, if the collinearity structure varies among periods, the set of included variables may also vary. If verbosity > 1, messages will report which variables were excluded from each period.}
 
 \item{maxcor}{numeric value to pass to \code{\link[collinear:collinear]{collinear::collinear()}} (if collin = TRUE) indicating the maximum correlation allowed between any pair of predictor variables. The default is 0.75.}
 
@@ -45,7 +45,7 @@ getModels(
 
 \item{regmult}{numeric value to pass to \code{\link[maxnet:maxnet]{maxnet::maxnet()}} indicating the constant to adjust regularization. The default is 1. See References for guidance.}
 
-\item{nreps}{integer value indicating the number of train-test datasets for testing the models. The default is 10. With nreps = 0, there is no division of the dataset into train and test samples, so models are trained on the entire dataset for each year. If nreps > 0, presences are randomly assigned to the train and test sample in each replicate (in the proportion defined by the 'test' argument), while the background remains the same.}
+\item{nreps}{integer value indicating the number of train-test datasets for testing the models. The default is 10. With nreps = 0, there is no division of the dataset into train and test samples, so models are trained on the entire dataset for each period. If nreps > 0, presences are randomly assigned to the train and test sample in each replicate (in the proportion defined by the 'test' argument), while the background remains the same.}
 
 \item{test}{(if nreps > 0) numeric value indicating the proportion of presences to set aside for testing each model. The default is 0.2, i.e. 20\%.}
 
@@ -56,12 +56,12 @@ getModels(
 \value{
 A list of three elements:
 
-$models: a list of lists of model objects of class \link[maxnet:maxnet]{maxnet::maxnet}. Each element of the list corresponds to a year, and each sub-element a replicate.
+$models: a list of lists of model objects of class \link[maxnet:maxnet]{maxnet::maxnet}. Each element of the list corresponds to a period (e.g. period), and each sub-element a replicate.
 
 $data: a data frame with the presences, remaining background points and their environmental values used in the model(s).
 }
 \description{
-This function computes yearly \code{\link[maxnet:maxnet]{maxnet::maxnet()}} ecological niche models, given a set of presence point coordinates and yearly environmental layers.
+This function computes \code{\link[maxnet:maxnet]{maxnet::maxnet()}} ecological niche models for a set of time steps or periods (e.g. years), given a set of presence point coordinates and periodly environmental layers.
 }
 \examples{
 # Several data prep steps required.

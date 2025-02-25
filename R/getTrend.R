@@ -3,7 +3,7 @@
 #' @description
 #' This function uses [terra::app()] to apply the [trend::sens.slope()] function to each pixel of a multi-layer time series SpatRaster, testing for a monotonic (either increasing or decreasing) linear trend in the raster values, as well as the confidence interval of the slope.
 
-#' @param rasts multi-layer SpatRaster with the output of [getPredictions()], or another time series of values for which to detect a trend. Note that >3 non-NA values (i.e. more than 3 years) are required for a trend to be computed. If there are >1 replicates per year, their pixel-wise mean is computed prior to analysing the trend.
+#' @param rasts multi-layer SpatRaster with the output of [getPredictions()], or another time series of values for which to detect a trend. Note that >3 non-NA values (i.e. more than 3 time steps) are required for a trend to be computed. If there are >1 replicates per year, their pixel-wise mean is computed prior to analysing the trend.
 #' @param occs SpatVector of species occurrence points, or their spatial coordinates (2 columns in this order: x, y or LONGitude, LATitude) in an object coercible to a data.frame (e.g. a data.frame, matrix, tibble, sf object), and in the same coordinate reference system as 'rasts'. If provided, output pixels that do not overlap these points will be NA
 #' @param alpha numeric value indicating the threshold significance level for Sen's slope. Default 0.05. Pixels with p-value above this will have NA value in the output.
 #' @param conf.level numeric value to pass to [trend::sens.slope()] indicating the confidence level for the slope of the trend. Default 0.95.

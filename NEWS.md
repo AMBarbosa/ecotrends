@@ -139,7 +139,7 @@
 -   getModels()
 
     -   implemented 'test' and 'nreps' arguments in output 'models'
-    -   help file mentions that constant variables and different collinearity structures may produce models with different sets of variables among years
+    -   help file mentions that constant variables and different collinearity structures may produce models with different sets of variables among periods
 
 
 -   getPredictions()

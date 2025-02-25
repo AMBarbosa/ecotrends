@@ -1,27 +1,27 @@
 #' Get models
 #'
 #' @description
-#' This function computes yearly [maxnet::maxnet()] ecological niche models, given a set of presence point coordinates and yearly environmental layers.
+#' This function computes [maxnet::maxnet()] ecological niche models for a set of time steps or periods (e.g. years), given a set of presence point coordinates and periodly environmental layers.
 
 #' @param occs species occurrence coordinates (2 columns in this order: x, y or LONGitude, LATitude) in an object coercible to a data.frame (e.g. a data.frame, matrix, tibble, sf object or SpatVector of points), and in the same coordinate reference system as 'rasts'
-#' @param rasts (multi-layer) SpatRaster with the variables to use in the models. The layer names should be in the form "varname \[underscore\] time", e.g. "tmin_1981" or "tmin_1" (with no more underscores than this), as in the output of [getVariables()]. Note that, if a variable has no spatial variation in a given time, it is excluded (as it cannot have an effect) in that year's model, so in practice not all models will include the exact same set of variables. If verbosity > 1, messages will report which variables were excluded from each year.
+#' @param rasts (multi-layer) SpatRaster with the variables to use in the models. The layer names should be in the form "varname \[underscore\] time", e.g. "tmin_1981" or "tmin_1" (with no more underscores than this), as in the output of [getVariables()]. Note that, if a variable has no spatial variation in a given time step or period, it is excluded (as it cannot have an effect) from that model, so in practice not all models will include the exact same set of variables. If verbosity > 1, messages will report which variables were excluded from each period.
 #' @param region optional SpatExtent or SpatVector polygon delimiting the region of 'rasts' within which to compute the models. The default is NULL, to use the entire extent of 'rasts' with pixel values. Note that 'region' should ideally include only reasonably surveyed areas that are accessible to the species, as pixels that don't overlap presence points are taken by Maxent as available and unoccupied.
 #' @param nbg integer value indicating the maximum number of background pixels to select randomly for use in the models. The default is 10,000, or the total number of non-NA pixels in 'rasts' if that's less.
 #' @param seed optional integer value to pass to [set.seed()] specifying the random seed to use for sampling the background pixels (if 'nbg' is smaller than the number of pixels in 'rasts') and for extracting the test samples (if nreps > 0).
 #' @param bias argument to pass to [fuzzySim::selectAbsences()] specifying if/how the selection of unoccupied background points should be biased to incorporate survey effort. Can be TRUE to make selection more likely towards the vicinity of occurrence points (which may indicate that those areas have been surveyed); or a SpatRaster of weights (bias layer), with the same coordinate reference system as 'occs' and 'rasts', with higher values where selection should be proportionally more likely, and zero or NA where points should not be placed. Default FALSE.
-#' @param collin logical value indicating whether multicollinearity among the variables should be reduced prior to computing each model. The default is TRUE, in which case the [collinear::collinear()] function is used. Note that, if the collinearity structure varies among years, the set of included variables may also vary. If verbosity > 1, messages will report which variables were excluded from each year.
+#' @param collin logical value indicating whether multicollinearity among the variables should be reduced prior to computing each model. The default is TRUE, in which case the [collinear::collinear()] function is used. Note that, if the collinearity structure varies among periods, the set of included variables may also vary. If verbosity > 1, messages will report which variables were excluded from each period.
 #' @param maxcor numeric value to pass to [collinear::collinear()] (if collin = TRUE) indicating the maximum correlation allowed between any pair of predictor variables. The default is 0.75.
 #' @param maxvif numeric value to pass to [collinear::collinear()] (if collin = TRUE) indicating the maximum VIF allowed for selected predictor variables. The default is 5.
 #' @param classes character value to pass to [maxnet::maxnet.formula()] indicating the continuous feature classes desired. Can be "default" or any subset of "lqpht" (linear, quadratic, product, hinge, threshold) -- for example, "lqh" for just linear, quadratic and hinge features. See References for guidance.
 #' @param regmult numeric value to pass to [maxnet::maxnet()] indicating the constant to adjust regularization. The default is 1. See References for guidance.
-#' @param nreps integer value indicating the number of train-test datasets for testing the models. The default is 10. With nreps = 0, there is no division of the dataset into train and test samples, so models are trained on the entire dataset for each year. If nreps > 0, presences are randomly assigned to the train and test sample in each replicate (in the proportion defined by the 'test' argument), while the background remains the same.
+#' @param nreps integer value indicating the number of train-test datasets for testing the models. The default is 10. With nreps = 0, there is no division of the dataset into train and test samples, so models are trained on the entire dataset for each period. If nreps > 0, presences are randomly assigned to the train and test sample in each replicate (in the proportion defined by the 'test' argument), while the background remains the same.
 #' @param test (if nreps > 0) numeric value indicating the proportion of presences to set aside for testing each model. The default is 0.2, i.e. 20%.
 #' @param file optional file name (including path, not including extension) if you want the output list of model objects to be saved on disk. If 'file' already exists in the working directory (meaning that models were already computed), models are imported from there.
 #' @param verbosity integer value indicating the amount of messages to display. The default is 2, for the maximum number of messages available.
 
 #' @return A list of three elements:
 #'
-#' $models: a list of lists of model objects of class [maxnet::maxnet]. Each element of the list corresponds to a year, and each sub-element a replicate.
+#' $models: a list of lists of model objects of class [maxnet::maxnet]. Each element of the list corresponds to a period (e.g. period), and each sub-element a replicate.
 #'
 #' $data: a data frame with the presences, remaining background points and their environmental values used in the model(s).
 #' @seealso [maxnet::maxnet()]
@@ -84,10 +84,10 @@ getModels <- function(occs, rasts, region = NULL, nbg = 10000, seed = NULL, bias
   var_cols <- names(dat)[-(1:4)]
   var_splits <- strsplit(var_cols, "_")
   var_names <- unique(sapply(var_splits, getElement, 1))
-  years <- unique(sapply(var_splits, getElement, 2))
+  periods <- unique(sapply(var_splits, getElement, 2))
 
-  mods <- vector("list", length(years))
-  names(mods) <- years
+  mods <- vector("list", length(periods))
+  names(mods) <- periods
   mod_count <- 0
   rep_count <- 0
 
@@ -100,31 +100,31 @@ getModels <- function(occs, rasts, region = NULL, nbg = 10000, seed = NULL, bias
   }
   message()  # blank line
 
-  for (y in years) {
+  for (y in periods) {
 
     mod_count <- mod_count + 1
 
     if (verbosity > 0) {
       if (nreps <= 1)
-        message("computing model ", mod_count, " of ", length(years), ": ", y)
+        message("computing model ", mod_count, " of ", length(periods), ": ", y)
       else
-        message("computing model ", mod_count, " of ", length(years), " (with replicates): ", y)
+        message("computing model ", mod_count, " of ", length(periods), " (with replicates): ", y)
     }
 
-    vars_year <- var_cols[grep(y, var_cols)]
+    vars_period <- var_cols[grep(y, var_cols)]
 
     # drop variables without variation in modelling subset (otherwise maxnet() error):
-    constants <- which(sapply(dat[ , vars_year, drop = FALSE], function(x) length(unique(x)) <= 1))
+    constants <- which(sapply(dat[ , vars_period, drop = FALSE], function(x) length(unique(x)) <= 1))
     if (length(constants) > 0) {
-      if (verbosity > 0) message(" - variables dropped for having no variation within the modelled data: ", paste(vars_year[constants], collapse = ", "))
-      vars_year <- vars_year[-constants]
+      if (verbosity > 0) message(" - variables dropped for having no variation within the modelled data: ", paste(vars_period[constants], collapse = ", "))
+      vars_period <- vars_period[-constants]
     }
 
     if (collin) {
-      vars_sel <- collinear::collinear(dat, response = "presence", predictors = vars_year, max_cor = maxcor, max_vif = maxvif, quiet = TRUE)
-      if (length(vars_sel) < length(vars_year) && verbosity > 1) message(" - variables dropped due to multicollinearity: ", paste(setdiff(vars_year, vars_sel), collapse = ", "))
+      vars_sel <- collinear::collinear(dat, response = "presence", predictors = vars_period, max_cor = maxcor, max_vif = maxvif, quiet = TRUE)
+      if (length(vars_sel) < length(vars_period) && verbosity > 1) message(" - variables dropped due to multicollinearity: ", paste(setdiff(vars_period, vars_sel), collapse = ", "))
     } else {
-      vars_sel <- vars_year
+      vars_sel <- vars_period
     }
 
 

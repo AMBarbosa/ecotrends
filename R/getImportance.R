@@ -5,11 +5,11 @@
 #' @param mods output of [getModels()].
 #' @param nper integer value (default 10; increase for more accurate but computationally intensive results) indicating the number of permutations for shuffling each variable.
 #' @param verbosity integer value indicating the amount of messages to display. The default is 2, for the maximum number of messages available.
-#' @param plot logical value specifying whether to produce a line (spaghetti) plot of the mean importance of each variable along the years. Note that this plot does not reflect the deviations around this mean, and that it may become hard to read if there are many variables or if their importances overlap.
+#' @param plot logical value specifying whether to produce a line (spaghetti) plot of the mean importance of each variable along the periods. Note that this plot does not reflect the deviations around this mean, and that it may become hard to read if there are many variables or if their importances overlap.
 #' @param palette argument to pass to [hcl.colors()] specifying the colours for the lines (if plot=TRUE). The default is "Dark2"; run hcl.pals() for other options.
 #' @param \dots additional arguments that can be passed to [base::plot()], e.g. 'main', 'xlab', 'ylab' or 'las'.
 #'
-#' @return A data frame with the permutation importance (expressed as percentage) of each variable in each model replicate for each year, along with the cross-replicate mean and standard deviation. If plot=TRUE (the default), also a spaghetti plot of mean variable importance per year.
+#' @return A data frame with the permutation importance (expressed as percentage) of each variable in each model replicate for each period, along with the cross-replicate mean and standard deviation. If plot=TRUE (the default), also a spaghetti plot of mean variable importance per period.
 #'
 #' @seealso \code{varImportance} in package \pkg{predicts}; \code{bm_VariablesImportance} in package \pkg{biomod2}
 #'
@@ -26,23 +26,23 @@
 getImportance <- function(mods, nper = 10, verbosity = 2, plot = TRUE, palette = "Dark2", ...) {
 
   models <- mods$models
-  n_years <- length(models)
+  n_periods <- length(models)
   n_reps <- length(models[[1]])
 
-  varimps <- vector("list", n_years)
+  varimps <- vector("list", n_periods)
   names(varimps) <- names(models)
 
-  for (y in 1:n_years) {
-    year <- names(models)[y]
+  for (y in 1:n_periods) {
+    period <- names(models)[y]
 
     if (verbosity > 0) {
       if (n_reps <= 1)
-        message("computing year ", y, " of ", n_years, ": ", year)
+        message("computing period ", y, " of ", n_periods, ": ", period)
       else
-        message("computing year ", y, " of ", n_years, " (with replicates): ", year)
+        message("computing period ", y, " of ", n_periods, " (with replicates): ", period)
     }  # end if verbosity
 
-    dat <- mods$data[ , grep(year, names(mods$data))]
+    dat <- mods$data[ , grep(period, names(mods$data))]
     varimps[[y]] <- vector("list", length(models[[y]]))
     names(varimps[[y]]) <- names(models[[y]])
 
@@ -58,28 +58,28 @@ getImportance <- function(mods, nper = 10, verbosity = 2, plot = TRUE, palette =
   varimps$mean <- apply(varimps, 1, mean)
   varimps$sd <- apply(varimps, 1, sd)
 
-  # move year and variable from row names to new columns:
+  # move period and variable from row names to new columns:
   splits <- strsplit(rownames(varimps), "\\.")
-  varimps <- data.frame(year = sapply(splits, getElement, 1),
+  varimps <- data.frame(period = sapply(splits, getElement, 1),
                         variable = sapply(splits, getElement, 2),
                         varimps)
   rownames(varimps) <- NULL
-  varimps$year <- as.numeric(varimps$year)
+  varimps$period <- as.numeric(varimps$period)
 
   if (plot) {
-    vars <- substr(varimps$variable, 1, nchar(varimps$variable) - 5)  # remove year from variable names
+    vars <- substr(varimps$variable, 1, nchar(varimps$variable) - 5)  # remove period from variable names
     clrs <- hcl.colors(n = length(unique(vars)), palette = palette, alpha = 0.9)
 
-    Year <- range(varimps$year)
+    period <- range(varimps$period)
     Mean_importance <- range(varimps$mean)  # names for default axis labels
-    plot(x = Year, y = Mean_importance,
+    plot(x = period, y = Mean_importance,
          type = "n", bty = "n", ...)
 
     for (v in unique(vars)) {
       clr <- clrs[which(vars == v)]
       dat <- varimps[vars == v, ]
-      lines(dat$year, dat$mean, col = clr)
-      text(x = dat$year[nrow(dat)],
+      lines(dat$period, dat$mean, col = clr)
+      text(x = dat$period[nrow(dat)],
            y = dat$mean[nrow(dat)],  # last value
            labels = v, pos = 4,  # to the right of the last value
            cex = 0.8, col = clr, xpd = NA)  # note text overlaps may occur

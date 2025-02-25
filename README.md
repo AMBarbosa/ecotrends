@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# ecotrends (version 0.23)
+# ecotrends (version 1.0)
 
 <!-- badges: start -->
 <!-- badges: end -->
@@ -226,16 +226,16 @@ varimps <- ecotrends::getImportance(mods,
                                     main = "Mean variable importance", 
                                     ylab = "", 
                                     las = 2)
-#> computing year 1 of 10 (with replicates): 1981
-#> computing year 2 of 10 (with replicates): 1982
-#> computing year 3 of 10 (with replicates): 1983
-#> computing year 4 of 10 (with replicates): 1984
-#> computing year 5 of 10 (with replicates): 1985
-#> computing year 6 of 10 (with replicates): 1986
-#> computing year 7 of 10 (with replicates): 1987
-#> computing year 8 of 10 (with replicates): 1988
-#> computing year 9 of 10 (with replicates): 1989
-#> computing year 10 of 10 (with replicates): 1990
+#> computing period 1 of 10 (with replicates): 1981
+#> computing period 2 of 10 (with replicates): 1982
+#> computing period 3 of 10 (with replicates): 1983
+#> computing period 4 of 10 (with replicates): 1984
+#> computing period 5 of 10 (with replicates): 1985
+#> computing period 6 of 10 (with replicates): 1986
+#> computing period 7 of 10 (with replicates): 1987
+#> computing period 8 of 10 (with replicates): 1988
+#> computing period 9 of 10 (with replicates): 1989
+#> computing period 10 of 10 (with replicates): 1990
 ```
 
 <img src="man/figures/README-varimp-1.png" width="100%" />
@@ -243,15 +243,15 @@ varimps <- ecotrends::getImportance(mods,
 ``` r
 
 head(varimps, 8)
-#>   year  variable     rep1     rep2     rep3     mean        sd
-#> 1 1981 tmin_1981 34.08416 37.20650 33.44227 34.91098 1.6441948
-#> 2 1981 tmax_1981  0.00000  0.00000  0.00000  0.00000 0.0000000
-#> 3 1981  ppt_1981 26.97670 20.82831 26.52798 24.77766 2.7986177
-#> 4 1981  pet_1981 24.07393 26.34771 21.92923 24.11695 1.8040937
-#> 5 1981   ws_1981 14.86521 15.61749 18.10053 16.19441 1.3823769
-#> 6 1982 tmin_1982 34.25688 33.98315 35.31589 34.51864 0.5747116
-#> 7 1982 tmax_1982  0.00000  0.00000  0.00000  0.00000 0.0000000
-#> 8 1982  ppt_1982 27.68860 30.90411 28.70352 29.09874 1.3421438
+#>   period  variable     rep1     rep2     rep3     mean        sd
+#> 1   1981 tmin_1981 34.08416 37.20650 33.44227 34.91098 1.6441948
+#> 2   1981 tmax_1981  0.00000  0.00000  0.00000  0.00000 0.0000000
+#> 3   1981  ppt_1981 26.97670 20.82831 26.52798 24.77766 2.7986177
+#> 4   1981  pet_1981 24.07393 26.34771 21.92923 24.11695 1.8040937
+#> 5   1981   ws_1981 14.86521 15.61749 18.10053 16.19441 1.3823769
+#> 6   1982 tmin_1982 34.25688 33.98315 35.31589 34.51864 0.5747116
+#> 7   1982 tmax_1982  0.00000  0.00000  0.00000  0.00000 0.0000000
+#> 8   1982  ppt_1982 27.68860 30.90411 28.70352 29.09874 1.3421438
 ```
 
 Note that the output plot does not reflect the deviations around the
@@ -305,25 +305,25 @@ par(mfrow = c(2, 2))
 perf <- ecotrends::getPerformance(rasts = preds,
                                   mods = mods,
                                   plot = FALSE)
-#> evaluating year 1 of 10 (with replicates): 1981
-#> evaluating year 2 of 10 (with replicates): 1982
-#> evaluating year 3 of 10 (with replicates): 1983
-#> evaluating year 4 of 10 (with replicates): 1984
-#> evaluating year 5 of 10 (with replicates): 1985
-#> evaluating year 6 of 10 (with replicates): 1986
-#> evaluating year 7 of 10 (with replicates): 1987
-#> evaluating year 8 of 10 (with replicates): 1988
-#> evaluating year 9 of 10 (with replicates): 1989
-#> evaluating year 10 of 10 (with replicates): 1990
+#> evaluating period 1 of 10 (with replicates): 1981
+#> evaluating period 2 of 10 (with replicates): 1982
+#> evaluating period 3 of 10 (with replicates): 1983
+#> evaluating period 4 of 10 (with replicates): 1984
+#> evaluating period 5 of 10 (with replicates): 1985
+#> evaluating period 6 of 10 (with replicates): 1986
+#> evaluating period 7 of 10 (with replicates): 1987
+#> evaluating period 8 of 10 (with replicates): 1988
+#> evaluating period 9 of 10 (with replicates): 1989
+#> evaluating period 10 of 10 (with replicates): 1990
 
 head(perf)
-#>   year rep train_presences test_presences train_AUC  test_AUC train_TSS
-#> 1 1981   1             110             28 0.8740956 0.8518081 0.6558619
-#> 2 1981   2             110             28 0.8672644 0.8878075 0.6124322
-#> 3 1981   3             110             28 0.8729622 0.8618532 0.6273246
-#> 4 1982   1             110             28 0.8819149 0.8482923 0.6715075
-#> 5 1982   2             110             28 0.8690163 0.8959793 0.6228879
-#> 6 1982   3             110             28 0.8777651 0.8681924 0.6317854
+#>   period rep train_presences test_presences train_AUC  test_AUC train_TSS
+#> 1   1981   1             110             28 0.8740956 0.8518081 0.6558619
+#> 2   1981   2             110             28 0.8672644 0.8878075 0.6124322
+#> 3   1981   3             110             28 0.8729622 0.8618532 0.6273246
+#> 4   1982   1             110             28 0.8819149 0.8482923 0.6715075
+#> 5   1982   2             110             28 0.8690163 0.8959793 0.6228879
+#> 6   1982   3             110             28 0.8777651 0.8681924 0.6317854
 #>    test_TSS train_threshold test_threshold
 #> 1 0.5808085            0.38           0.34
 #> 2 0.7145572            0.41           0.34

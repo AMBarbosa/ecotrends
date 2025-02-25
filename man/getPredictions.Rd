@@ -30,7 +30,7 @@ getPredictions(
 \item{verbosity}{integer value indicating the amount of messages to display. The default is 2, for the maximum number of messages available.}
 }
 \value{
-This function returns a SpatRasterDataset with one sub-dataset per year, each of which is a (multilayer) SpatRaster with the predictions of each replicate (if there are replicates) for that year.
+This function returns a SpatRasterDataset with one sub-dataset per period, each of which is a (multilayer) SpatRaster with the predictions of each replicate (if there are replicates) for that period.
 }
 \description{
 Get predictions

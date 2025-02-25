@@ -40,50 +40,50 @@ getPerformance <- function(rasts, mods, metrics = c("AUC", "TSS"), plot = FALSE,
   # if (inherits(rasts, "SpatRaster")) {  # no replicates
   #   pres_coords <- data[data$presence == 1, c("x", "y")]
   #   rasts_mask <- terra::mask(rasts, bg_coords)
-  #   n_years <- terra::nlyr(rasts)
-  #   # perf <- matrix(data = NA, nrow = n_years, ncol = length(metrics))
+  #   n_periods <- terra::nlyr(rasts)
+  #   # perf <- matrix(data = NA, nrow = n_periods, ncol = length(metrics))
   #   # colnames(perf) <- metrics
   #
   # } else {  # with replicates, 'rasts' is a SpatRasterDataset
 
   rasts_mask <- lapply(rasts, terra::mask, bg_coords)
-  n_years <- length(rasts)
+  n_periods <- length(rasts)
 
   n_reps <- terra::nlyr(rasts[[1]])
-  # perf <- matrix(data = NA, nrow = n_years * n_reps, ncol = length(metrics))
+  # perf <- matrix(data = NA, nrow = n_periods * n_reps, ncol = length(metrics))
   # colnames(perf) <- sort(paste0(metrics, c("_train", "_test")))
   reps <- gsub("rep", "", names(mods$models[[1]]))
-  out <- data.frame(year = rep(names(rasts), each = n_reps), rep = rep(reps, length(rasts)))  # , perf -- columns added later
+  out <- data.frame(period = rep(names(rasts), each = n_reps), rep = rep(reps, length(rasts)))  # , perf -- columns added later
 
   # }  # end if reps
 
 
-  for (y in 1:n_years) {
-    year <- names(rasts)[y]
+  for (y in 1:n_periods) {
+    period <- names(rasts)[y]
 
     if (verbosity > 0) {
       if (n_reps <= 1)
-        message("evaluating year ", y, " of ", n_years, ": ", year)
+        message("evaluating period ", y, " of ", n_periods, ": ", period)
       else
-        message("evaluating year ", y, " of ", n_years, " (with replicates): ", year)
+        message("evaluating period ", y, " of ", n_periods, " (with replicates): ", period)
     }
 
     # if (inherits(rasts, "SpatRaster")) {  # no replicates
     #   if ("AUC" %in% metrics) {
-    #     perf[y, "AUC"] <- modEvA::AUC(obs = pres_coords, pred = rasts_mask[[y]], simplif = TRUE, plot = plot, main = year, verbosity = 0, pbg = TRUE)
+    #     perf[y, "AUC"] <- modEvA::AUC(obs = pres_coords, pred = rasts_mask[[y]], simplif = TRUE, plot = plot, main = period, verbosity = 0, pbg = TRUE)
     #   }
     #
     #   if ("TSS" %in% metrics) {
     #     if (isFALSE(plot)) {
     #       perf[y, "train_TSS"] <- modEvA::threshMeasures(obs = pres_coords, pred = rasts_mask[[y]], simplif = TRUE, measures = "TSS", thresh = "maxTSS", standardize = FALSE, plot = FALSE, verbosity = 0, pbg = TRUE)[1, 1]
     #     } else {
-    #       tss <- modEvA::optiThresh(obs = pres_coords, pred = rasts_mask[[y]], measures = "TSS", pch = 20, cex = 0.3, main = year, verbosity = 0, pbg = TRUE)$optimals.criteria[1, 1]
+    #       tss <- modEvA::optiThresh(obs = pres_coords, pred = rasts_mask[[y]], measures = "TSS", pch = 20, cex = 0.3, main = period, verbosity = 0, pbg = TRUE)$optimals.criteria[1, 1]
     #       perf[y, "train_TSS"] <- tss
     #       text(0.5, 0.05, substitute(paste(maxTSS == a), list(a = round(tss, 3))))
     #     } # end if plot
     #   }  # end if TSS
     #
-    #   out <- data.frame(year = names(rasts), perf)
+    #   out <- data.frame(period = names(rasts), perf)
     #
     # } else {  # if replicates
 
@@ -106,11 +106,11 @@ getPerformance <- function(rasts, mods, metrics = c("AUC", "TSS"), plot = FALSE,
       }
 
       if ("AUC" %in% metrics) {
-        out[out$year == year & out$rep == r, "train_AUC"] <- modEvA::AUC(obs = pres_train, pred = rasts_mask[[y]][[r]], simplif = TRUE, plot = plot, main = paste0(year, "_rep", r, "_train"), verbosity = 0, pbg = TRUE)
+        out[out$period == period & out$rep == r, "train_AUC"] <- modEvA::AUC(obs = pres_train, pred = rasts_mask[[y]][[r]], simplif = TRUE, plot = plot, main = paste0(period, "_rep", r, "_train"), verbosity = 0, pbg = TRUE)
         if (nrow(pres_test) > 0) {
-          out[out$year == year & out$rep == r, "test_AUC"] <- modEvA::AUC(obs = pres_test, pred = rasts_mask[[y]][[r]], simplif = TRUE, plot = plot, main = paste0(year, "_rep", r, "_test"), verbosity = 0, pbg = TRUE)
+          out[out$period == period & out$rep == r, "test_AUC"] <- modEvA::AUC(obs = pres_test, pred = rasts_mask[[y]][[r]], simplif = TRUE, plot = plot, main = paste0(period, "_rep", r, "_test"), verbosity = 0, pbg = TRUE)
         } else {
-          out[out$year == year & out$rep == r, "test_AUC"] <- NA
+          out[out$period == period & out$rep == r, "test_AUC"] <- NA
         }
       }  # end if AUC
 
@@ -122,30 +122,30 @@ getPerformance <- function(rasts, mods, metrics = c("AUC", "TSS"), plot = FALSE,
           else
             test_threshold <- NA
 
-          out[out$year == year & out$rep == r, "train_TSS"] <- modEvA::threshMeasures(obs = pres_train, pred = rasts_mask[[y]][[r]], simplif = TRUE, measures = "TSS", thresh = train_threshold, standardize = FALSE, plot = FALSE, verbosity = 0, pbg = TRUE)[1, 1]
+          out[out$period == period & out$rep == r, "train_TSS"] <- modEvA::threshMeasures(obs = pres_train, pred = rasts_mask[[y]][[r]], simplif = TRUE, measures = "TSS", thresh = train_threshold, standardize = FALSE, plot = FALSE, verbosity = 0, pbg = TRUE)[1, 1]
           if (nrow(pres_test) > 0)
-            out[out$year == year & out$rep == r, "test_TSS"] <- modEvA::threshMeasures(obs = pres_test, pred = rasts_mask[[y]][[r]], simplif = TRUE, measures = "TSS", thresh = test_threshold, standardize = FALSE, plot = FALSE, verbosity = 0, pbg = TRUE)[1, 1]
+            out[out$period == period & out$rep == r, "test_TSS"] <- modEvA::threshMeasures(obs = pres_test, pred = rasts_mask[[y]][[r]], simplif = TRUE, measures = "TSS", thresh = test_threshold, standardize = FALSE, plot = FALSE, verbosity = 0, pbg = TRUE)[1, 1]
           else
-            out[out$year == year & out$rep == r, "test_TSS"] <- NA
+            out[out$period == period & out$rep == r, "test_TSS"] <- NA
 
-          out[out$year == year & out$rep == r, "train_threshold"] <- train_threshold
+          out[out$period == period & out$rep == r, "train_threshold"] <- train_threshold
           if (nrow(pres_test) > 0)
-            out[out$year == year & out$rep == r, "test_threshold"] <- test_threshold
+            out[out$period == period & out$rep == r, "test_threshold"] <- test_threshold
           else
-            out[out$year == year & out$rep == r, "test_threshold"] <- NA
+            out[out$period == period & out$rep == r, "test_threshold"] <- NA
 
         } else {  # if plot
-          train_TSS <- modEvA::optiThresh(obs = pres_train, pred = rasts_mask[[y]][[r]], measures = "TSS", pch = 20, cex = 0.3, main = paste0(year, "_rep", r, "_train"), sep.plots = NA, reset.par = FALSE, verbosity = 0, pbg = TRUE)
+          train_TSS <- modEvA::optiThresh(obs = pres_train, pred = rasts_mask[[y]][[r]], measures = "TSS", pch = 20, cex = 0.3, main = paste0(period, "_rep", r, "_train"), sep.plots = NA, reset.par = FALSE, verbosity = 0, pbg = TRUE)
           text(0.5, 0.05, substitute(paste(maxTSS == a), list(a = round(train_TSS$optimals.each[1, "value"], 3))))
-          out[out$year == year & out$rep == r, "train_TSS"] <- train_TSS$optimals.each[1, "value"]
-          out[out$year == year & out$rep == r, "TSS_thesh_train"] <- train_TSS$optimals.each[1, "threshold"]
+          out[out$period == period & out$rep == r, "train_TSS"] <- train_TSS$optimals.each[1, "value"]
+          out[out$period == period & out$rep == r, "TSS_thesh_train"] <- train_TSS$optimals.each[1, "threshold"]
 
           if (nrow(pres_test) > 0) {
-            test_TSS <- modEvA::optiThresh(obs = pres_test, pred = rasts_mask[[y]][[r]], measures = "TSS", pch = 20, cex = 0.3, main = paste0(year, "_rep", r, "_test"), sep.plots = NA, reset.par = FALSE, verbosity = 0, pbg = TRUE)
+            test_TSS <- modEvA::optiThresh(obs = pres_test, pred = rasts_mask[[y]][[r]], measures = "TSS", pch = 20, cex = 0.3, main = paste0(period, "_rep", r, "_test"), sep.plots = NA, reset.par = FALSE, verbosity = 0, pbg = TRUE)
             text(0.5, 0.05, substitute(paste(maxTSS == a), list(a = round(test_TSS$optimals.each[1, "value"], 3))))
-            out[out$year == year & out$rep == r, "test_TSS"] <- test_TSS$optimals.each[1, "value"]
-            out[out$year == year & out$rep == r, "TSS_thesh_test"] <- test_TSS$optimals.each[1, "threshold"]
-          } else out[out$year == year & out$rep == r, "test_TSS"] <- out[out$year == year & out$rep == r, "TSS_thesh_test"] <- NA
+            out[out$period == period & out$rep == r, "test_TSS"] <- test_TSS$optimals.each[1, "value"]
+            out[out$period == period & out$rep == r, "TSS_thesh_test"] <- test_TSS$optimals.each[1, "threshold"]
+          } else out[out$period == period & out$rep == r, "test_TSS"] <- out[out$period == period & out$rep == r, "TSS_thesh_test"] <- NA
         } # end if plot
       }  # end if TSS
     }  # end for r
@@ -158,4 +158,3 @@ getPerformance <- function(rasts, mods, metrics = c("AUC", "TSS"), plot = FALSE,
 
   return(out)
 }
-

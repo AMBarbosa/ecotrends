@@ -8,7 +8,7 @@
 #' @param file optional folder name (including path within the working directory) if you want the prediction rasters to be saved to disk. If 'file' already exists in the working directory (meaning that predictions were already computed), predictions are imported from there.
 #' @param verbosity integer value indicating the amount of messages to display. The default is 2, for the maximum number of messages available.
 #'
-#' @return This function returns a SpatRasterDataset with one sub-dataset per year, each of which is a (multilayer) SpatRaster with the predictions of each replicate (if there are replicates) for that year.
+#' @return This function returns a SpatRasterDataset with one sub-dataset per period, each of which is a (multilayer) SpatRaster with the predictions of each replicate (if there are replicates) for that period.
 #' @author A. Marcia Barbosa
 #' @export
 #' @importFrom terra crop predict rast sds writeRaster
@@ -58,33 +58,33 @@ getPredictions <- function(rasts, mods, region = NULL, type = "cloglog", clamp =
     rasts <- terra::crop(rasts, region, mask = TRUE, snap = "out")
   }
 
-  n_years <- length(models)
+  n_periods <- length(models)
   n_reps <- length(models[[1]])
 
-  preds <- vector("list", n_years)
+  preds <- vector("list", n_periods)
   names(preds) <- names(models)
 
-  for (y in 1:n_years) {
-    year <- names(models)[y]
+  for (y in 1:n_periods) {
+    period <- names(models)[y]
 
     if (verbosity > 0) {
       if (n_reps <= 1)
-        message("predicting for year ", y, " of ", n_years, ": ", year)
+        message("predicting for period ", y, " of ", n_periods, ": ", period)
       else
-        message("predicting for year ", y, " of ", n_years, " (with replicates): ", year)
+        message("predicting for period ", y, " of ", n_periods, " (with replicates): ", period)
     }
 
-    rasts_year <- rasts[[grep(year, names(rasts))]]
+    rasts_period <- rasts[[grep(period, names(rasts))]]
 
     # if (inherits(mods[[y]], "maxnet")) { # no replicates
-    #   preds[[y]] <- terra::predict(rasts_year, mods[[y]], clamp = clamp, type = type, na.rm = TRUE)
+    #   preds[[y]] <- terra::predict(rasts_period, mods[[y]], clamp = clamp, type = type, na.rm = TRUE)
     #
     # } else {  # with replicates, 'mods' is a list
       preds[[y]] <- vector("list", length(models[[y]]))
       # names(preds[[y]]) <- paste0("rep", 1:length(models[[y]]))
       names(preds[[y]]) <- names(models[[y]])
       for (r in 1:length(models[[y]])) {
-        preds[[y]][[r]] <- terra::predict(rasts_year, models[[y]][[r]], clamp = clamp, type = type, na.rm = TRUE)
+        preds[[y]][[r]] <- terra::predict(rasts_period, models[[y]][[r]], clamp = clamp, type = type, na.rm = TRUE)
       # }
     }
   }  # end for y

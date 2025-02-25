@@ -20,14 +20,14 @@ getImportance(
 
 \item{verbosity}{integer value indicating the amount of messages to display. The default is 2, for the maximum number of messages available.}
 
-\item{plot}{logical value specifying whether to produce a line (spaghetti) plot of the mean importance of each variable along the years. Note that this plot does not reflect the deviations around this mean, and that it may become hard to read if there are many variables or if their importances overlap.}
+\item{plot}{logical value specifying whether to produce a line (spaghetti) plot of the mean importance of each variable along the periods. Note that this plot does not reflect the deviations around this mean, and that it may become hard to read if there are many variables or if their importances overlap.}
 
 \item{palette}{argument to pass to \code{\link[=hcl.colors]{hcl.colors()}} specifying the colours for the lines (if plot=TRUE). The default is "Dark2"; run hcl.pals() for other options.}
 
 \item{\dots}{additional arguments that can be passed to \code{\link[base:plot]{base::plot()}}, e.g. 'main', 'xlab', 'ylab' or 'las'.}
 }
 \value{
-A data frame with the permutation importance (expressed as percentage) of each variable in each model replicate for each year, along with the cross-replicate mean and standard deviation. If plot=TRUE (the default), also a spaghetti plot of mean variable importance per year.
+A data frame with the permutation importance (expressed as percentage) of each variable in each model replicate for each period, along with the cross-replicate mean and standard deviation. If plot=TRUE (the default), also a spaghetti plot of mean variable importance per period.
 }
 \description{
 This function computes the permutation importance of each variable in each model, by shuffling each variable in turn (a given number of times) and computing the root mean squared difference between the actual model predictions and those obtained with the shuffled variable. Values are then normalized to a percentage by dividing each by the sum of all values and multiplying by 100. Note that "importance" is a vague concept which can be measured in many other different ways.
