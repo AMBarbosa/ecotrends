@@ -17,6 +17,8 @@
 
 #'
 #' @examples
+#' # Several data prep steps required.
+#' # See https://github.com/AMBarbosa/ecotrends for a full worked example.
 
 getPredictions <- function(rasts, mods, region = NULL, type = "cloglog", clamp = TRUE, file = NULL, verbosity = 2) {
 

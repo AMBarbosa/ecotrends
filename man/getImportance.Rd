@@ -32,6 +32,10 @@ A data frame with the permutation importance (expressed as percentage) of each v
 \description{
 This function computes the permutation importance of each variable in each model, by shuffling each variable in turn (a given number of times) and computing the root mean squared difference between the actual model predictions and those obtained with the shuffled variable. Values are then normalized to a percentage by dividing each by the sum of all values and multiplying by 100. Note that "importance" is a vague concept which can be measured in many other different ways.
 }
+\examples{
+# Several data prep steps required.
+# See https://github.com/AMBarbosa/ecotrends for a full worked example.
+}
 \seealso{
 \code{varImportance} in package \pkg{predicts}; \code{bm_VariablesImportance} in package \pkg{biomod2}
 }

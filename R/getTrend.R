@@ -20,6 +20,8 @@
 #' @importFrom trend sens.slope
 #'
 #' @examples
+#' # Several data prep steps required.
+#' # See https://github.com/AMBarbosa/ecotrends for a full worked example.
 
 getTrend <- function(rasts, occs = NULL, alpha = 0.05, conf.level = 0.95, file = NULL, full = TRUE, verbosity = 2) {
 

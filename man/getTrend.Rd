@@ -35,6 +35,10 @@ If full=FALSE, a single-layer SpatRaster where each pixel (or each pixel with oc
 \description{
 This function uses \code{\link[terra:app]{terra::app()}} to apply the \code{\link[trend:sens.slope]{trend::sens.slope()}} function to each pixel of a multi-layer time series SpatRaster, testing for a monotonic (either increasing or decreasing) linear trend in the raster values, as well as the confidence interval of the slope.
 }
+\examples{
+# Several data prep steps required.
+# See https://github.com/AMBarbosa/ecotrends for a full worked example.
+}
 \seealso{
 \code{\link[trend:sens.slope]{trend::sens.slope()}}, \code{\link[trend:mk.test]{trend::mk.test()}}, Kendall::MannKendall(), spatialEco::raster.kendall()
 }

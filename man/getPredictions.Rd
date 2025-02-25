@@ -35,6 +35,10 @@ This function returns a SpatRasterDataset with one sub-dataset per year, each of
 \description{
 Get predictions
 }
+\examples{
+# Several data prep steps required.
+# See https://github.com/AMBarbosa/ecotrends for a full worked example.
+}
 \references{
 Phillips, S.J., Anderson, R.P., Dudik, M., Schapire, R.E., Blair, M.E., 2017. Opening the black box: an open-source release of Maxent. Ecography 40, 887-893. https://doi.org/10.1111/ecog.03049
 }

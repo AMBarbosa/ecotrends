@@ -39,6 +39,8 @@
 #' @importFrom fuzzySim gridRecords selectAbsences
 
 #' @examples
+#' # Several data prep steps required.
+#' # See https://github.com/AMBarbosa/ecotrends for a full worked example.
 
 getModels <- function(occs, rasts, region = NULL, nbg = 10000, seed = NULL, bias = FALSE, collin = TRUE, maxcor = 0.75, maxvif = 5, classes = "default", regmult = 1, nreps = 10, test = 0.2, file = NULL, verbosity = 2) {
 

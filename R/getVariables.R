@@ -20,7 +20,16 @@
 #' @importFrom terra app rast writeRaster
 #'
 #' @examples
-
+#' \dontrun{
+#' # note these downloads may take long!
+#'
+#' vars <- ecotrends::getVariables(vars = c("tmin", "tmax", "ppt", "pet", "ws"),
+#' years = 1981:1990, region = reg, file = "outputs/variables")
+#'
+#' names(vars)
+#'
+#' terra::plot(vars[[1:6]])
+#' }
 
 getVariables <- function(source = "TerraClimate", vars = varsAvailable(source)$vars, years = varsAvailable(source)$years, region = c(-180, 180, -90, 90), file = NULL, verbosity = 2) {
 

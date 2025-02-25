@@ -1,3 +1,9 @@
+# ecotrends 1.0
+
+-   finished CRAN-like checks and required fixes
+
+
+
 # ecotrends 0.23
 
 -   getImportance()
@@ -7,8 +13,8 @@
 
 -   getModels()
     
-    -   years (periods) not automatically sorted, but rather taken as in input 'rasts'
-    -   help file improves description of 'rasts' layer names
+    -   periods (years) not automatically sorted, but rather taken as in input 'rasts'
+    -   help file: improved description of 'rasts' layer names
 
 
 

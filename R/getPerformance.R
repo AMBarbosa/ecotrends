@@ -15,6 +15,8 @@
 #' Phillips, S.J., Anderson, R.P., Schapire, R.E. (2006) Maximum entropy modeling of species geographic distributions. Ecological Modelling, 190: 231-259. https://doi.org/10.1016/j.ecolmodel.2005.03.026
 #'
 #' @examples
+#' # Several data prep steps required.
+#' # See https://github.com/AMBarbosa/ecotrends for a full worked example.
 
 
 getPerformance <- function(rasts, mods, metrics = c("AUC", "TSS"), plot = FALSE, verbosity = 2) {

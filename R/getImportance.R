@@ -19,6 +19,8 @@
 #' @importFrom grDevices hcl.colors
 #'
 #' @examples
+#' # Several data prep steps required.
+#' # See https://github.com/AMBarbosa/ecotrends for a full worked example.
 
 
 getImportance <- function(mods, nper = 10, verbosity = 2, plot = TRUE, palette = "Dark2", ...) {

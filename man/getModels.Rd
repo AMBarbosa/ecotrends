@@ -63,6 +63,10 @@ $data: a data frame with the presences, remaining background points and their en
 \description{
 This function computes yearly \code{\link[maxnet:maxnet]{maxnet::maxnet()}} ecological niche models, given a set of presence point coordinates and yearly environmental layers.
 }
+\examples{
+# Several data prep steps required.
+# See https://github.com/AMBarbosa/ecotrends for a full worked example.
+}
 \references{
 Elith J., Phillips S.J., Hastie T., Dudik M., Chee Y.E., Yates, C.J. (2011) A Statistical Explanation of MaxEnt for Ecologists. Diversity and Distributions 17:43-57. http://dx.doi.org/10.1111/j.1472-4642.2010.00725.x
 
