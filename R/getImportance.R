@@ -6,6 +6,7 @@
 #' @param nper integer value (default 10; increase for more accurate but computationally intensive results) indicating the number of permutations for shuffling each variable.
 #' @param verbosity integer value indicating the amount of messages to display. The default is 2, for the maximum number of messages available.
 #' @param plot logical value specifying whether to produce a line (spaghetti) plot of the mean importance of each variable along the years. Note that this plot does not reflect the deviations around this mean, and that it may become hard to read if there are many variables or if their importances overlap.
+#' @param palette argument to pass to [hcl.colors()] specifying the colours for the lines (if plot=TRUE). The default is "Dark2"; run hcl.pals() for other options.
 #' @param \dots additional arguments that can be passed to [base::plot()], e.g. 'main', 'xlab', 'ylab' or 'las'.
 #'
 #' @return A data frame with the permutation importance (expressed as percentage) of each variable in each model replicate for each year, along with the cross-replicate mean and standard deviation. If plot=TRUE (the default), also a spaghetti plot of mean variable importance per year.
@@ -20,7 +21,7 @@
 #' @examples
 
 
-getImportance <- function(mods, nper = 10, verbosity = 2, plot = TRUE, ...) {
+getImportance <- function(mods, nper = 10, verbosity = 2, plot = TRUE, palette = "Dark2", ...) {
 
   models <- mods$models
   n_years <- length(models)
@@ -65,7 +66,7 @@ getImportance <- function(mods, nper = 10, verbosity = 2, plot = TRUE, ...) {
 
   if (plot) {
     vars <- substr(varimps$variable, 1, nchar(varimps$variable) - 5)  # remove year from variable names
-    clrs <- hcl.colors(length(unique(vars)), "Set2")
+    clrs <- hcl.colors(n = length(unique(vars)), palette = palette, alpha = 0.9)
 
     Year <- range(varimps$year)
     Mean_importance <- range(varimps$mean)  # names for default axis labels

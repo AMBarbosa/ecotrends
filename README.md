@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# ecotrends (version 0.22)
+# ecotrends (version 0.23)
 
 <!-- badges: start -->
 <!-- badges: end -->
@@ -41,7 +41,7 @@ performs just a **basic automatic cleaning**:
 ``` r
 library(geodata)
 #> Loading required package: terra
-#> terra 1.8.10
+#> terra 1.8.15
 library(fuzzySim)
 
 occ_raw <- geodata::sp_occurrence(genus = "Chioglossa", 
@@ -49,9 +49,9 @@ occ_raw <- geodata::sp_occurrence(genus = "Chioglossa",
                                   args = c("year=2022,2024"), 
                                   fixnames = FALSE)
 #> Loading required namespace: jsonlite
-#> 494 records found
-#> 0-300-494
-#> 494 records downloaded
+#> 495 records found
+#> 0-300-495
+#> 495 records downloaded
 
 occ_clean <- fuzzySim::cleanCoords(data = occ_raw, 
                                    coord.cols = c("decimalLongitude", "decimalLatitude"), 
@@ -59,15 +59,15 @@ occ_clean <- fuzzySim::cleanCoords(data = occ_raw,
                                    uncert.limit = 10000, 
                                    abs.col = "occurrenceStatus", 
                                    plot = FALSE)
-#> 494 rows in input data
-#> 446 rows after 'rm.dup'
-#> 446 rows after 'rm.equal'
-#> 446 rows after 'rm.imposs'
-#> 446 rows after 'rm.missing.any'
-#> 446 rows after 'rm.zero.any'
-#> 445 rows after 'rm.imprec.any'
-#> 378 rows after 'rm.uncert' (with uncert.limit=10000 and uncert.na.pass=TRUE)
-#> 378 rows after 'rm.abs'
+#> 495 rows in input data
+#> 463 rows after 'rm.dup'
+#> 463 rows after 'rm.equal'
+#> 463 rows after 'rm.imposs'
+#> 463 rows after 'rm.missing.any'
+#> 463 rows after 'rm.zero.any'
+#> 462 rows after 'rm.imprec.any'
+#> 33 rows after 'rm.uncert' (with uncert.limit=10000 and uncert.na.pass=TRUE)
+#> 33 rows after 'rm.abs'
 
 occ_coords <- occ_clean[ , c("decimalLongitude", "decimalLatitude")]
 ```
@@ -164,7 +164,7 @@ sqrt(ecotrends::pixelArea(vars))
 
     summary(occ_clean$coordinateUncertaintyInMeters, na.rm = TRUE)
     #>    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
-    #>     1.0     4.0    23.5   314.2   189.0  7601.0      58
+    #>    1000    1000    1000    1000    1000    1000       3
 
 You can see there are several occurrence points with spatial uncertainty
 larger than our pixel size, so it might be a good idea to **coarsen the

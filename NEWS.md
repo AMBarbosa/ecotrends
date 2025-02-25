@@ -1,8 +1,22 @@
+# ecotrends 0.23
+
+-   getImportance()
+    
+    -   added 'palette' argument
+
+
+-   getModels()
+    
+    -   years (periods) not automatically sorted, but rather taken as in input 'rasts'
+    -   help file improves description of 'rasts' layer names
+
+
+
 # ecotrends 0.22
 
 -   getImportance()
     
-    -   added 'plot' argument
+    -   added 'plot' and associated arguments
 
 
 

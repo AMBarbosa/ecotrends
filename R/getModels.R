@@ -4,7 +4,7 @@
 #' This function computes yearly [maxnet::maxnet()] ecological niche models, given a set of presence point coordinates and yearly environmental layers.
 
 #' @param occs species occurrence coordinates (2 columns in this order: x, y or LONGitude, LATitude) in an object coercible to a data.frame (e.g. a data.frame, matrix, tibble, sf object or SpatVector of points), and in the same coordinate reference system as 'rasts'
-#' @param rasts (multi-layer) SpatRaster with the variables to use in the models. The layer names should be in the form 'varname_year', e.g. 'tmin_1981', as in the output of [getVariables()]. Note that, if a variable has no spatial variation in a given year, it is excluded (as it cannot have an effect) in that year's model, so in practice not all models will include the exact same set of variables. If verbosity > 1, messages will report which variables were excluded from each year.
+#' @param rasts (multi-layer) SpatRaster with the variables to use in the models. The layer names should be in the form "varname \[underscore\] time", e.g. "tmin_1981" or "tmin_1" (with no more underscores than this), as in the output of [getVariables()]. Note that, if a variable has no spatial variation in a given time, it is excluded (as it cannot have an effect) in that year's model, so in practice not all models will include the exact same set of variables. If verbosity > 1, messages will report which variables were excluded from each year.
 #' @param region optional SpatExtent or SpatVector polygon delimiting the region of 'rasts' within which to compute the models. The default is NULL, to use the entire extent of 'rasts' with pixel values. Note that 'region' should ideally include only reasonably surveyed areas that are accessible to the species, as pixels that don't overlap presence points are taken by Maxent as available and unoccupied.
 #' @param nbg integer value indicating the maximum number of background pixels to select randomly for use in the models. The default is 10,000, or the total number of non-NA pixels in 'rasts' if that's less.
 #' @param seed optional integer value to pass to [set.seed()] specifying the random seed to use for sampling the background pixels (if 'nbg' is smaller than the number of pixels in 'rasts') and for extracting the test samples (if nreps > 0).
@@ -82,7 +82,7 @@ getModels <- function(occs, rasts, region = NULL, nbg = 10000, seed = NULL, bias
   var_cols <- names(dat)[-(1:4)]
   var_splits <- strsplit(var_cols, "_")
   var_names <- unique(sapply(var_splits, getElement, 1))
-  years <- sort(unique(sapply(var_splits, getElement, 2)))
+  years <- unique(sapply(var_splits, getElement, 2))
 
   mods <- vector("list", length(years))
   names(mods) <- years

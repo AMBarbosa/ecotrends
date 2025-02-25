@@ -4,7 +4,14 @@
 \alias{getImportance}
 \title{Get variable importance}
 \usage{
-getImportance(mods, nper = 10, verbosity = 2, plot = TRUE, ...)
+getImportance(
+  mods,
+  nper = 10,
+  verbosity = 2,
+  plot = TRUE,
+  palette = "Dark2",
+  ...
+)
 }
 \arguments{
 \item{mods}{output of \code{\link[=getModels]{getModels()}}.}
@@ -14,6 +21,8 @@ getImportance(mods, nper = 10, verbosity = 2, plot = TRUE, ...)
 \item{verbosity}{integer value indicating the amount of messages to display. The default is 2, for the maximum number of messages available.}
 
 \item{plot}{logical value specifying whether to produce a line (spaghetti) plot of the mean importance of each variable along the years. Note that this plot does not reflect the deviations around this mean, and that it may become hard to read if there are many variables or if their importances overlap.}
+
+\item{palette}{argument to pass to \code{\link[=hcl.colors]{hcl.colors()}} specifying the colours for the lines (if plot=TRUE). The default is "Dark2"; run hcl.pals() for other options.}
 
 \item{\dots}{additional arguments that can be passed to \code{\link[base:plot]{base::plot()}}, e.g. 'main', 'xlab', 'ylab' or 'las'.}
 }
