@@ -17,7 +17,7 @@ project](https://montobeo.wordpress.com/).
 
 Here is a very basic flow chart of the package:
 
-![](images/ecotrends.drawio.png)
+![](images/ecotrends.drawio.svg)
 
 ## Installation
 
