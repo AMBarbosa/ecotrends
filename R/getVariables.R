@@ -20,7 +20,7 @@
 #' @importFrom terra app rast writeRaster
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # note these downloads may take long!
 #'
 #' vars <- ecotrends::getVariables(vars = c("tmin", "tmax", "ppt", "pet", "ws"),
