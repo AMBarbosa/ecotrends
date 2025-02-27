@@ -24,7 +24,11 @@
 #' # note these downloads may take long!
 #'
 #' vars <- ecotrends::getVariables(vars = c("tmin", "tmax", "ppt", "pet", "ws"),
-#' years = 1981:1990, region = reg, file = "outputs/variables")
+#' years = 1981:1990, region = reg, file = paste0(tempdir(), "/variables"))
+#'
+#' # tempdir() is here to comply with CRAN policy, but you should normally
+#' # use a directory that you can access again when reopening R
+#' # to avoid having to download all over again
 #'
 #' names(vars)
 #'
