@@ -8,6 +8,7 @@
 #' @param unit numeric value indicating the units for the output value: either "m" (default) or "km" squared.
 #' @param mask logical value (default TRUE) indicating whether to consider only the areas of non-NA pixels
 #' @param map logical value (default TRUE) indicating whether to also plot a map
+#' @param verbosity integer value indicating the amount of messages to display. The default is 2, for the maximum number of messages available.
 #'
 #' @return numeric value
 #' @author A. Marcia Barbosa, wrapping 'terra' functions by Robert H. Hijmans
@@ -28,7 +29,8 @@ pixelArea <- function(rast, # SpatRaster
                       type = "mean", # can also be "centroid"
                       unit = "m",  # can also be "km"
                       mask = TRUE,  # to use only non-NA pixels
-                      map = TRUE) {
+                      map = TRUE,
+                      verbosity = 2) {
 
   # by A. Marcia Barbosa (https://modtools.wordpress.com/)
   # version 1.4 (17 May 2024)
@@ -44,7 +46,7 @@ pixelArea <- function(rast, # SpatRaster
 
   if (type == "mean") {
     out <- mean(areas, na.rm = TRUE)
-    cat(paste0("Mean pixel area (", unit, "2):\n", out, "\n\n"))
+    if (verbosity > 0) message(paste0("Mean pixel area (", unit, "2):\n", out, "\n"))
     return(out)
   }
 
@@ -59,7 +61,7 @@ pixelArea <- function(rast, # SpatRaster
     centr_pix <- terra::cellFromXY(r, terra::crds(centr))
     out <- areas[centr_pix]
     if (!is.finite(out)) message("The centroid of your region may not have a pixel value; consider using mask=FALSE, or type = 'mean'.")
-    cat(paste0("Centroid pixel area (", unit, "2):\n", out, "\n\n"))
+    if (verbosity > 0) message(paste0("Centroid pixel area (", unit, "2):\n", out, "\n"))
     return(out)
   }
 }
