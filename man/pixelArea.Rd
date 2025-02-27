@@ -4,7 +4,14 @@
 \alias{pixelArea}
 \title{Average pixel area}
 \usage{
-pixelArea(rast, type = "mean", unit = "m", mask = TRUE, map = TRUE)
+pixelArea(
+  rast,
+  type = "mean",
+  unit = "m",
+  mask = TRUE,
+  map = TRUE,
+  verbosity = 2
+)
 }
 \arguments{
 \item{rast}{SpatRaster for which to compute the pixel area}
@@ -16,6 +23,8 @@ pixelArea(rast, type = "mean", unit = "m", mask = TRUE, map = TRUE)
 \item{mask}{logical value (default TRUE) indicating whether to consider only the areas of non-NA pixels}
 
 \item{map}{logical value (default TRUE) indicating whether to also plot a map}
+
+\item{verbosity}{integer value indicating the amount of messages to display. The default is 2, for the maximum number of messages available.}
 }
 \value{
 numeric value
