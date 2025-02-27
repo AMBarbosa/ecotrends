@@ -33,15 +33,23 @@ multi-layer SpatRaster
 This function downloads a specified time series of variables from a specified environmental data source, optionally (to save download time) within a specified region. Currently "TerraClimate" (Abatzoglou et al., 2018) is the only implemented data source.
 }
 \examples{
-\dontrun{
+\donttest{
+if (interactive()) {
+
 # note these downloads may take long!
 
 vars <- ecotrends::getVariables(vars = c("tmin", "tmax", "ppt", "pet", "ws"),
-years = 1981:1990, region = reg, file = "outputs/variables")
+years = 1981:1990, region = terra::ext(-11, -4, 37, 45), file = paste0(tempdir(), "/variables"))
+
+# tempdir() is here to comply with CRAN policy, but you should normally
+# use a directory that you can access again when reopening R
+# to avoid having to download all over again
 
 names(vars)
 
 terra::plot(vars[[1:6]])
+
+}
 }
 }
 \references{
