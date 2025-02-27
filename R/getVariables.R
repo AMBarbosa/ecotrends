@@ -21,10 +21,12 @@
 #'
 #' @examples
 #' \donttest{
+#' if (interactive()) {
+#'
 #' # note these downloads may take long!
 #'
 #' vars <- ecotrends::getVariables(vars = c("tmin", "tmax", "ppt", "pet", "ws"),
-#' years = 1981:1990, region = reg, file = paste0(tempdir(), "/variables"))
+#' years = 1981:1990, region = terra::ext(-11, -4, 37, 45), file = paste0(tempdir(), "/variables"))
 #'
 #' # tempdir() is here to comply with CRAN policy, but you should normally
 #' # use a directory that you can access again when reopening R
@@ -33,6 +35,8 @@
 #' names(vars)
 #'
 #' terra::plot(vars[[1:6]])
+#'
+#' }
 #' }
 
 getVariables <- function(source = "TerraClimate", vars = varsAvailable(source)$vars, years = varsAvailable(source)$years, region = c(-180, 180, -90, 90), file = NULL, verbosity = 2) {
