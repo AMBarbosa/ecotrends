@@ -70,9 +70,9 @@ getImportance <- function(mods, nper = 10, verbosity = 2, plot = TRUE, palette =
     vars <- substr(varimps$variable, 1, nchar(varimps$variable) - 5)  # remove period from variable names
     clrs <- hcl.colors(n = length(unique(vars)), palette = palette, alpha = 0.9)
 
-    period <- range(varimps$period)
+    Period <- range(varimps$period)
     Mean_importance <- range(varimps$mean)  # names for default axis labels
-    plot(x = period, y = Mean_importance,
+    plot(x = Period, y = Mean_importance,
          type = "n", bty = "n", ...)
 
     for (v in unique(vars)) {
