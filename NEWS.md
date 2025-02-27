@@ -2,7 +2,13 @@
 
     -   replaced 'year' with 'period' in messages and outputs
 
-    -   finished CRAN-like checks and required fixes
+    -   following CRAN requests:
+    
+        - replaced cat() with message() conditional on 'verbosity' argument
+
+        - replaced \dontrun with \donttest in examples that take long to run, but are feasible without extra software
+        
+        - replaced getwd() with tempfile() in Examples
 
 
 
