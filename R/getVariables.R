@@ -30,7 +30,7 @@
 #'
 #' # tempdir() is here to comply with CRAN policy, but you should normally
 #' # use a directory that you can access again when reopening R
-#' # to avoid having to download all over again
+#' # to avoid downloading the variables again every time
 #'
 #' names(vars)
 #'
