@@ -25,7 +25,7 @@ Authors:
   \item Nuno Garcia
   \item João Campos
   \item Ana Cláudia Teodoro
-  \item Lia Barbosa
+  \item Lia Bárbara Duarte
   \item Isabel Pôças
   \item Salvador Arenas-Castro
   \item Neftalí Sillero
