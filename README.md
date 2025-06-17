@@ -1,9 +1,10 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# ecotrends (version 1.0)
+# ecotrends (version 1.1)
 
 <!-- badges: start -->
+
 <!-- badges: end -->
 
 The goal of `ecotrends` is to **compute a time series of ecological
@@ -41,7 +42,7 @@ performs just a **basic automatic cleaning**:
 ``` r
 library(geodata)
 #> Loading required package: terra
-#> terra 1.8.15
+#> terra 1.8.54
 library(fuzzySim)
 
 occ_raw <- geodata::sp_occurrence(genus = "Chioglossa", 
@@ -49,9 +50,9 @@ occ_raw <- geodata::sp_occurrence(genus = "Chioglossa",
                                   args = c("year=2022,2024"), 
                                   fixnames = FALSE)
 #> Loading required namespace: jsonlite
-#> 495 records found
-#> 0-300-495
-#> 495 records downloaded
+#> 509 records found
+#> 0-300-509
+#> 509 records downloaded
 
 occ_clean <- fuzzySim::cleanCoords(data = occ_raw, 
                                    coord.cols = c("decimalLongitude", "decimalLatitude"), 
@@ -59,13 +60,13 @@ occ_clean <- fuzzySim::cleanCoords(data = occ_raw,
                                    uncert.limit = 10000, 
                                    abs.col = "occurrenceStatus", 
                                    plot = FALSE)
-#> 495 rows in input data
-#> 463 rows after 'rm.dup'
-#> 463 rows after 'rm.equal'
-#> 463 rows after 'rm.imposs'
-#> 463 rows after 'rm.missing.any'
-#> 463 rows after 'rm.zero.any'
-#> 462 rows after 'rm.imprec.any'
+#> 509 rows in input data
+#> 477 rows after 'rm.dup'
+#> 477 rows after 'rm.equal'
+#> 477 rows after 'rm.imposs'
+#> 477 rows after 'rm.missing.any'
+#> 477 rows after 'rm.zero.any'
+#> 476 rows after 'rm.imprec.any'
 #> 33 rows after 'rm.uncert' (with uncert.limit=10000 and uncert.na.pass=TRUE)
 #> 33 rows after 'rm.abs'
 
@@ -324,13 +325,20 @@ head(perf)
 #> 4   1982   1             110             28 0.8819149 0.8482923 0.6715075
 #> 5   1982   2             110             28 0.8690163 0.8959793 0.6228879
 #> 6   1982   3             110             28 0.8777651 0.8681924 0.6317854
-#>    test_TSS train_threshold test_threshold
-#> 1 0.5808085            0.38           0.34
-#> 2 0.7145572            0.41           0.34
-#> 3 0.6625129            0.29           0.36
-#> 4 0.5477819            0.41           0.43
-#> 5 0.7404165            0.40           0.49
-#> 6 0.6586985            0.47           0.35
+#>   train_thresh_TSS  test_TSS test_thresh_TSS train_kappa train_thresh_kappa
+#> 1             0.38 0.5808085            0.34   0.2139232               0.67
+#> 2             0.41 0.7145572            0.34   0.2245709               0.64
+#> 3             0.29 0.6625129            0.36   0.2201877               0.66
+#> 4             0.41 0.5477819            0.43   0.2358166               0.71
+#> 5             0.40 0.7404165            0.49   0.2153542               0.64
+#> 6             0.47 0.6586985            0.35   0.2369446               0.82
+#>   test_kappa test_thresh_kappa
+#> 1 0.10641284              0.89
+#> 2 0.16274823              0.99
+#> 3 0.10803384              0.93
+#> 4 0.11225416              0.84
+#> 5 0.11627452              0.92
+#> 6 0.07821233              0.89
 ```
 
 Note that `rasts` here can be either the output of `getPredictions()`,
