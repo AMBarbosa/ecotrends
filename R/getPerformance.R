@@ -2,7 +2,7 @@
 #'
 #' @param rasts SpatRasterDataset output of [getPredictions()], or 'file' argument previously provided to [getPredictions()]
 #' @param mods output of [getModels()]
-#' @param metrics character vector with the metrics to compute. Can be any subset of c("AUC", "TSS"), the latter computed at its optimal threshold. The default is both. Performance metrics are computed with presence against all background (using 'modEvA' package functions with pbg=TRUE), so they evaluate the capacity of distinguishing presence from random, rather than presence from absence pixels (Phillips et al., 2006).
+#' @param metrics character vector with the metrics to compute. Can be any subset (default all) of c("AUC", "TSS", "kappa"), with the latter two computed at their maximum values (optimal thresholds). Performance metrics are computed with presence against all background (using 'modEvA' package functions with pbg=TRUE), so they evaluate the capacity of distinguishing presence from random, rather than presence from absence pixels (Phillips et al., 2006).
 #' @param plot logical value indicating whether plots should also be produced to illustrate the performance metrics for each model. The default is FALSE; TRUE can be slow for large datasets.
 #' @param verbosity integer value indicating the amount of messages to display. The default is 2, for the maximum number of messages available.
 #'
@@ -19,7 +19,7 @@
 #' # See https://github.com/AMBarbosa/ecotrends for a full worked example.
 
 
-getPerformance <- function(rasts, mods, metrics = c("AUC", "TSS"), plot = FALSE, verbosity = 2) {
+getPerformance <- function(rasts, mods, metrics = c("AUC", "TSS", "kappa"), plot = FALSE, verbosity = 2) {
 
   # if (plot) {
   #   opar <- par(no.readonly = TRUE)
@@ -53,7 +53,12 @@ getPerformance <- function(rasts, mods, metrics = c("AUC", "TSS"), plot = FALSE,
   # perf <- matrix(data = NA, nrow = n_periods * n_reps, ncol = length(metrics))
   # colnames(perf) <- sort(paste0(metrics, c("_train", "_test")))
   reps <- gsub("rep", "", names(mods$models[[1]]))
-  out <- data.frame(period = rep(names(rasts), each = n_reps), rep = rep(reps, length(rasts)))  # , perf -- columns added later
+  n <- length(rasts)
+  out <- data.frame(period = rep(names(rasts), each = n_reps), rep = rep(reps, n), train_presences = rep(NA_integer_, n), test_presences = rep(NA_integer_, n))
+  if ("AUC" %in% metrics) out <- data.frame(out, train_AUC = rep(NA_real_, n), test_AUC = rep(NA_real_, n))
+  if ("TSS" %in% metrics) out <- data.frame(out, train_TSS = rep(NA_real_, n), train_thresh_TSS = rep(NA_real_, n), test_TSS = rep(NA_real_, n), test_thresh_TSS = rep(NA_real_, n))
+  if ("kappa" %in% metrics) out <- data.frame(out, train_kappa = rep(NA_real_, n), train_thresh_kappa = rep(NA_real_, n), test_kappa = rep(NA_real_, n), test_thresh_kappa = rep(NA_real_, n))
+
 
   # }  # end if reps
 
@@ -128,26 +133,62 @@ getPerformance <- function(rasts, mods, metrics = c("AUC", "TSS"), plot = FALSE,
           else
             out[out$period == period & out$rep == r, "test_TSS"] <- NA
 
-          out[out$period == period & out$rep == r, "train_threshold"] <- train_threshold
+          out[out$period == period & out$rep == r, "train_thresh_TSS"] <- train_threshold
           if (nrow(pres_test) > 0)
-            out[out$period == period & out$rep == r, "test_threshold"] <- test_threshold
+            out[out$period == period & out$rep == r, "test_thresh_TSS"] <- test_threshold
           else
-            out[out$period == period & out$rep == r, "test_threshold"] <- NA
+            out[out$period == period & out$rep == r, "test_thresh_TSS"] <- NA
 
         } else {  # if plot
           train_TSS <- modEvA::optiThresh(obs = pres_train, pred = rasts_mask[[y]][[r]], measures = "TSS", pch = 20, cex = 0.3, main = paste0(period, "_rep", r, "_train"), sep.plots = NA, reset.par = FALSE, verbosity = 0, pbg = TRUE)
           text(0.5, 0.05, substitute(paste(maxTSS == a), list(a = round(train_TSS$optimals.each[1, "value"], 3))))
           out[out$period == period & out$rep == r, "train_TSS"] <- train_TSS$optimals.each[1, "value"]
-          out[out$period == period & out$rep == r, "TSS_thesh_train"] <- train_TSS$optimals.each[1, "threshold"]
+          out[out$period == period & out$rep == r, "train_thresh_TSS"] <- train_TSS$optimals.each[1, "threshold"]
 
           if (nrow(pres_test) > 0) {
             test_TSS <- modEvA::optiThresh(obs = pres_test, pred = rasts_mask[[y]][[r]], measures = "TSS", pch = 20, cex = 0.3, main = paste0(period, "_rep", r, "_test"), sep.plots = NA, reset.par = FALSE, verbosity = 0, pbg = TRUE)
             text(0.5, 0.05, substitute(paste(maxTSS == a), list(a = round(test_TSS$optimals.each[1, "value"], 3))))
             out[out$period == period & out$rep == r, "test_TSS"] <- test_TSS$optimals.each[1, "value"]
-            out[out$period == period & out$rep == r, "TSS_thesh_test"] <- test_TSS$optimals.each[1, "threshold"]
-          } else out[out$period == period & out$rep == r, "test_TSS"] <- out[out$period == period & out$rep == r, "TSS_thesh_test"] <- NA
+            out[out$period == period & out$rep == r, "test_thresh_TSS"] <- test_TSS$optimals.each[1, "threshold"]
+          } else out[out$period == period & out$rep == r, "test_TSS"] <- out[out$period == period & out$rep == r, "test_thresh_TSS"] <- NA
         } # end if plot
       }  # end if TSS
+
+      if ("kappa" %in% metrics) {
+        if (isFALSE(plot)) {
+          train_threshold <- modEvA::getThreshold(obs = pres_train, pred = rasts_mask[[y]][[r]], threshMethod = "maxKappa", na.rm = TRUE, verbosity = 0, pbg = TRUE)
+          if (nrow(pres_test) > 0)
+            test_threshold <- modEvA::getThreshold(obs = pres_test, pred = rasts_mask[[y]][[r]], threshMethod = "maxKappa", na.rm = TRUE, verbosity = 0, pbg = TRUE)
+          else
+            test_threshold <- NA
+
+          out[out$period == period & out$rep == r, "train_kappa"] <- modEvA::threshMeasures(obs = pres_train, pred = rasts_mask[[y]][[r]], simplif = TRUE, measures = "kappa", thresh = train_threshold, standardize = FALSE, plot = FALSE, verbosity = 0, pbg = TRUE)[1, 1]
+          if (nrow(pres_test) > 0)
+            out[out$period == period & out$rep == r, "test_kappa"] <- modEvA::threshMeasures(obs = pres_test, pred = rasts_mask[[y]][[r]], simplif = TRUE, measures = "kappa", thresh = test_threshold, standardize = FALSE, plot = FALSE, verbosity = 0, pbg = TRUE)[1, 1]
+          else
+            out[out$period == period & out$rep == r, "test_kappa"] <- NA
+
+          out[out$period == period & out$rep == r, "train_thresh_kappa"] <- train_threshold
+          if (nrow(pres_test) > 0)
+            out[out$period == period & out$rep == r, "test_thresh_kappa"] <- test_threshold
+          else
+            out[out$period == period & out$rep == r, "test_thresh_kappa"] <- NA
+
+        } else {  # if plot
+          train_kappa <- modEvA::optiThresh(obs = pres_train, pred = rasts_mask[[y]][[r]], measures = "kappa", pch = 20, cex = 0.3, main = paste0(period, "_rep", r, "_train"), sep.plots = NA, reset.par = FALSE, verbosity = 0, pbg = TRUE)
+          text(0.5, 0.05, substitute(paste(maxKappa == a), list(a = round(train_kappa$optimals.each[1, "value"], 3))))
+          out[out$period == period & out$rep == r, "train_kappa"] <- train_kappa$optimals.each[1, "value"]
+          out[out$period == period & out$rep == r, "train_thresh_kappa"] <- train_kappa$optimals.each[1, "threshold"]
+
+          if (nrow(pres_test) > 0) {
+            test_kappa <- modEvA::optiThresh(obs = pres_test, pred = rasts_mask[[y]][[r]], measures = "kappa", pch = 20, cex = 0.3, main = paste0(period, "_rep", r, "_test"), sep.plots = NA, reset.par = FALSE, verbosity = 0, pbg = TRUE)
+            text(0.5, 0.05, substitute(paste(maxKappa == a), list(a = round(test_kappa$optimals.each[1, "value"], 3))))
+            out[out$period == period & out$rep == r, "test_kappa"] <- test_kappa$optimals.each[1, "value"]
+            out[out$period == period & out$rep == r, "test_thresh_kappa"] <- test_kappa$optimals.each[1, "threshold"]
+          } else out[out$period == period & out$rep == r, "test_kappa"] <- out[out$period == period & out$rep == r, "test_thresh_kappa"] <- NA
+        } # end if plot
+      }  # end if kappa
+
     }  # end for r
 
     # }  # end if reps

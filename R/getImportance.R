@@ -1,6 +1,7 @@
 #' Get variable importance
 #'
-#' This function computes the permutation importance of each variable in each model, by shuffling each variable in turn (a given number of times) and computing the root mean squared difference between the actual model predictions and those obtained with the shuffled variable. Values are then normalized to a percentage by dividing each by the sum of all values and multiplying by 100. Note that "importance" is a vague concept which can be measured in many other different ways.
+#' This function computes the permutation importance of each variable in each model, by shuffling each variable in turn (a given number of times) and computing the root mean squared difference between the actual model predictions and those obtained with the shuffled variable. Values are then normalized to a percentage by dividing each by the sum of all values and multiplying by 100.
+#' Note that "importance" is not a straightforward concept and it can be measured in many different ways. Permutation importance is a widely used and effective model-agnostic technique, which provides an intuitive measure of the contribution of each variable, particularly in complex and non-linear models.
 #'
 #' @param mods output of [getModels()].
 #' @param nper integer value (default 10; increase for more accurate but computationally intensive results) indicating the number of permutations for shuffling each variable.

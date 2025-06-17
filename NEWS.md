@@ -1,3 +1,14 @@
+# ecotrends 1.1
+
+-   getPerformance()
+
+    - added 'kappa' to implemented metrics
+    
+    - create columns before they are populated
+    
+    - renamed and reordered some threshold columns for better readability
+
+
 # ecotrends 1.0
 
 -   replaced 'year' with 'period' in messages and outputs
