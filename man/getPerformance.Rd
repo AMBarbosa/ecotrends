@@ -7,7 +7,7 @@
 getPerformance(
   rasts,
   mods,
-  metrics = c("AUC", "TSS"),
+  metrics = c("AUC", "TSS", "kappa"),
   plot = FALSE,
   verbosity = 2
 )
@@ -17,7 +17,7 @@ getPerformance(
 
 \item{mods}{output of \code{\link[=getModels]{getModels()}}}
 
-\item{metrics}{character vector with the metrics to compute. Can be any subset of c("AUC", "TSS"), the latter computed at its optimal threshold. The default is both. Performance metrics are computed with presence against all background (using 'modEvA' package functions with pbg=TRUE), so they evaluate the capacity of distinguishing presence from random, rather than presence from absence pixels (Phillips et al., 2006).}
+\item{metrics}{character vector with the metrics to compute. Can be any subset (default all) of c("AUC", "TSS", "kappa"), with the latter two computed at their maximum values (optimal thresholds). Performance metrics are computed with presence against all background (using 'modEvA' package functions with pbg=TRUE), so they evaluate the capacity of distinguishing presence from random, rather than presence from absence pixels (Phillips et al., 2006).}
 
 \item{plot}{logical value indicating whether plots should also be produced to illustrate the performance metrics for each model. The default is FALSE; TRUE can be slow for large datasets.}
 

@@ -30,7 +30,8 @@ getImportance(
 A data frame with the permutation importance (expressed as percentage) of each variable in each model replicate for each period, along with the cross-replicate mean and standard deviation. If plot=TRUE (the default), also a spaghetti plot of mean variable importance per period.
 }
 \description{
-This function computes the permutation importance of each variable in each model, by shuffling each variable in turn (a given number of times) and computing the root mean squared difference between the actual model predictions and those obtained with the shuffled variable. Values are then normalized to a percentage by dividing each by the sum of all values and multiplying by 100. Note that "importance" is a vague concept which can be measured in many other different ways.
+This function computes the permutation importance of each variable in each model, by shuffling each variable in turn (a given number of times) and computing the root mean squared difference between the actual model predictions and those obtained with the shuffled variable. Values are then normalized to a percentage by dividing each by the sum of all values and multiplying by 100.
+Note that "importance" is not a straightforward concept and it can be measured in many different ways. Permutation importance is a widely used and effective model-agnostic technique, which provides an intuitive measure of the contribution of each variable, particularly in complex and non-linear models.
 }
 \examples{
 # Several data prep steps required.
