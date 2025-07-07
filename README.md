@@ -22,11 +22,24 @@ Here is a very basic flow chart of the package:
 
 ## Installation
 
-You can (re)install `ecotrends` from GitHub and then load it:
+`ecotrends` is on [CRAN](https://cran.r-project.org/package=ecotrends),
+so you can install it (or reinstall if you don’t have the latest
+version) by (uncommenting and) running the next line:
 
 ``` r
-# devtools::install_github("AMBarbosa/ecotrends")  # run if you don't have the latest version!
+# install.packages("ecotrends")
+```
 
+Alternatively, you can (re)install the development version from GitHub
+with:
+
+``` r
+# devtools::install_github("AMBarbosa/ecotrends")
+```
+
+You can then load the package, to use it in your current R session:
+
+``` r
 library(ecotrends)
 ```
 

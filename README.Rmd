@@ -32,13 +32,24 @@ Here is a very basic flow chart of the package:
 
 ## Installation
 
-You can (re)install `ecotrends` from GitHub and then load it:
+`ecotrends` is on [CRAN](https://cran.r-project.org/package=ecotrends), so you can install it (or reinstall if you don't have the latest version) by (uncommenting and) running the next line:
 
-```{r install}
-# devtools::install_github("AMBarbosa/ecotrends")  # run if you don't have the latest version!
+```{r install_cran}
+# install.packages("ecotrends")
+```
 
+Alternatively, you can (re)install the development version from GitHub with:
+
+```{r install_github}
+# devtools::install_github("AMBarbosa/ecotrends")
+```
+
+You can then load the package, to use it in your current R session:
+
+```{r load}
 library(ecotrends)
 ```
+
 
 ## Usage
 
@@ -118,7 +129,6 @@ sqrt(ecotrends::pixelArea(vars_agg))
 
 This is much closer to the spatial resolution of many of the species occurrences.
 
-
 ### Model building
 
 We can now **compute yearly ecological niche models** with these occurrences and variables, optionally saving the results to a file:
@@ -196,7 +206,6 @@ head(perf)
 ```
 
 Note that `rasts` here can be either the output of `getPredictions()`, or a `file` argument previously provided to `getPredictions()`, in case you exported predictions in a previous R session and don't want to compute them again.
-
 
 ### Suitability trend
 
