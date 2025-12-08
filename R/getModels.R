@@ -1,7 +1,7 @@
 #' Get models
 #'
 #' @description
-#' This function computes [maxnet::maxnet()] ecological niche models for a set of time steps or periods (e.g. years), given a set of presence point coordinates and periodly environmental layers.
+#' This function computes [maxnet::maxnet()] ecological niche models for a set of time steps or periods (e.g. years), given environmental layers for each period and a set of presence point coordinates.
 
 #' @param occs species occurrence coordinates (2 columns in this order: x, y or LONGitude, LATitude) in an object coercible to a data.frame (e.g. a data.frame, matrix, tibble, sf object or SpatVector of points), and in the same coordinate reference system as 'rasts'
 #' @param rasts (multi-layer) SpatRaster with a time series of variables to use in the models. The layers should be ordered chronologically, and their names should be in the form "varname \[underscore\] time", e.g. "tmin_1985" or "tmin_1" (with no more underscores than this), as in the output of [getVariables()]. Note that, if a variable has no spatial variation in a given time step or period, it is excluded (as it cannot have an effect) from that model, so in practice not all models will include the exact same set of variables. If verbosity > 1, messages will report which variables were excluded from each period.
@@ -9,9 +9,9 @@
 #' @param nbg integer value indicating the maximum number of background pixels to select randomly for use in the models. The default is 10,000, or the total number of non-NA pixels in 'rasts' if that's less.
 #' @param seed optional integer value to pass to [set.seed()] specifying the random seed to use for sampling the background pixels (if 'nbg' is smaller than the number of pixels in 'rasts') and for extracting the test samples (if nreps > 0).
 #' @param bias argument to pass to [fuzzySim::selectAbsences()] specifying if/how the selection of unoccupied background points should be biased to incorporate survey effort. Can be TRUE to make selection more likely towards the vicinity of occurrence points (which may indicate that those areas have been surveyed); or a SpatRaster of weights (bias layer), with the same coordinate reference system as 'occs' and 'rasts', with higher values where selection should be proportionally more likely, and zero or NA where points should not be placed. Default FALSE.
-#' @param collin logical value indicating whether multicollinearity among the variables should be reduced prior to computing each model. The default is TRUE, in which case the [collinear::collinear()] function is used. Note that, if the collinearity structure varies among periods, the set of included variables may also vary. If verbosity > 1, messages will report which variables were excluded from each period.
-#' @param maxcor numeric value to pass to [collinear::collinear()] (if collin = TRUE) indicating the maximum correlation allowed between any pair of predictor variables. The default is 0.75.
-#' @param maxvif numeric value to pass to [collinear::collinear()] (if collin = TRUE) indicating the maximum VIF allowed for selected predictor variables. The default is 5.
+#' @param collin logical value indicating whether multicollinearity among the variables should be reduced prior to computing each model. The default is TRUE, in which case the [fuzzySim::corSelect()] and [fuzzySim::multicol()] functions are used (collinear::collinear() was used previously, but we eliminated the dependency on this package after it introduced breaking changes for the 2nd time). Note that, if the collinearity structure varies among periods, the set of included variables may also vary. If verbosity > 1, messages will report which variables were excluded from each period.
+#' @param maxcor numeric value to pass to [fuzzySim::corSelect()] (if collin = TRUE, and using select = "cor") indicating the maximum correlation allowed between any pair of predictor variables. The default is 0.75.
+#' @param maxvif numeric value (used if collin = TRUE) indicating the maximum VIF allowed for selected predictor variables. VIF values are computed with [fuzzySim::multicol()] and variables are excluded in a stepwise manner, starting from the one with the highest VIF and recomputing every time, until none exceeds the 'maxvif' value. The default is 5.
 #' @param classes character value to pass to [maxnet::maxnet.formula()] indicating the continuous feature classes desired. Can be "default" or any subset of "lqpht" (linear, quadratic, product, hinge, threshold) -- for example, "lqh" for just linear, quadratic and hinge features. See References for guidance.
 #' @param regmult numeric value to pass to [maxnet::maxnet()] indicating the constant to adjust regularization. The default is 1. See References for guidance.
 #' @param nreps integer value indicating the number of train-test datasets for testing the models. The default is 10. With nreps = 0, there is no division of the dataset into train and test samples, so models are trained on the entire dataset for each period. If nreps > 0, presences are randomly assigned to the train and test sample in each replicate (in the proportion defined by the 'test' argument), while the background remains the same.
@@ -33,10 +33,9 @@
 
 #' @author A. Marcia Barbosa
 #' @export
-#' @importFrom collinear collinear
+#' @importFrom fuzzySim multicol corSelect gridRecords selectAbsences
 #' @importFrom maxnet maxnet maxnet.formula
 #' @importFrom terra crop same.crs
-#' @importFrom fuzzySim gridRecords selectAbsences
 
 #' @examples
 #' # Several data prep steps required.
@@ -121,7 +120,25 @@ getModels <- function(occs, rasts, region = NULL, nbg = 10000, seed = NULL, bias
     }
 
     if (collin) {
-      vars_sel <- collinear::collinear(dat, response = "presence", predictors = vars_period, max_cor = maxcor, max_vif = maxvif, quiet = TRUE)
+      # select by VIF first, for better compatibility with previous versions, which used collinear::collinear()
+      vars_df <- dat[ , vars_period]
+      repeat {
+        vif_df <- fuzzySim::multicol(vars_df)
+        if (max(vif_df$VIF, na.rm = TRUE) <= maxvif) break
+        exclude <- rownames(vif_df)[which.max(vif_df$VIF)]
+        vars_df[ , exclude] <- NULL
+        if (ncol(vars_df) < 2) break
+      }
+
+      vars_sel <- suppressMessages(
+        fuzzySim::corSelect(data = dat,
+                            sp.cols = "presence",
+                            var.cols = colnames(vars_df),
+                            cor.thresh = maxcor,
+                            select = "cor",
+                            verbosity = 0)
+        ) $ selected.vars
+
       if (length(vars_sel) < length(vars_period) && verbosity > 1) message(" - variables dropped due to multicollinearity: ", paste(setdiff(vars_period, vars_sel), collapse = ", "))
     } else {
       vars_sel <- vars_period

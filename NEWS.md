@@ -1,12 +1,24 @@
+# ecotrends 1.2
+
+-   DESCRIPTION, NAMESPACE
+
+    - removed dependency on the {collinear} package, as its updates were often not backward-compatible and introduced breaking changes
+
+
+-   getModels()
+
+    - collinearity is now reduced with fuzzySim::corSelect() and fuzzySim::multicol(), instead of collinear::collinear()
+
+
 # ecotrends 1.1
 
 -   getPerformance()
 
-    - added 'kappa' to implemented metrics
+    - added 'kappa' to implemented metrics, by reviewer request
     
-    - create columns before they are populated
+    - create columns before they are populated, for efficiency
     
-    - renamed and reordered some threshold columns for better readability
+    - renamed and reordered some threshold columns, for better readability
 
 
 # ecotrends 1.0

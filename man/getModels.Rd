@@ -35,11 +35,11 @@ getModels(
 
 \item{bias}{argument to pass to \code{\link[fuzzySim:selectAbsences]{fuzzySim::selectAbsences()}} specifying if/how the selection of unoccupied background points should be biased to incorporate survey effort. Can be TRUE to make selection more likely towards the vicinity of occurrence points (which may indicate that those areas have been surveyed); or a SpatRaster of weights (bias layer), with the same coordinate reference system as 'occs' and 'rasts', with higher values where selection should be proportionally more likely, and zero or NA where points should not be placed. Default FALSE.}
 
-\item{collin}{logical value indicating whether multicollinearity among the variables should be reduced prior to computing each model. The default is TRUE, in which case the \code{\link[collinear:collinear]{collinear::collinear()}} function is used. Note that, if the collinearity structure varies among periods, the set of included variables may also vary. If verbosity > 1, messages will report which variables were excluded from each period.}
+\item{collin}{logical value indicating whether multicollinearity among the variables should be reduced prior to computing each model. The default is TRUE, in which case the \code{\link[fuzzySim:corSelect]{fuzzySim::corSelect()}} and \code{\link[fuzzySim:multicol]{fuzzySim::multicol()}} functions are used (collinear::collinear() was used previously, but we eliminated the dependency on this package after it introduced breaking changes for the 2nd time). Note that, if the collinearity structure varies among periods, the set of included variables may also vary. If verbosity > 1, messages will report which variables were excluded from each period.}
 
-\item{maxcor}{numeric value to pass to \code{\link[collinear:collinear]{collinear::collinear()}} (if collin = TRUE) indicating the maximum correlation allowed between any pair of predictor variables. The default is 0.75.}
+\item{maxcor}{numeric value to pass to \code{\link[fuzzySim:corSelect]{fuzzySim::corSelect()}} (if collin = TRUE, and using select = "cor") indicating the maximum correlation allowed between any pair of predictor variables. The default is 0.75.}
 
-\item{maxvif}{numeric value to pass to \code{\link[collinear:collinear]{collinear::collinear()}} (if collin = TRUE) indicating the maximum VIF allowed for selected predictor variables. The default is 5.}
+\item{maxvif}{numeric value (used if collin = TRUE) indicating the maximum VIF allowed for selected predictor variables. VIF values are computed with \code{\link[fuzzySim:multicol]{fuzzySim::multicol()}} and variables are excluded in a stepwise manner, starting from the one with the highest VIF and recomputing every time, until none exceeds the 'maxvif' value. The default is 5.}
 
 \item{classes}{character value to pass to \code{\link[maxnet:maxnet]{maxnet::maxnet.formula()}} indicating the continuous feature classes desired. Can be "default" or any subset of "lqpht" (linear, quadratic, product, hinge, threshold) -- for example, "lqh" for just linear, quadratic and hinge features. See References for guidance.}
 
@@ -61,7 +61,7 @@ $models: a list of lists of model objects of class \link[maxnet:maxnet]{maxnet::
 $data: a data frame with the presences, remaining background points and their environmental values used in the model(s).
 }
 \description{
-This function computes \code{\link[maxnet:maxnet]{maxnet::maxnet()}} ecological niche models for a set of time steps or periods (e.g. years), given a set of presence point coordinates and periodly environmental layers.
+This function computes \code{\link[maxnet:maxnet]{maxnet::maxnet()}} ecological niche models for a set of time steps or periods (e.g. years), given environmental layers for each period and a set of presence point coordinates.
 }
 \examples{
 # Several data prep steps required.
