@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# ecotrends (version 1.1)
+# ecotrends (version 1.2)
 
 <!-- badges: start -->
 
@@ -14,7 +14,14 @@ trends in environmental suitability**, as in [Arenas-Castro & Sillero
 (2021)](https://doi.org/10.1016/j.scitotenv.2021.147172).
 
 This package is part of the [MontObEO
-project](https://montobeo.wordpress.com/).
+project](https://montobeo.wordpress.com/) and it is described the
+following paper:
+
+Sillero N., Alírio J., Garcia N., Freitas I., Campos J.C., Duarte L.B.,
+Pôças I., Teodoro A.C., Arenas-Castro S. & Barbosa A.M. (2026)
+*ecotrends*: an R package for estimating habitat suitability trends over
+time. *Ecological Modelling*, 513: 111426. DOI:
+<https://doi.org/10.1016/j.ecolmodel.2025.111426>
 
 Here is a very basic flow chart of the package:
 
@@ -55,7 +62,7 @@ performs just a **basic automatic cleaning**:
 ``` r
 library(geodata)
 #> Loading required package: terra
-#> terra 1.8.54
+#> terra 1.8.80
 library(fuzzySim)
 
 occ_raw <- geodata::sp_occurrence(genus = "Chioglossa", 
@@ -63,9 +70,9 @@ occ_raw <- geodata::sp_occurrence(genus = "Chioglossa",
                                   args = c("year=2022,2024"), 
                                   fixnames = FALSE)
 #> Loading required namespace: jsonlite
-#> 509 records found
-#> 0-300-509
-#> 509 records downloaded
+#> 514 records found
+#> 0-300-514
+#> 514 records downloaded
 
 occ_clean <- fuzzySim::cleanCoords(data = occ_raw, 
                                    coord.cols = c("decimalLongitude", "decimalLatitude"), 
@@ -73,13 +80,13 @@ occ_clean <- fuzzySim::cleanCoords(data = occ_raw,
                                    uncert.limit = 10000, 
                                    abs.col = "occurrenceStatus", 
                                    plot = FALSE)
-#> 509 rows in input data
-#> 477 rows after 'rm.dup'
-#> 477 rows after 'rm.equal'
-#> 477 rows after 'rm.imposs'
-#> 477 rows after 'rm.missing.any'
-#> 477 rows after 'rm.zero.any'
-#> 476 rows after 'rm.imprec.any'
+#> 514 rows in input data
+#> 481 rows after 'rm.dup'
+#> 481 rows after 'rm.equal'
+#> 481 rows after 'rm.imposs'
+#> 481 rows after 'rm.missing.any'
+#> 481 rows after 'rm.zero.any'
+#> 480 rows after 'rm.imprec.any'
 #> 33 rows after 'rm.uncert' (with uncert.limit=10000 and uncert.na.pass=TRUE)
 #> 33 rows after 'rm.abs'
 
@@ -104,6 +111,8 @@ reg <- fuzzySim::getRegion(pres.coords = occ_coords,
                            type = "width",
                            width_mult = 0.5,
                            dist_mult = 1)
+#> Warning in fuzzySim::getRegion(pres.coords = occ_coords, CRS = "EPSG:4326", :
+#> Null or empty CRS; assuming EPSG:4326.
 
 countries <- geodata::world(path = "outputs/countries")
 
